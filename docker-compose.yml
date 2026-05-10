@@ -1,5 +1,6 @@
 services:
-  nuxt-app:
+  app:
+    container_name: bookmessanger_frontend
     build: .
     ports:
       - "3007:3007"

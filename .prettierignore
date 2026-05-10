@@ -1,0 +1,30 @@
+# Nuxt generated
+.nuxt
+
+# Node
+node_modules
+
+# Build
+dist
+coverage
+
+# Docs
+*.md
+
+# JSON generated
+*.json
+
+# Docker
+docker-compose.yml
+
+# ESLint/Nuxt generated configs
+eslint.config.mjs
+
+# Optional generated typings
+*.d.ts
+
+# nuxtconfig
+nuxt.config.ts
+
+# prettier config
+.prettierrc

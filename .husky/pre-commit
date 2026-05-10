@@ -1,0 +1,41 @@
+#!/bin/sh
+# Load Husky
+. "$(dirname "$0")/_/husky.sh"
+# 1. Check for Cyrillic characters (Fast fail)
+echo "🔍 Checking for Cyrillic characters..."
+STAGED_FILES=$(git diff --cached --name-only --diff-filter=ACM | grep -vE '\.json$' || true)
+
+if [ -n "$STAGED_FILES" ]; then
+  MATCHES=$(grep -Hn -iE '[а-яіїєґё]' $STAGED_FILES 2>/dev/null || true)
+
+  if [ -n "$MATCHES" ]; then
+    echo "❌ ERROR: Found Cyrillic characters!"
+    echo "Please use English only. Found in:"
+    echo "---------------------------------------------------"
+    echo "$MATCHES"
+    echo "---------------------------------------------------"
+    echo "🚫 Commit blocked!"
+    exit 1
+  fi
+fi
+
+# 2. Type Check
+echo "🐳 Running type check..."
+docker exec -t bookmessanger_frontend npm run typecheck
+if [ $? -ne 0 ]; then
+  echo "❌ ERROR: TypeScript found issues."
+  echo "🚫 Commit blocked!"
+  exit 1
+fi
+
+# 3. Lint Check
+echo "🧹 Running linter (ESLint)..."
+docker exec -t bookmessanger_frontend npm run lint
+if [ $? -ne 0 ]; then
+  echo "❌ ERROR: Linter found style or logic issues."
+  echo "🚫 Commit blocked!"
+  exit 1
+fi
+
+echo "✅ All clear. Proceeding to commit..."
+exit 0
