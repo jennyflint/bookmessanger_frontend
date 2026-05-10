@@ -17,10 +17,22 @@ export default defineNuxtConfig({
     port: 3007,
     host: '0.0.0.0'
   },
-
   modules: [
     '@nuxt/eslint',
     '@pinia/nuxt',
     '@nuxtjs/tailwindcss',
+    '@nuxtjs/i18n',
   ],
+  i18n: {
+    strategy: 'prefix_except_default',
+    defaultLocale: 'ua',
+    locales: [
+      {
+        code: 'ua',
+        iso: 'uk-UA',
+        name: 'Ukrainian',
+        file: 'ua.json'
+      }
+    ]
+  },
 })
