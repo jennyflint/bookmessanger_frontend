@@ -18,5 +18,9 @@ export default defineNuxtConfig({
     host: '0.0.0.0'
   },
 
-  modules: ['@nuxt/eslint', '@pinia/nuxt'],
+  modules: [
+    '@nuxt/eslint',
+    '@pinia/nuxt',
+    '@nuxtjs/tailwindcss',
+  ],
 })
