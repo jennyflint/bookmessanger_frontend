@@ -5,6 +5,7 @@ export default defineNuxtConfig({
       appName: import.meta.env.NUXT_PUBLIC_APP_NAME || 'Default App Name',
       appUrl: import.meta.env.NUXT_PUBLIC_APP_URL,
       apiBase: import.meta.env.NUXT_PUBLIC_API_BASE,
+      appHost: import.meta.env.NUXT_PUBLIC_APP_HOST,
       defaultApiVersion: import.meta.env.NUXT_PUBLIC_DEFAULT_API_VERSION
 
     }
