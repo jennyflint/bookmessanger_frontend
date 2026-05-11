@@ -3,6 +3,7 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       appName: import.meta.env.NUXT_PUBLIC_APP_NAME || 'Default App Name',
+      appUrl: import.meta.env.NUXT_PUBLIC_APP_URL,
       apiBase: import.meta.env.NUXT_PUBLIC_API_BASE,
       defaultApiVersion: import.meta.env.NUXT_PUBLIC_DEFAULT_API_VERSION
 

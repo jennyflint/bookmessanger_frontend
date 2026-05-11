@@ -1,11 +1,7 @@
 <template>
-  <ion-app>
-    <NuxtLayout>
-      <NuxtPage />
-    </NuxtLayout>
-  </ion-app>
+  <NuxtLayout>
+    <NuxtPage />
+  </NuxtLayout>
 </template>
 
-<script lang="ts" setup>
-
-</script>
+<script lang="ts" setup></script>
