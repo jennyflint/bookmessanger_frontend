@@ -1,15 +1,12 @@
 FROM node:26-alpine
 
-RUN apk add --no-cache libc6-compat
-
 WORKDIR /app
 
 COPY package*.json ./
-
 RUN npm install
 
-COPY . .
-RUN npx nuxi prepare
+ENV HOST=0.0.0.0
+ENV PORT=3007
 
 EXPOSE 3007
 

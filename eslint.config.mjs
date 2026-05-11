@@ -1,7 +1,11 @@
 import withNuxt from './.nuxt/eslint.config.mjs'
+import unusedImports from 'eslint-plugin-unused-imports'
 
 export default withNuxt([
   {
+    plugins: {
+      'unused-imports': unusedImports
+    },
     settings: {
       polyfills: ['fetch', 'promises'],
       browsers: ['ios_saf >= 14', 'and_chr >= 96']
@@ -13,25 +17,36 @@ export default withNuxt([
       'no-debugger': 'error',
       'eqeqeq': ['error', 'always'],
       'prefer-const': 'error',
+      'no-var': 'error',
+      '@typescript-eslint/no-explicit-any': 'error',
+      '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+      '@typescript-eslint/no-non-null-assertion': 'error',
+      '@typescript-eslint/explicit-function-return-type': 'error',
+      '@typescript-eslint/no-inferrable-types': 'error',
+
       'vue/multi-word-component-names': 'error',
       'vue/no-deprecated-slot-attribute': 'error',
-      'vue/html-indent': ['error', 2, {
-        attribute: 1,
-        baseIndent: 1,
-        closeBracket: 0,
-        alignAttributesVertically: false,
-        ignores: []
+      'vue/block-lang': ['error', {
+        script: { lang: 'ts' }
       }],
+      'vue/no-v-html': 'warn',
+      'vue/no-unused-components': 'error',
+      'vue/no-unused-vars': 'error',
+      'vue/html-indent': ['error', 2],
       'vue/max-attributes-per-line': ['error', {
-        singleline: { max: 3 },
+        singleline: { max: 2 },
         multiline: { max: 1 }
       }],
       'vue/prop-name-casing': ['error', 'camelCase'],
-      '@typescript-eslint/no-explicit-any': 'error',
-      '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
-      '@typescript-eslint/no-non-null-assertion': 'error'
+      'no-unused-vars': 'off',
+      'unused-imports/no-unused-imports': 'error',
+      'unused-imports/no-unused-vars': [
+        'error',
+        { vars: 'all', varsIgnorePattern: '^_', args: 'after-used', argsIgnorePattern: '^_' }
+      ]
     }
   },
+
   {
     files: ['**/pages/**/*.vue', '**/layouts/**/*.vue', '**/error.vue', 'app.vue'],
     rules: {

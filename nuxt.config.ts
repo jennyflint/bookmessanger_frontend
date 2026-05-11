@@ -1,5 +1,13 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
+  runtimeConfig: {
+    public: {
+      appName: import.meta.env.NUXT_PUBLIC_APP_NAME || 'Default App Name',
+      apiBase: import.meta.env.NUXT_PUBLIC_API_BASE,
+      defaultApiVersion: import.meta.env.NUXT_PUBLIC_DEFAULT_API_VERSION
+
+    }
+  },
   typescript: {
     strict: true,
     typeCheck: true,
@@ -16,6 +24,16 @@ export default defineNuxtConfig({
   devServer: {
     port: 3007,
     host: '0.0.0.0'
+  },
+  imports: {
+    dirs: [
+      'composables/auth',
+      'services',
+      'services/**',
+    ]
+  },
+  pinia: {
+    storesDirs: ['./stores/**'],
   },
   modules: [
     '@nuxt/eslint',
