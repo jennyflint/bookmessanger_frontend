@@ -1,5 +1,5 @@
 <template>
-  <div/>
+  <book-list-component />
 </template>
 
 

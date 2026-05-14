@@ -1,6 +1,7 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   runtimeConfig: {
+    apiBase: import.meta.env.NUXT_API_BASE,
     public: {
       appName: import.meta.env.NUXT_PUBLIC_APP_NAME || 'Default App Name',
       appUrl: import.meta.env.NUXT_PUBLIC_APP_URL,
@@ -29,7 +30,8 @@ export default defineNuxtConfig({
   },
   imports: {
     dirs: [
-      'composables/auth',
+      'composables',
+      'composables/**',
       'services',
       'services/**',
     ]
