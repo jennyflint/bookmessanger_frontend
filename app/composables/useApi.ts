@@ -46,8 +46,8 @@ export const useApi = (): ApiComposable => {
         refreshPromise ??= $fetch<RefreshResponse>('/auth/refresh/token', {
           baseURL,
           method: 'POST',
-          body: {
-            refresh_token: userStore.refreshToken
+          headers: {
+            Authorization: `Bearer ${userStore.refreshToken}`
           }
         })
           .then((res) => {

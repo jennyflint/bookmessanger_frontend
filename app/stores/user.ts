@@ -1,3 +1,5 @@
+import type { User } from "~/types/user"
+
 export const useUserStore = defineStore('user', () => {
   const config = useRuntimeConfig()
   const appHost = config.public.appHost
@@ -8,13 +10,14 @@ export const useUserStore = defineStore('user', () => {
 
   const accessToken = useCookie<string | null>('access_token', cookieOptions)
   const refreshToken = useCookie<string | null>('refresh_token', cookieOptions)
-  const userEmail = useCookie<string | null>('user_email', cookieOptions)
+  const user = useCookie<User | null>('user_data', cookieOptions)
   const isAuthenticated = computed(() => !!accessToken.value || !!refreshToken.value)
 
   const logout = (): void => {
     accessToken.value = null
     refreshToken.value = null
-    userEmail.value = null
+    user.value = null
+
   }
 
   const refreshSession = async (): Promise<boolean> => {
@@ -27,7 +30,7 @@ export const useUserStore = defineStore('user', () => {
   return {
     accessToken,
     refreshToken,
-    userEmail,
+    user,
     isAuthenticated,
     logout,
     refreshSession
