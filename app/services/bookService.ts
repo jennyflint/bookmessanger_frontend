@@ -7,13 +7,20 @@ export const useBookService = (): {
 } => {
   const api = useApi()
 
-  const getBooks = (params?: RequestParams): Promise<PaginatedResponse<BookDetailResponse>> => {
-    return api.get<PaginatedResponse<BookDetailResponse>>(
+  const getBooks = async (params?: RequestParams): Promise<PaginatedResponse<BookDetailResponse>> => {
+    const response = await api.get<PaginatedResponse<BookDetailResponse>>(
       '/book/list',
-      params as Record<string, unknown>
-    )
+    params as Record<string, unknown>
+    );
+    return {
+      data: response?.data || [],
+      meta: response?.meta || {
+        total: 0,
+        limit: 10, 
+        offset: 0
+      }
+    };
   }
-
   const uploadBook = (file: File): Promise<BookDetailResponse> => {
     const formData = new FormData()
     formData.append('file', file)

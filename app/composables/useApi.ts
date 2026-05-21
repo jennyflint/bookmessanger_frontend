@@ -39,9 +39,10 @@ export const useApi = (): ApiComposable => {
 
       if (fetchError.response?.status === 401 && !isRetry) {
         if (!userStore.refreshToken) {
-          userStore.$reset()
-          throw fetchError
+          userStore.logout()
+          navigateTo('/auth/login')
         }
+
 
         refreshPromise ??= $fetch<RefreshResponse>('/auth/refresh/token', {
           baseURL,
@@ -55,7 +56,8 @@ export const useApi = (): ApiComposable => {
             userStore.refreshToken = res.refresh_token
           })
           .catch((refreshError: unknown) => {
-            userStore.$reset()
+            userStore.logout()
+            navigateTo('/auth/login')
             throw refreshError
           })
           .finally(() => {

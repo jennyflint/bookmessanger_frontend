@@ -55,5 +55,17 @@
     "error": {
         "loading": "Помилка завантаження",
         "retry": "Спробувати ще раз"
+    },
+
+    "status_list": {
+        "new": "Нова",
+        "pending": "Очікування",
+        "processing": "Обробка",
+        "completed": "Готово",
+        "failed": "Не вдалося"
+    },
+    "buttons": {
+        "delete": "Видалити",
+        "favorite": "Улюблене"
     }
 }
