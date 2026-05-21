@@ -31,7 +31,7 @@
       </div>
       <BookListRowsComponent
         v-model="selectedBook"
-        :books="response.data"
+        :books="localBooks" 
       />
     </div>
 
@@ -53,7 +53,9 @@ import type { RequestParams, PaginatedResponse } from "~/types/api";
 import type { BookDetailResponse } from "~/types/book";
 
 const bookService = useBookService();
+
 const selectedBook = ref<BookDetailResponse | null>(null);
+const localBooks = ref<BookDetailResponse[]>([]);
 
 const params = ref<RequestParams>({
   limit: 5,
@@ -83,7 +85,19 @@ const prevPage = async (): Promise<void> => {
   }
 };
 
+bookService.listenToBookUpdates(localBooks);
 
+watch(
+  () => response.value?.data, 
+  (newData) => {
+    if (newData) {
+      localBooks.value = structuredClone(toRaw(newData));
+    } else {
+      localBooks.value = [];
+    }
+  }, 
+  { immediate: true }
+);
 </script>
 
 <style scoped>
