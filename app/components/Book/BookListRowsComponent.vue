@@ -9,7 +9,8 @@
           ? 'cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-700/50 hover:shadow-sm'
           : 'hover:bg-slate-50/30 dark:hover:bg-slate-700/10 opacity-85',
       ]"
-      @click="isBookCompleted(book) ? model = book : null"
+     
+      @click="navigateToBook(book)"
     >
       <div class="col-span-1 md:col-span-6 flex items-center space-x-3 overflow-hidden">
         <div
@@ -37,19 +38,20 @@
           <p class="text-[10px] text-slate-400 font-normal">ID: {{ book.id }}</p>
         </div>
       </div>
+      
       <div class="col-span-1 md:col-span-2 flex md:block items-center justify-between">
         <span class="md:hidden text-xs text-slate-400 font-medium mr-2">{{ $t("book.status") }}:</span>
         <span :class="getStatusClass(book)" class="px-2 py-1 rounded text-[10px] font-bold border uppercase tracking-tight">
           {{ getStatusLabel(book) }}
         </span>
       </div>
+      
       <div class="col-span-1 md:col-span-2 text-xs text-slate-500 dark:text-slate-400 flex md:block items-center justify-between">
         <span class="md:hidden text-xs text-slate-400 font-medium mr-2">{{ $t("book.date") }}:</span>
         <ClientOnly fallback-tag="span" fallback="...">
           {{ formatDate(book.created_at) }}
         </ClientOnly>
       </div>
-
       <div class="col-span-1 md:col-span-2 flex items-center justify-end space-x-2" @click.stop>
         <button
           class="p-2 rounded-xl text-slate-400 hover:text-amber-500 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
@@ -102,7 +104,6 @@ defineEmits<{
   'toggle-favorite': [id: number];
   'delete': [id: number];
 }>();
-const model = defineModel<BookDetailResponse | null>();
 
 const formatDate = (dateString: string): string => {
   return new Intl.DateTimeFormat("uk-UA", {
@@ -149,7 +150,14 @@ const getStatusClass = (book: BookDetailResponse): string => {
 };
 
 const isBookCompleted = (book: BookDetailResponse): boolean => {
-  if (!book.jobs || book.jobs.length === 0) return false;
-  return book.jobs.at(-1)?.status === "completed";
+  if (book.complete_books && book.complete_books.length > 0) return true;
+  
+  const latestStatus = getLatestJobStatus(book);
+  return latestStatus === "completed";
+};
+const navigateToBook = (book: BookDetailResponse): void => {
+  if (isBookCompleted(book)) {
+    navigateTo(`/book/model/${book.id}`)
+  }
 };
 </script>

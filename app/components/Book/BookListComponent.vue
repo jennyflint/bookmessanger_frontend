@@ -43,8 +43,6 @@
       @next="nextPage"
       @prev="prevPage"
     />
-
-    <book-modal-download-component v-model="selectedBook" />
   </div>
 </template>
 
