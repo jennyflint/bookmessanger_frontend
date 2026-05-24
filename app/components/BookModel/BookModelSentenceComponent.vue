@@ -1,28 +1,33 @@
 <template>
   <div class="max-w-6xl mx-auto p-4 sm:p-6">
-    <div class="flex items-center justify-between mb-3 px-4 py-3 bg-slate-100 dark:bg-slate-900 border border-b-0 border-slate-200 dark:border-slate-800 rounded-t-2xl">
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-3 px-4 py-3 bg-slate-100 dark:bg-slate-900 border border-b-0 border-slate-200 dark:border-slate-800 rounded-t-2xl gap-3 sm:gap-0">
+  
       <div class="flex items-center space-x-2">
-        <span class="text-xs font-mono text-slate-500 dark:text-slate-400 ml-2">
-          {{book?.name}}
+        <div class="flex space-x-1.5 hidden sm:flex">
+          <span class="w-3 h-3 rounded-full bg-red-400 block"/>
+          <span class="w-3 h-3 rounded-full bg-amber-400 block"/>
+          <span class="w-3 h-3 rounded-full bg-emerald-400 block"/>
+        </div>
+        <span class="text-xs font-bold sm:font-mono sm:font-normal text-slate-700 dark:text-slate-300 sm:text-slate-500 sm:dark:text-slate-400 ml-0 sm:ml-2 truncate max-w-[200px] md:max-w-xs">
+          {{ book?.name || 'book-preview' }}
         </span>
       </div>
-      
-      <div class="flex items-center space-x-3">
-        
-        <div class="flex items-center space-x-2">
-          <label for="template-select" class="text-xs font-semibold text-slate-600 dark:text-slate-300">
+  
+      <div class="flex flex-wrap items-center gap-2 sm:gap-3">
+    
+        <div class="flex items-center space-x-2 mr-auto sm:mr-0">
+          <label for="template-select" class="hidden md:block text-xs font-semibold text-slate-600 dark:text-slate-300">
             {{ $t('template.label') }}:
           </label>
-          
+      
           <div class="relative">
             <select 
               id="template-select"
               v-model="selectedTemplate"
-              class="appearance-none outline-none text-xs font-medium text-black bg-white px-3 py-1.5 pr-8 rounded-lg border border-slate-200 shadow-sm cursor-pointer hover:text-indigo-600 transition-colors"
+              class="appearance-none outline-none text-xs font-medium text-black bg-white px-3 py-1.5 pr-8 rounded-lg border border-slate-200 shadow-sm cursor-pointer hover:text-indigo-600 transition-colors w-full min-w-[100px]"
               @change="handleTemplateChange"
             >
               <option value="json">JSON</option>
-              
               <option 
                 v-for="template in templateStore.templates" 
                 :key="template.value" 
@@ -47,47 +52,75 @@
           </div>
         </div>
 
-        <button 
-          v-if="book?.lines?.length"
-          class="inline-flex items-center space-x-1.5 text-xs font-medium text-slate-600 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors bg-white dark:bg-slate-800 px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 shadow-sm"
-          @click="copyToClipboard"
-        >
-          <svg
-            v-if="!isCopied"
-            class="w-3.5 h-3.5"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24">
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
-          </svg>
-          <svg
-            v-else
-            class="w-3.5 h-3.5 text-emerald-500"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24">
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M5 13l4 4L19 7" />
-          </svg>
-          <span>{{ isCopied ? $t('buttons.copied') : $t('buttons.copy')  }}</span>
-        </button>
+        <div class="flex items-center space-x-2">
+          <button 
+            v-if="book?.lines?.length"
+            class="inline-flex items-center space-x-1.5 text-xs font-medium text-slate-600 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors bg-white dark:bg-slate-800 px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 shadow-sm"
+            :title="$t('buttons.copy')"
+            @click="copyToClipboard"
+          >
+            <svg
+              v-if="!isCopied"
+              class="w-3.5 h-3.5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24">
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
+            </svg>
+            <svg
+              v-else
+              class="w-3.5 h-3.5 text-emerald-500"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24">
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M5 13l4 4L19 7" />
+            </svg>
+            <span class="hidden sm:inline">{{ isCopied ? $t('buttons.copied') : $t('buttons.copy') }}</span>
+          </button>
+
+          <button 
+            v-if="book?.lines?.length"
+            class="inline-flex items-center space-x-1.5 text-xs font-medium text-slate-600 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors bg-white dark:bg-slate-800 px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 shadow-sm"
+            :title="$t('buttons.download')"
+            @click="isDownloadModalOpen = true"
+          >
+            <svg
+              class="w-3.5 h-3.5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24">
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+            </svg>
+            <span class="hidden sm:inline">{{ $t('buttons.download')}}</span>
+          </button>
+        </div>
+
       </div>
     </div>
 
     <div class="relative rounded-b-2xl shadow-xl border border-slate-800 max-h-[550px] overflow-y-auto custom-scrollbar bg-slate-50 dark:bg-slate-800 min-h-[200px]">
-      
       <book-model-preview-json v-if="selectedTemplate === 'json'" />
-      
       <book-model-preview-html v-else />
-
     </div>
+
+    <modal-download-component
+      v-model="isDownloadModalOpen"
+      :html-content="processedTemplateCode"
+      :json-content="bookStore.book"
+      :file-name="book?.name || 'book-export'"
+    />
   </div>
 </template>
 
@@ -98,6 +131,16 @@ const templateStore = useTemplateStore()
 const { book } = storeToRefs(bookStore)
 const selectedTemplate = ref('json')
 const isCopied = ref(false)
+
+const isDownloadModalOpen = ref(false)
+
+const processedTemplateCode = computed(() => {
+  const code = templateStore.currentTemplateCode
+  if (!code) return ''
+
+  const jsonDataString = book.value ? JSON.stringify(book.value, null, 2) : '{}'
+  return code.replace(/\{\{\s*json_data\s*\}\}/g, jsonDataString)
+})
 
 onMounted(() => {
   templateStore.fetchTemplates()

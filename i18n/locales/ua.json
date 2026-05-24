@@ -77,7 +77,18 @@
         "delete": "Видалити",
         "favorite": "Улюблене",
         "copy": "Копіювати",
-        "copied": "Скопійовано!"
+        "copied": "Скопійовано!",
+        "download": "Завантажити"
+    },
+    "download_modal": {
+        "title": "Завантажити книгу",
+        "description": "Оберіть формат для завантаження",
+        "pdf_document": "PDF Документ",
+        "for_reading_and_printing": "Для читання та друку",
+        "html_page": "HTML Сторінка",
+        "opens_in_browser": "Відкривається в браузері",
+        "raw_data_json": "Сирі дані (JSON)",
+        "for_developers_and_api": "Для розробників та API"
     },
     "template": {
         "label": "Шаблон",
