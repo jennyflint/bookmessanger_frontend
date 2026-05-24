@@ -1,5 +1,8 @@
 <template>
-  <book-model-character-list-component :avatars="avatarResponse?.items || []" />
+  <div>
+    <book-model-character-list-component :avatars="avatarResponse?.items || []" />
+    <book-model-sentence-component />
+  </div>
 </template>
 
 <script setup lang="ts">
