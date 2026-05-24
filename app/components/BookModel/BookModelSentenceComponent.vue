@@ -2,11 +2,6 @@
   <div class="max-w-6xl mx-auto p-4 sm:p-6">
     <div class="flex items-center justify-between mb-3 px-4 py-3 bg-slate-100 dark:bg-slate-900 border border-b-0 border-slate-200 dark:border-slate-800 rounded-t-2xl">
       <div class="flex items-center space-x-2">
-        <div class="flex space-x-1.5">
-          <span class="w-3 h-3 rounded-full bg-red-400 block"/>
-          <span class="w-3 h-3 rounded-full bg-amber-400 block"/>
-          <span class="w-3 h-3 rounded-full bg-emerald-400 block"/>
-        </div>
         <span class="text-xs font-mono text-slate-500 dark:text-slate-400 ml-2">
           {{book?.name}}
         </span>
@@ -90,13 +85,7 @@
       
       <book-model-preview-json v-if="selectedTemplate === 'json'" />
       
-      <div v-else-if="templateStore.isLoading" class="flex items-center justify-center h-full p-8 text-slate-500">
-        {{ $t('template.loading') }}
-      </div>
-      
-      <div v-else-if="templateStore.currentTemplateCode" class="p-4 text-sm text-slate-800 dark:text-slate-200">
-        <pre class="whitespace-pre-wrap font-mono">{{ templateStore.currentTemplateCode }}</pre>
-      </div>
+      <book-model-preview-html v-else />
 
     </div>
   </div>
