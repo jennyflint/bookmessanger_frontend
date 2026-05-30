@@ -54,7 +54,7 @@
 
         <div class="flex items-center space-x-2">
           <button 
-            v-if="book?.lines?.length"
+            v-if="book?.lines?.length && selectedTemplate === 'json'"
             class="inline-flex items-center space-x-1.5 text-xs font-medium text-slate-600 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors bg-white dark:bg-slate-800 px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 shadow-sm"
             :title="$t('buttons.copy')"
             @click="copyToClipboard"
@@ -87,7 +87,7 @@
           </button>
 
           <button 
-            v-if="book?.lines?.length"
+            v-if="book?.lines?.length && selectedTemplate !== 'json'"
             class="inline-flex items-center space-x-1.5 text-xs font-medium text-slate-600 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors bg-white dark:bg-slate-800 px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 shadow-sm"
             :title="$t('buttons.download')"
             @click="isDownloadModalOpen = true"
@@ -119,6 +119,7 @@
       v-model="isDownloadModalOpen"
       :html-content="processedTemplateCode"
       :json-content="bookStore.book"
+      :template="selectedTemplate"
       :file-name="book?.name || 'book-export'"
       :book-id="id"
       @success="successDownload"

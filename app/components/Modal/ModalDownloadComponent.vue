@@ -116,6 +116,7 @@ const bookStore = useBookStore()
 const props = defineProps<{
   modelValue: boolean
   htmlContent: string
+  template: string,
   jsonContent: BookModel | null
   bookId: number,
   fileName?: string
@@ -155,7 +156,7 @@ const downloadPdf = (): void => {
   const params: DownloadBookParams = {
     format: 'pdf',
     characters: bookStore.getPreparedCharacters(),
-    template: 'simple-test'
+    template: props.template
   }
 
   downloadService.downloadBook(props.bookId, params)
