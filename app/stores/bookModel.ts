@@ -50,6 +50,7 @@ export const useBookStore = defineStore('book', () => {
     if (!book.value) return []
     return book.value.characters.map(character => ({
       id: character.id,
+      name: character.name,
       avatar: character.avatar
     }))
   }

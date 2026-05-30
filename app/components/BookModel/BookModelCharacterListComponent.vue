@@ -60,38 +60,96 @@
         </div>
 
         <div class="flex-1 min-w-0">
-          <h3 class="font-semibold text-slate-800 dark:text-slate-100 truncate group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
-            {{ char.name }}
-          </h3>
-          <p v-if="char.full_name" class="text-xs text-slate-400 truncate mt-0.5">
-            {{ char.full_name }}
-          </p>
           
-          <div class="flex flex-wrap gap-1 mt-1.5 overflow-hidden max-h-[18px]">
-            <span 
-              v-for="(alias, index) in char.names.slice(0, 3)" 
-              :key="index"
-              class="text-[9px] bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-300 px-1.5 py-0.5 rounded-md font-medium"
-            >
-              {{ alias }}
-            </span>
-            <span v-if="char.names.length > 3" class="text-[9px] text-indigo-500 font-semibold px-0.5 self-center">
-              +{{ char.names.length - 3 }}
-            </span>
+          <div v-if="editingCharId === char.id" class="flex flex-col gap-1.5 z-10 relative">
+            <div class="flex items-center gap-1">
+              <input 
+                v-model="tempCharName" 
+                class="w-full text-sm font-semibold px-2 py-1 border border-indigo-300 dark:border-indigo-600 rounded-md bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500/50" 
+                autofocus
+                @keyup.enter="saveName(char)"
+                @keyup.esc="cancelEditing"
+              >
+              <button
+                class="p-1 text-emerald-500 hover:bg-emerald-50 dark:hover:bg-emerald-900/30 rounded-md transition-colors"
+                :title="$t('buttons.save')"
+                @click="saveName(char)">
+                <svg
+                  class="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"><path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2.5"
+                    d="M5 13l4 4L19 7"/></svg>
+              </button>
+              <button
+                class="p-1 text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-md transition-colors"
+                :title="$t('cancel')"
+                @click="cancelEditing">
+                <svg
+                  class="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"><path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2.5"
+                    d="M6 18L18 6M6 6l12 12"/></svg>
+              </button>
+            </div>
+
+            <div v-if="char.names.length > 0" class="flex flex-wrap gap-1 mt-0.5">
+              <span class="text-[10px] text-slate-400 flex items-center mr-1">{{ $t('select') }}:</span>
+              <button 
+                v-for="(alias, index) in char.names" 
+                :key="index"
+                class="text-[10px] bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-1.5 py-0.5 rounded hover:bg-indigo-100 dark:hover:bg-indigo-900/50 hover:text-indigo-600 dark:hover:text-indigo-300 transition-colors border border-slate-200 dark:border-slate-600"
+                @click="tempCharName = alias"
+              >
+                {{ alias }}
+              </button>
+            </div>
           </div>
-        </div>
-        <div class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 w-56 p-3 bg-slate-900/95 dark:bg-slate-950/95 text-white text-xs rounded-xl opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity duration-200 shadow-xl z-20 backdrop-blur-sm">
-          <p class="font-bold border-b border-slate-700 pb-1 mb-1.5 text-indigo-400">{{ $t("book_model.characters.name_forms") }}:</p>
-          <div class="flex flex-wrap gap-1 max-h-24 overflow-y-auto custom-scrollbar">
-            <span 
-              v-for="(alias, index) in char.names" 
-              :key="index"
-              class="bg-slate-800 text-slate-200 px-1.5 py-0.5 rounded text-[10px]"
-            >
-              {{ alias }}
-            </span>
+
+          <div
+            v-else
+            class="group/name flex items-start justify-between cursor-pointer"
+            @click="startEditingName(char)">
+            <div class="relative">
+              <h3 class="font-semibold text-slate-800 dark:text-slate-100 truncate group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors inline-block mr-1">
+                {{ char.name }}
+              </h3>
+              <svg
+                class="w-3.5 h-3.5 text-slate-400 opacity-0 group-hover/name:opacity-100 inline-block transition-opacity -translate-y-0.5 absolute top-1"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"><path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
+              
+              <p v-if="char.full_name" class="text-xs text-slate-400 truncate mt-0.5">
+                {{ char.full_name }}
+              </p>
+              
+              <div class="flex flex-wrap gap-1 mt-1.5 overflow-hidden max-h-[18px]">
+                <span 
+                  v-for="(alias, index) in char.names.slice(0, 3)" 
+                  :key="index"
+                  class="text-[9px] bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-300 px-1.5 py-0.5 rounded-md font-medium"
+                >
+                  {{ alias }}
+                </span>
+                <span v-if="char.names.length > 3" class="text-[9px] text-indigo-500 font-semibold px-0.5 self-center">
+                  +{{ char.names.length - 3 }}
+                </span>
+              </div>
+            </div>
           </div>
-          <div class="absolute top-full left-1/2 transform -translate-x-1/2 w-2 h-2 bg-slate-900/95 dark:bg-slate-950/95 rotate-45"/>
+
         </div>
       </div>
     </div>
@@ -106,11 +164,31 @@
 
 <script setup lang="ts">
 
+import type { CharacterModel } from '@/types/bookModel'
+
 const bookStore = useBookStore()
 const { book } = storeToRefs(bookStore)
 const isAvatarModalOpen = ref(false)
 const selectedCharacterId = ref<number | null>(null)
 
+const editingCharId = ref<number | null>(null)
+const tempCharName = ref<string>('')
+
+const startEditingName = (char: CharacterModel): void => {
+  editingCharId.value = char.id
+  tempCharName.value = char.name
+}
+
+const saveName = (char: CharacterModel): void => {
+  if (tempCharName.value.trim()) {
+    char.name = tempCharName.value.trim()
+  }
+  editingCharId.value = null
+}
+
+const cancelEditing = (): void => {
+  editingCharId.value = null
+}
 const openAvatarModal = (characterId: number): void => {
   selectedCharacterId.value = characterId
   isAvatarModalOpen.value = true
