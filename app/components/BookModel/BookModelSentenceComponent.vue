@@ -120,6 +120,7 @@
       :html-content="processedTemplateCode"
       :json-content="bookStore.book"
       :file-name="book?.name || 'book-export'"
+      :book-id="id"
     />
   </div>
 </template>
@@ -129,6 +130,10 @@
 const bookStore = useBookStore()
 const templateStore = useTemplateStore()
 const { book } = storeToRefs(bookStore)
+
+const route = useRoute()
+const id = Number(route.params.id)
+
 const selectedTemplate = ref('json')
 const isCopied = ref(false)
 

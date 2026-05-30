@@ -1,4 +1,3 @@
-
 export type SafeBody = Record<string, unknown> | unknown[] | BodyInit | null | undefined
 export type ApiMethod =| 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH' 
   | 'get' | 'post' | 'put' | 'delete' | 'patch';

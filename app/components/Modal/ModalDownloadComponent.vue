@@ -108,11 +108,16 @@
 
 <script setup lang="ts">
 import type { BookModel } from '@/types/bookModel'
+import type { DownloadBookParams } from '@/types/book'
 
+const downloadService = useDownloadService()
+
+const bookStore = useBookStore()
 const props = defineProps<{
   modelValue: boolean
   htmlContent: string
   jsonContent: BookModel | null
+  bookId: number,
   fileName?: string
 }>()
 
@@ -146,8 +151,15 @@ const downloadJson = (): void => {
 }
 
 const downloadPdf = (): void => {
-  alert("For PDF download, please use the print function (Ctrl+P) or add a backend API.");
-  closeModal();
+  const params: DownloadBookParams = {
+    format: 'pdf',
+    characters: bookStore.getPreparedCharacters(),
+    template: 'simple-test'
+  }
+
+  downloadService.downloadBook(props.bookId, params)
+  closeModal()
+
 }
 </script>
 

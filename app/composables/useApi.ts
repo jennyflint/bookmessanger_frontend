@@ -43,7 +43,6 @@ export const useApi = (): ApiComposable => {
           navigateTo('/auth/login')
         }
 
-
         refreshPromise ??= $fetch<RefreshResponse>('/auth/refresh/token', {
           baseURL,
           method: 'POST',

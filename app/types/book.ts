@@ -1,5 +1,7 @@
 import type { JobResponse } from "./job";
 
+export type ExportBookFormat = 'html' | 'pdf'
+
 export interface CompleteBookResponse {
   id: number;
   name: string;
@@ -14,4 +16,10 @@ export interface BookDetailResponse {
   updated_at: string;
   complete_books: CompleteBookResponse[];
   jobs: JobResponse[];
+}
+
+export type DownloadBookParams = {
+  format: ExportBookFormat
+  characters: object[]
+  template: string
 }

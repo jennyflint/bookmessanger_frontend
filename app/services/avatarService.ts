@@ -1,6 +1,5 @@
 import type { AvatarItems } from '@/types/avatar'
 
-
 export const useAvatarService = (): {
   getAvatarList: (limit?: number) => Promise<AvatarItems>
 } => {

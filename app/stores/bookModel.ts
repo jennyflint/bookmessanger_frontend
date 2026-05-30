@@ -46,6 +46,14 @@ export const useBookStore = defineStore('book', () => {
     }
   }
 
+  const getPreparedCharacters = (): object[] => {
+    if (!book.value) return []
+    return book.value.characters.map(character => ({
+      id: character.id,
+      avatar: character.avatar
+    }))
+  }
+
   const clearBook = (): void => {
     book.value = null
     availableAvatars.value = []
@@ -58,6 +66,7 @@ export const useBookStore = defineStore('book', () => {
     getCharacterAvatar,
     setAvailableAvatars,
     assignAvatarsToCharacters,
+    getPreparedCharacters,
     clearBook
   }
 })

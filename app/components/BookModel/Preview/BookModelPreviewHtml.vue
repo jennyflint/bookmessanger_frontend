@@ -42,7 +42,6 @@
 
 <script setup lang="ts">
 
-
 const templateStore = useTemplateStore()
 const bookStore = useBookStore()
 const processedTemplateCode = computed(() => {

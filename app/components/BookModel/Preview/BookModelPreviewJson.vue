@@ -15,7 +15,6 @@
 <script setup lang="ts">
 import type { JsonToken } from "~/types/bookPreview"
 
-
 const bookStore = useBookStore()
 const { book } = storeToRefs(bookStore)
 const jsonTokens = computed<JsonToken[]>(() => {
@@ -28,7 +27,6 @@ const jsonTokens = computed<JsonToken[]>(() => {
     
     let lastIndex = 0
     let match
-
    
     while ((match = tokenRegex.exec(jsonString)) !== null) {
       if (match.index > lastIndex) {
@@ -68,7 +66,6 @@ const jsonTokens = computed<JsonToken[]>(() => {
     return [{ text: `Error: ${(e as Error).message}`, type: 'null' }]
   }
 })
-
 
 const getTokenClass = (type: JsonToken['type']): string => {
   switch (type) {

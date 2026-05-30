@@ -18,6 +18,11 @@ export default withNuxt([
       'eqeqeq': ['error', 'always'],
       'prefer-const': 'error',
       'no-var': 'error',
+      'no-multiple-empty-lines': ['error', { 
+        max: 1,
+        maxEOF: 0,
+        maxBOF: 0
+      }],
       '@typescript-eslint/no-explicit-any': 'error',
       '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
       '@typescript-eslint/no-non-null-assertion': 'error',
@@ -33,6 +38,7 @@ export default withNuxt([
       'vue/no-unused-components': 'error',
       'vue/no-unused-vars': 'error',
       'vue/html-indent': ['error', 2],
+      'vue/padding-line-between-blocks': ['error', 'always'],
       'vue/max-attributes-per-line': ['error', {
         singleline: { max: 2 },
         multiline: { max: 1 }

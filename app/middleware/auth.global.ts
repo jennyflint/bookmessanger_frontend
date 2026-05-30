@@ -1,6 +1,5 @@
 import { useUserStore } from '~/stores/user'
 
-
 export default defineNuxtRouteMiddleware((to) => {
   const authStore = useUserStore();
   const isLoggedIn = authStore.isAuthenticated;

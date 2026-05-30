@@ -27,7 +27,6 @@ const { data: avatarResponse } = await useAsyncData<AvatarItems>(
   () => avatarService.getAvatarList(50)
 );
 
-
 watch(response, (newData) => {
   if (newData) {
     bookStore.setBook(newData)

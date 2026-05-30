@@ -1,6 +1,3 @@
-
-
-
 export interface SentenceModel {
   content: string;
   parts: string[];

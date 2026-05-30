@@ -1,10 +1,7 @@
 import type { TemplateList } from '@/types/template'
 
-
-
 export const useTemplateStore = defineStore('template', () => {
   const templateService = useTemplateService()
-
 
   const templates = ref<TemplateList[]>([])
   const currentTemplateCode = ref<string | null>(null)
@@ -28,7 +25,6 @@ export const useTemplateStore = defineStore('template', () => {
       isLoading.value = false
     }
   }
-
 
   const fetchTemplateByValue = async (value: string): Promise<void> => {
     isLoading.value = true

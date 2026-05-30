@@ -1,6 +1,5 @@
 import type { TemplateList } from '@/types/template'
 
-
 export const useTemplateService = (): {
   getTemplateList: () => Promise<TemplateList[]>,
   getTemplateByValue: (value: string) => Promise<string | null>

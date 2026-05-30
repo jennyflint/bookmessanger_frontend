@@ -1,6 +1,5 @@
 import type { BookModel } from '@/types/bookModel'
 
-
 export const useBookModelService = (): {
   getBookModel: (bookId: number) => Promise<BookModel>
 } => {
