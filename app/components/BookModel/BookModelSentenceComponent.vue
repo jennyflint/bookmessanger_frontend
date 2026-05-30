@@ -121,6 +121,13 @@
       :json-content="bookStore.book"
       :file-name="book?.name || 'book-export'"
       :book-id="id"
+      @success="successDownload"
+    />
+    <modal-notification-component
+      v-model="isNotificationOpen"
+      :title="$t('download_modal.success.title')"
+      :message="$t('download_modal.success.message')"
+      type="success"
     />
   </div>
 </template>
@@ -138,6 +145,7 @@ const selectedTemplate = ref('json')
 const isCopied = ref(false)
 
 const isDownloadModalOpen = ref(false)
+const isNotificationOpen = ref(false)
 
 const processedTemplateCode = computed(() => {
   const code = templateStore.currentTemplateCode
@@ -180,6 +188,10 @@ const handleTemplateChange = async (): Promise<void> => {
   } else if (selectedTemplate.value) {
     await templateStore.fetchTemplateByValue(selectedTemplate.value)
   }
+}
+
+const successDownload = (): void => {
+  isNotificationOpen.value = true
 }
 </script>
 

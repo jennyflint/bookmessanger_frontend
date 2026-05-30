@@ -4,3 +4,11 @@ export interface BookPaginationProps {
   total: number | undefined | null
   pending?: boolean
 }
+
+export type NotificationType = "success" | "error" | "default"
+
+export interface NotificationProps {
+  title?: string;
+  message: string;
+  type?: NotificationType;
+}

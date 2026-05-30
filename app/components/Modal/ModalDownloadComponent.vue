@@ -122,7 +122,8 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits<{
-  (e: 'update:modelValue', value: boolean): void
+  (e: 'update:modelValue', value: boolean): void,
+  (e: 'success'): void,
 }>()
 
 const closeModal = (): void => emit('update:modelValue', false)
@@ -158,6 +159,8 @@ const downloadPdf = (): void => {
   }
 
   downloadService.downloadBook(props.bookId, params)
+  emit('success')
+
   closeModal()
 
 }
