@@ -61,6 +61,7 @@ export const useBookStore = defineStore('book', () => {
 
   return {
     book,
+    availableAvatars,
     setBook,
     updateCharacterAvatar,
     getCharacterAvatar,

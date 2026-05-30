@@ -35,7 +35,10 @@
         :key="char.id"
         class="group relative bg-white/80 dark:bg-slate-800/80 backdrop-blur-md border border-slate-200 dark:border-slate-700 rounded-2xl p-4 flex items-center space-x-4 hover:shadow-md hover:border-indigo-300 dark:hover:border-indigo-800 transition-all duration-300"
       >
-        <div class="w-14 h-14 rounded-xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 p-1 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform duration-300 overflow-hidden">
+        <div
+          class="w-14 h-14 rounded-xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 p-1 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform duration-300 overflow-hidden cursor-pointer relative"
+          @click="openAvatarModal(char.id)"
+        >
           <img
             v-if="char.avatar"
             :src="char.avatar" 
@@ -43,6 +46,17 @@
             class="w-full h-full object-contain"
             loading="lazy"
           >
+          <div class="absolute inset-0 bg-black/40 z-20 hidden group-hover:flex items-center justify-center text-white">
+            <svg
+              class="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"><path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
+          </div>
         </div>
 
         <div class="flex-1 min-w-0">
@@ -81,6 +95,12 @@
         </div>
       </div>
     </div>
+    <modal-select-avatar-component
+      v-model="isAvatarModalOpen"
+      :available-avatars="bookStore.availableAvatars"
+      @select="onAvatarSelected"
+    />
+    
   </div>
 </template>
 
@@ -88,6 +108,19 @@
 
 const bookStore = useBookStore()
 const { book } = storeToRefs(bookStore)
+const isAvatarModalOpen = ref(false)
+const selectedCharacterId = ref<number | null>(null)
+
+const openAvatarModal = (characterId: number): void => {
+  selectedCharacterId.value = characterId
+  isAvatarModalOpen.value = true
+}
+
+const onAvatarSelected = (newAvatarUrl: string): void => {
+  if (selectedCharacterId.value !== null) {
+    bookStore.updateCharacterAvatar(selectedCharacterId.value, newAvatarUrl)
+  }
+}
 </script>
 
 <style scoped>
