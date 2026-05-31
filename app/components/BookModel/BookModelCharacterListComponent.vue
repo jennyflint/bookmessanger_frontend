@@ -2,24 +2,29 @@
   <div class="max-w-6xl mx-auto p-4 sm:p-6">
     <div class="flex items-center justify-between mb-6">
       <div>
-        <h2 class="text-2xl font-bold text-slate-800 dark:text-slate-100 flex items-center gap-2">
-          <svg
-            class="w-6 h-6 text-indigo-500"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24">
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
-          </svg>
-          {{ $t("book_model.characters.title") }}
-        </h2>
-        <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">
+        <div class="flex items-center gap-3">
+          <navigation-back-component />
+          <h2 class="text-2xl font-bold text-slate-800 dark:text-slate-100 flex items-center gap-2">
+            <svg
+              class="w-6 h-6 text-indigo-500"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24">
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+            </svg>
+            {{ $t("book_model.characters.title") }}
+          </h2>
+        </div>
+      
+        <p class="text-sm text-slate-500 dark:text-slate-400 mt-1 ml-11">
           {{ $t("book_model.characters.description") }}
         </p>
       </div>
+  
       <span class="px-3 py-1 bg-indigo-50 text-indigo-700 dark:bg-indigo-900/40 dark:text-indigo-300 rounded-full text-sm font-semibold border border-indigo-100 dark:border-indigo-800">
         {{ book?.characters?.length || 0 }}
       </span>
