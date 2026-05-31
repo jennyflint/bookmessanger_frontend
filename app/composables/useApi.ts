@@ -52,7 +52,6 @@ export const useApi = (): ApiComposable => {
         })
           .then((res) => {
             userStore.accessToken = res.access_token
-            userStore.refreshToken = res.refresh_token
           })
           .catch((refreshError: unknown) => {
             userStore.logout()
