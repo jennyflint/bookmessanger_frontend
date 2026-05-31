@@ -124,15 +124,15 @@ const formatDate = (dateString: string): string => {
   }).format(new Date(dateString));
 };
 
-const getLatestJobStatus = (book: BookDetailResponse): string | null => {
-  if (!book.jobs || book.jobs.length === 0) return null;
-  return book.jobs.at(-1)?.status || null;
+const getLatestActionStatus = (book: BookDetailResponse): string | null => {
+  if (!book.actions || book.actions.length === 0) return null;
+  return book.actions.at(-1)?.status || null;
 };
 
 const getStatusLabel = (book: BookDetailResponse): string => {
   if (book.complete_books?.length > 0) return $t("status_list.completed");
 
-  const latestStatus = getLatestJobStatus(book);
+  const latestStatus = getLatestActionStatus(book);
   if (latestStatus === "new") return $t("status_list.new");
   if (latestStatus === "pending") return $t("status_list.pending");
   if (latestStatus === "processing") return $t("status_list.processing");
@@ -147,7 +147,7 @@ const getStatusClass = (book: BookDetailResponse): string => {
     return "bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-900/30 dark:border-emerald-800";
   }
 
-  const latestStatus = getLatestJobStatus(book);
+  const latestStatus = getLatestActionStatus(book);
   if (latestStatus === "processing") {
     return "bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-900/30 dark:border-blue-800";
   }
@@ -161,7 +161,7 @@ const getStatusClass = (book: BookDetailResponse): string => {
 const isBookCompleted = (book: BookDetailResponse): boolean => {
   if (book.complete_books && book.complete_books.length > 0) return true;
   
-  const latestStatus = getLatestJobStatus(book);
+  const latestStatus = getLatestActionStatus(book);
   return latestStatus === "completed";
 };
 const navigateToBook = (book: BookDetailResponse): void => {

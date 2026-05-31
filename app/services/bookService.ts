@@ -1,6 +1,6 @@
 import type { BookDetailResponse } from '@/types/book'
 import type { RequestParams, PaginatedResponse } from '~/types/api'
-import type { JobStatus, JobResponse } from '~/types/job'
+import type { ActionStatus, ActionResponse } from '~/types/action'
 
 export const useBookService = (): {
   getBooks: (params?: RequestParams) => Promise<PaginatedResponse<BookDetailResponse>>
@@ -35,7 +35,7 @@ export const useBookService = (): {
 
     onMounted(() => {
       connect((payload: unknown) => {
-        const data = payload as { type?: string; book_id?: number; status?: JobStatus };
+        const data = payload as { type?: string; book_id?: number; status?: ActionStatus };
 
         if (data.type === "create_book_model" && data.book_id && data.status) {
           const bookIndex = booksRef.value.findIndex((b) => b.id === data.book_id);
@@ -43,18 +43,18 @@ export const useBookService = (): {
           if (bookIndex !== -1) {
             const book = <BookDetailResponse>booksRef.value[bookIndex];
 
-            const currentJobs = book.jobs || [];
+            const currentActions = book.actions || [];
 
-            if (currentJobs.length > 0) {
-              const lastJob = currentJobs.at(-1);
-              if (lastJob) {
-                lastJob.status = data.status;
+            if (currentActions.length > 0) {
+              const lastAction = currentActions.at(-1);
+              if (lastAction) {
+                lastAction.status = data.status;
               }
             } else {
-              currentJobs.push({ status: data.status } as JobResponse);
+              currentActions.push({ status: data.status } as ActionResponse);
             }
 
-            book.jobs = currentJobs;
+            book.actions = currentActions;
 
             if (data.status !== 'completed' && book.complete_books) {
               book.complete_books = [];

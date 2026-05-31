@@ -24,7 +24,7 @@ const { data: response} = await useAsyncData<BookModel>(
 
 const { data: avatarResponse } = await useAsyncData<AvatarItems>(
   "avatar-list", 
-  () => avatarService.getAvatarList(50)
+  () => avatarService.getAvatarList(100)
 );
 
 watch(response, (newData) => {

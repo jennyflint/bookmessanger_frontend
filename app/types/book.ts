@@ -1,4 +1,4 @@
-import type { JobResponse } from "./job";
+import type { ActionResponse } from "./action";
 
 export type ExportBookFormat = 'html' | 'pdf'
 
@@ -15,7 +15,7 @@ export interface BookDetailResponse {
   created_at: string;
   updated_at: string;
   complete_books: CompleteBookResponse[];
-  jobs: JobResponse[];
+  actions: ActionResponse[];
 }
 
 export type DownloadBookParams = {
