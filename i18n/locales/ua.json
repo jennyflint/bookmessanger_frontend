@@ -75,7 +75,6 @@
     },
     "buttons": {
         "delete": "Видалити",
-        "favorite": "Улюблене",
         "copy": "Копіювати",
         "copied": "Скопійовано!",
         "download": "Завантажити",
@@ -91,6 +90,7 @@
         "opens_in_browser": "Відкривається в браузері",
         "raw_data_json": "Сирі дані (JSON)",
         "for_developers_and_api": "Для розробників та API",
+        "extended_mode": "Перейти в розширений режим",
         "success" : {
             "title": "Успіх",
             "message": "Почато підготовку до завантаження книги"
@@ -104,7 +104,7 @@
         "label": "Шаблон",
         "loading": "Завантаження шаблону...",
         "generating_preview": "Генерація прев’ю...",
-        "select_to_preview": "Оберіть шаблон для візуалізації"
+        "select_to_preview": "Оберіть шаблон для книги"
     },
     "navigation": {
         "back": "Назад"

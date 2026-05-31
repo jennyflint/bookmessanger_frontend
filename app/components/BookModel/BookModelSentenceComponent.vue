@@ -119,7 +119,7 @@
       v-model="isDownloadModalOpen"
       :html-content="processedTemplateCode"
       :json-content="bookStore.book"
-      :template="selectedTemplate"
+      :template-name="selectedTemplate"
       :file-name="book?.name || 'book-export'"
       :book-id="id"
       @success="successDownload"
