@@ -43,12 +43,12 @@
 <script setup lang="ts">
 
 const templateStore = useTemplateStore()
-const bookStore = useBookStore()
+const bookModelStore = useBookModelStore()
 const processedTemplateCode = computed(() => {
   const code = templateStore.currentTemplateCode
   if (!code) return ''
 
-  const jsonDataString = bookStore.book ? JSON.stringify(bookStore.book, null, 2) : '{}'
+  const jsonDataString = bookModelStore.bookModel ? JSON.stringify(bookModelStore.bookModel, null, 2) : '{}'
 
   return code.replace(/\{\{\s*json_data\s*\}\}/g, jsonDataString)
 })

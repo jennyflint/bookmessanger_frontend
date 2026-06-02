@@ -210,7 +210,7 @@ import type { BookModel } from '@/types/bookModel'
 import type { DownloadBookParams, ExportBookFormat } from '@/types/book'
 
 const downloadService = useDownloadService()
-const bookStore = useBookStore()
+const bookModelStore = useBookModelStore()
 const templateStore = useTemplateStore()
 
 const props = defineProps<{
@@ -293,7 +293,7 @@ const executeDownload = async (): Promise<void> => {
     if (selectedFormat.value === 'pdf') {
       const params: DownloadBookParams = {
         format: 'pdf',
-        characters: bookStore.getPreparedCharacters(),
+        characters: bookModelStore.getPreparedCharacters(),
         template: selectedTemplate.value 
       }
       await downloadService.downloadBook(props.bookId, params)

@@ -9,7 +9,7 @@
           <span class="w-3 h-3 rounded-full bg-emerald-400 block"/>
         </div>
         <span class="text-xs font-bold sm:font-mono sm:font-normal text-slate-700 dark:text-slate-300 sm:text-slate-500 sm:dark:text-slate-400 ml-0 sm:ml-2 truncate max-w-[200px] md:max-w-xs">
-          {{ book?.name || 'book-preview' }}
+          {{ bookModel?.name || 'book-preview' }}
         </span>
       </div>
   
@@ -54,7 +54,7 @@
 
         <div class="flex items-center space-x-2">
           <button 
-            v-if="book?.lines?.length && selectedTemplate === 'json'"
+            v-if="bookModel?.lines?.length && selectedTemplate === 'json'"
             class="inline-flex items-center space-x-1.5 text-xs font-medium text-slate-600 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors bg-white dark:bg-slate-800 px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 shadow-sm"
             :title="$t('buttons.copy')"
             @click="copyToClipboard"
@@ -87,7 +87,7 @@
           </button>
 
           <button 
-            v-if="book?.lines?.length && selectedTemplate !== 'json'"
+            v-if="bookModel?.lines?.length && selectedTemplate !== 'json'"
             class="inline-flex items-center space-x-1.5 text-xs font-medium text-slate-600 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors bg-white dark:bg-slate-800 px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 shadow-sm"
             :title="$t('buttons.download')"
             @click="isDownloadModalOpen = true"
@@ -118,9 +118,9 @@
     <modal-download-component
       v-model="isDownloadModalOpen"
       :html-content="processedTemplateCode"
-      :json-content="bookStore.book"
+      :json-content="bookModelStore.bookModel"
       :template-name="selectedTemplate"
-      :file-name="book?.name || 'book-export'"
+      :file-name="bookModel?.name || 'book-export'"
       :book-id="id"
       @success="successDownload"
     />
@@ -135,9 +135,9 @@
 
 <script setup lang="ts">
 
-const bookStore = useBookStore()
+const bookModelStore = useBookModelStore()
 const templateStore = useTemplateStore()
-const { book } = storeToRefs(bookStore)
+const { bookModel } = storeToRefs(bookModelStore)
 
 const route = useRoute()
 const id = Number(route.params.id)
@@ -152,7 +152,7 @@ const processedTemplateCode = computed(() => {
   const code = templateStore.currentTemplateCode
   if (!code) return ''
 
-  const jsonDataString = book.value ? JSON.stringify(book.value, null, 2) : '{}'
+  const jsonDataString = bookModel.value ? JSON.stringify(bookModel.value, null, 2) : '{}'
   return code.replace(/\{\{\s*json_data\s*\}\}/g, jsonDataString)
 })
 
@@ -161,13 +161,13 @@ onMounted(() => {
 })
 
 const copyToClipboard = async (): Promise<void> => {
-  if (!book.value?.lines) return
+  if (!bookModel.value?.lines) return
   
   try {
     let contentToCopy = '';
     
     if (selectedTemplate.value === 'json') {
-      contentToCopy = JSON.stringify(book.value.lines, null, 2)
+      contentToCopy = JSON.stringify(bookModel.value.lines, null, 2)
     } else {
       contentToCopy = templateStore.currentTemplateCode || ''
     }

@@ -26,17 +26,17 @@
       </div>
   
       <span class="px-3 py-1 bg-indigo-50 text-indigo-700 dark:bg-indigo-900/40 dark:text-indigo-300 rounded-full text-sm font-semibold border border-indigo-100 dark:border-indigo-800">
-        {{ book?.characters?.length || 0 }}
+        {{ bookModel?.characters?.length || 0 }}
       </span>
     </div>
 
-    <div v-if="!book?.characters || book.characters.length === 0" class="text-center py-12 text-slate-400 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700">
+    <div v-if="!bookModel?.characters || bookModel.characters.length === 0" class="text-center py-12 text-slate-400 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700">
       {{ $t("book_model.characters.not_found") }}
     </div>
 
     <div v-else class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
       <div
-        v-for="char in book.characters"
+        v-for="char in bookModel.characters"
         :key="char.id"
         class="group relative bg-white/80 dark:bg-slate-800/80 backdrop-blur-md border border-slate-200 dark:border-slate-700 rounded-2xl p-4 flex items-center space-x-4 hover:shadow-md hover:border-indigo-300 dark:hover:border-indigo-800 transition-all duration-300"
       >
@@ -160,7 +160,7 @@
     </div>
     <modal-select-avatar-component
       v-model="isAvatarModalOpen"
-      :available-avatars="bookStore.availableAvatars"
+      :available-avatars="bookModelStore.availableAvatars"
       @select="onAvatarSelected"
     />
     
@@ -171,8 +171,8 @@
 
 import type { CharacterModel } from '@/types/bookModel'
 
-const bookStore = useBookStore()
-const { book } = storeToRefs(bookStore)
+const bookModelStore = useBookModelStore()
+const { bookModel } = storeToRefs(bookModelStore)
 const isAvatarModalOpen = ref(false)
 const selectedCharacterId = ref<number | null>(null)
 
@@ -201,7 +201,7 @@ const openAvatarModal = (characterId: number): void => {
 
 const onAvatarSelected = (newAvatarUrl: string): void => {
   if (selectedCharacterId.value !== null) {
-    bookStore.updateCharacterAvatar(selectedCharacterId.value, newAvatarUrl)
+    bookModelStore.updateCharacterAvatar(selectedCharacterId.value, newAvatarUrl)
   }
 }
 </script>

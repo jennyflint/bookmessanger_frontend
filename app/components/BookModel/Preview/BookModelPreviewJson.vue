@@ -1,6 +1,6 @@
 <template>
   <div class="bg-slate-950 text-slate-100 ">
-    <div v-if="!book?.lines || book.lines.length === 0" class="p-8 text-center text-sm text-slate-500 font-mono">
+    <div v-if="!bookModel?.lines || bookModel.lines.length === 0" class="p-8 text-center text-sm text-slate-500 font-mono">
       // {{ $t('book_model.no_found') }}
     </div>
       
@@ -15,13 +15,13 @@
 <script setup lang="ts">
 import type { JsonToken } from "~/types/bookPreview"
 
-const bookStore = useBookStore()
-const { book } = storeToRefs(bookStore)
+const bookModelStore = useBookModelStore()
+const { bookModel } = storeToRefs(bookModelStore)
 const jsonTokens = computed<JsonToken[]>(() => {
-  if (!book.value?.lines) return []
+  if (!bookModel.value?.lines) return []
 
   try {
-    const jsonString = JSON.stringify(book.value.lines, null, 2)
+    const jsonString = JSON.stringify(bookModel.value.lines, null, 2)
     const tokens: JsonToken[] = []
     const tokenRegex = /("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+-]?\d+)?)/g
     

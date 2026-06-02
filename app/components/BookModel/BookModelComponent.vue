@@ -15,7 +15,7 @@ const id = route.params.id
 
 const bookModelService = useBookModelService()
 const avatarService = useAvatarService()
-const bookStore = useBookStore()
+const bookModelStore = useBookModelStore()
 
 const { data: response} = await useAsyncData<BookModel>(
   "book-model", 
@@ -29,20 +29,19 @@ const { data: avatarResponse } = await useAsyncData<AvatarItems>(
 
 watch(response, (newData) => {
   if (newData) {
-    bookStore.setBook(newData)
+    bookModelStore.setBookModel(newData)
   }
 }, { immediate: true })
 
 watch(avatarResponse, (newData) => {
   if (newData && newData.items) {
     
-    bookStore.setAvailableAvatars(newData)
-
-    bookStore.assignAvatarsToCharacters()
+    bookModelStore.setAvailableAvatars(newData)
+    bookModelStore.assignAvatarsToCharacters()
   }
 }, { immediate: true })
 
 onUnmounted(() => {
-  bookStore.clearBook()
+  bookModelStore.clearBookModel()
 })
 </script>

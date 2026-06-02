@@ -1,18 +1,18 @@
 import type { BookModel } from "~/types/bookModel";
 import type { AvatarItems } from "~/types/avatar";
 
-export const useBookStore = defineStore('book', () => {
-  const book = ref<BookModel | null>(null)
+export const useBookModelStore = defineStore('bookModel', () => {
+  const bookModel = ref<BookModel | null>(null)
   const availableAvatars = ref<string[]>([])
 
-  const setBook = (data: BookModel): void => {
-    book.value = data
+  const setBookModel = (data: BookModel): void => {
+    bookModel.value = data
   }
 
   const updateCharacterAvatar = (characterId: number, newAvatarUrl: string): void => {
-    if (!book.value) return
+    if (!bookModel.value) return
 
-    const character = book.value.characters.find(c => c.id === characterId)
+    const character = bookModel.value.characters.find(c => c.id === characterId)
     
     if (character) {
       character.avatar = newAvatarUrl
@@ -22,8 +22,8 @@ export const useBookStore = defineStore('book', () => {
   }
 
   const getCharacterAvatar = (characterId: number | null): string | null => {
-    if (!book.value || !characterId) return null
-    const character = book.value.characters.find(c => c.id === characterId)
+    if (!bookModel.value || !characterId) return null
+    const character = bookModel.value.characters.find(c => c.id === characterId)
     return character ? character.avatar : null
   }
 
@@ -32,10 +32,10 @@ export const useBookStore = defineStore('book', () => {
   }
 
   const assignAvatarsToCharacters = (): void => {
-    if (!book.value) return
+    if (!bookModel.value) return
 
     let avatarIndex = 0;
-    for (const character of book.value.characters) {
+    for (const character of bookModel.value.characters) {
       if (avatarIndex < availableAvatars.value.length) {
         const newAvatarUrl = availableAvatars.value[avatarIndex];
         if (newAvatarUrl) {
@@ -47,28 +47,28 @@ export const useBookStore = defineStore('book', () => {
   }
 
   const getPreparedCharacters = (): object[] => {
-    if (!book.value) return []
-    return book.value.characters.map(character => ({
+    if (!bookModel.value) return []
+    return bookModel.value.characters.map(character => ({
       id: character.id,
       name: character.name,
       avatar: character.avatar
     }))
   }
 
-  const clearBook = (): void => {
-    book.value = null
+  const clearBookModel = (): void => {
+    bookModel.value = null
     availableAvatars.value = []
   }
 
   return {
-    book,
+    bookModel,
     availableAvatars,
-    setBook,
+    setBookModel,
     updateCharacterAvatar,
     getCharacterAvatar,
     setAvailableAvatars,
     assignAvatarsToCharacters,
     getPreparedCharacters,
-    clearBook
+    clearBookModel
   }
 })
