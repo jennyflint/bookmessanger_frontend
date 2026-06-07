@@ -620,7 +620,8 @@ watch(
     if (!props.templateName && templateStore.templates.length === 0) {
       templateStore.fetchTemplates();
     }
-  }
+  },
+  { immediate: true }
 );
 
 const closeModal = (): void => {
