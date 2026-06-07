@@ -91,6 +91,8 @@
         "raw_data_json": "Сирі дані (JSON)",
         "for_developers_and_api": "Для розробників та API",
         "extended_mode": "Перейти в розширений режим",
+        "previous_downloads": "Попередні завантаження",
+        "no_downloads_yet": "Файли ще не завантажувались",
         "success" : {
             "title": "Успіх",
             "message": "Почато підготовку до завантаження книги"

@@ -1,6 +1,7 @@
 import type { ActionResponse } from "./action";
 
 export type ExportBookFormat = 'html' | 'pdf'
+export type DownloadBookStatus = 'new' | 'pending' | 'completed' | 'failed' | 'removed'
 
 export interface CompleteBookResponse {
   id: number;
@@ -22,4 +23,13 @@ export type DownloadBookParams = {
   format: ExportBookFormat
   characters: object[]
   template: string
+}
+
+export type DownloadBook = {
+  id: number;
+  name: string;
+  status: DownloadBookStatus;
+  format: ExportBookFormat;
+  created_at: string;
+  updated_at: string;
 }
