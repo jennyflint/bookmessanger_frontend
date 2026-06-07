@@ -15,6 +15,7 @@ export interface ApiComposable {
   post: <T>(url: string, body?: SafeBody) => Promise<T>
   put: <T>(url: string, body?: SafeBody) => Promise<T>
   delete: <T>(url: string) => Promise<T>
+  download: (url: string) => Promise<void>
 }
 
 export interface RequestParams {

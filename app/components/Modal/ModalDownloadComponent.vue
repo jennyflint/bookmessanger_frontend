@@ -564,16 +564,7 @@ const handleDownloadExisting = async (file: DownloadBook): Promise<void> => {
   activeActionId.value = file.id;
   currentAction.value = "download";
   try {
-    const fileUrl = await downloadService.downloadCompleteBook(props.bookId, file.id);
-    if (fileUrl) {
-      const a = document.createElement("a");
-      a.href = fileUrl;
-      a.target = "_blank";
-      a.download = file.name || "book-export";
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-    }
+    await downloadService.downloadCompleteBook(props.bookId, file.id);
   } catch (error) {
     console.error("Failed to download existing file:", error);
   } finally {

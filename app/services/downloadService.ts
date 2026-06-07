@@ -3,8 +3,11 @@ import type { DownloadBookParams, DownloadBook } from '~/types/book'
 import type { PaginatedResponse, RequestParams } from '~/types/api'
 export const useDownloadService = (): {
   downloadBookStart: (bookId: number, params: DownloadBookParams) => Promise<AvatarItems>
-  getDownloadBookList: (bookId: number, params?: RequestParams) => Promise<PaginatedResponse<DownloadBook>>
-  downloadCompleteBook: (bookId: number, downloadId: number) => Promise<string>
+  getDownloadBookList: (
+    bookId: number,
+    params?: RequestParams
+  ) => Promise<PaginatedResponse<DownloadBook>>
+  downloadCompleteBook: (bookId: number, downloadId: number) => Promise<void>
   deleteDownloadBook: (bookId: number, downloadId: number) => Promise<string>
 } => {
   const api = useApi()
@@ -17,7 +20,10 @@ export const useDownloadService = (): {
     return response || {}
   }
 
-  const getDownloadBookList = async (bookId: number, params?: RequestParams): Promise<PaginatedResponse<DownloadBook>> => {
+  const getDownloadBookList = async (
+    bookId: number,
+    params?: RequestParams
+  ): Promise<PaginatedResponse<DownloadBook>> => {
     const response = await api.get<PaginatedResponse<DownloadBook>>(
       `/book/list/download/${bookId}`,
       params as Record<string, unknown>
@@ -32,9 +38,8 @@ export const useDownloadService = (): {
     }
   }
 
-  const downloadCompleteBook = async (bookId: number, downloadId: number): Promise<string> => {
-    const response = await api.get<string>(`/book/download/${bookId}/item/${downloadId}`)
-    return response || ''
+  const downloadCompleteBook = async (bookId: number, downloadId: number): Promise<void> => {
+    await api.download(`/book/download/${bookId}/item/${downloadId}`)
   }
   const deleteDownloadBook = async (bookId: number, downloadId: number): Promise<string> => {
     const response = await api.delete<string>(`/book/delete/${bookId}/item/${downloadId}`)

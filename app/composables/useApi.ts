@@ -90,6 +90,44 @@ export const useApi = (): ApiComposable => {
         body
       }),
 
-    delete: <T>(url: string): Promise<T> => request<T>(url, { method: 'DELETE' })
+    delete: <T>(url: string): Promise<T> => request<T>(url, { method: 'DELETE' }),
+    download: async (url: string): Promise<void> => {
+      try {
+        const response = await $fetch.raw(url, {
+          baseURL,
+          method: 'GET',
+          responseType: 'blob',
+          headers: userStore.accessToken 
+            ? { Authorization: `Bearer ${userStore.accessToken}` } 
+            : {}
+        })
+
+        let fileName = 'unknown';
+        const disposition = response.headers.get('content-disposition');
+        
+        if (disposition && disposition.includes('filename=')) {
+          const matches = disposition.match(/filename="?([^"]+)"?/);
+          if (matches && matches[1]) {
+            fileName = matches[1]; 
+          }
+        }
+
+        const fileData = response._data as Blob; 
+        const urlObj = window.URL.createObjectURL(fileData);
+        
+        const link = document.createElement('a');
+        link.href = urlObj;
+        link.setAttribute('download', fileName);
+        
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(urlObj);
+        
+      } catch (error) {
+        console.error('[API DOWNLOAD ERROR]', error);
+        throw error;
+      }
+    }
   }
 }
