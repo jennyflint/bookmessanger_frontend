@@ -29,10 +29,7 @@
         <div class="col-span-2">{{ $t("book.date") }}</div>
         <div class="col-span-2 text-right">{{ $t("book.actions") }}</div>
       </div>
-      <BookListRowsComponent
-        v-model="selectedBook"
-        :books="localBooks" 
-      />
+      <book-list-rows-component/>
     </div>
 
     <book-pagination-component
@@ -48,13 +45,9 @@
 
 <script setup lang="ts">
 import type { RequestParams } from "~/types/api";
-import type { BookDetailResponse } from "~/types/book";
 
 const bookStore = useBookStore();
 const { books, meta, isLoading, error } = storeToRefs(bookStore);
-
-const selectedBook = ref<BookDetailResponse | null>(null);
-const localBooks = ref<BookDetailResponse[]>([]);
 
 const params = ref<RequestParams>({
   limit: 5,
@@ -84,17 +77,7 @@ const prevPage = async (): Promise<void> => {
     await refresh();
   }
 };
-watch(
-  books, 
-  (newData) => {
-    if (newData && newData.length > 0) {
-      localBooks.value = structuredClone(toRaw(newData));
-    } else {
-      localBooks.value = [];
-    }
-  }, 
-  { immediate: true }
-);
+
 </script>
 
 <style scoped>

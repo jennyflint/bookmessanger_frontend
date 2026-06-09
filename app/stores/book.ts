@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import type { BookDetailResponse } from '@/types/book'
+import type { ActionStatus } from '@/types/action'
 import type { RequestParams } from '~/types/api'
 import { useBookService } from '~/services/bookService' 
 
@@ -32,11 +33,35 @@ export const useBookStore = defineStore('bookStore', () => {
     }
   }
 
+  const updateBookActionStatus = (bookId: number, actionType: string, newStatus: ActionStatus): void => {
+    const book = books.value.find((b) => b.id === bookId)
+    if (book) {
+      if (!book.actions) {
+        book.actions = []
+      }
+
+      const action = book.actions.find((a) => a.type === actionType)
+      
+      if (action) {
+        action.status = newStatus
+        action.updated_at = new Date().toISOString()
+      } else {
+        book.actions.push({
+          id: Date.now(),
+          type: actionType,
+          status: newStatus,
+          updated_at: new Date().toISOString()
+        })
+      }
+    }
+  }
+
   return {
     books,
     meta,
     isLoading,
     error,
-    fetchBooks
+    fetchBooks,
+    updateBookActionStatus
   }
 })

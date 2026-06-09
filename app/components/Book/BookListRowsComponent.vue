@@ -1,7 +1,7 @@
 <template>
   <div class="divide-y divide-slate-100 dark:divide-slate-700">
     <div
-      v-for="book in books"
+      v-for="book in bookStore.books"
       :key="book.id"
       :class="[
         'grid grid-cols-1 md:grid-cols-12 items-center px-6 py-4 transition-all gap-4 md:gap-0',
@@ -9,7 +9,6 @@
           ? 'cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-700/50 hover:shadow-sm'
           : 'hover:bg-slate-50/30 dark:hover:bg-slate-700/10 opacity-85',
       ]"
-     
       @click="navigateToBook(book)"
     >
       <div class="col-span-1 md:col-span-6 flex items-center space-x-3 overflow-hidden">
@@ -52,31 +51,28 @@
           {{ formatDate(book.created_at) }}
         </ClientOnly>
       </div>
+
       <div class="col-span-1 md:col-span-2 flex items-center justify-end space-x-2" @click.stop>
         <button
           v-if="isBookCompleted(book)"
           class="p-2 rounded-xl text-slate-400 hover:text-emerald-500 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
-          :title="$t('buttons.download')"
           @click="openDownloadPopup(book)"
         >
           <svg
             class="w-5 h-5"
             fill="none"
             stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
+            viewBox="0 0 24 24">
             <path
               stroke-linecap="round"
               stroke-linejoin="round"
               stroke-width="2"
-              d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
-            />
+              d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
           </svg>
         </button>
 
         <button
           class="p-2 rounded-xl text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-950/30 transition-colors"
-          :title="$t('buttons.delete')"
           @click="$emit('delete', book.id)"
         >
           <svg
@@ -93,19 +89,19 @@
         </button>
       </div>
     </div>
+
     <modal-download-component
       v-if="selectedBook"
       v-model="isOpenDownloadPopup"
-      :book-id="selectedBook.id" />
+      :book-id="selectedBook.id" 
+    />
   </div>
 </template>
 
 <script setup lang="ts">
+import { useBookStore } from '~/stores/book';
 import type { BookDetailResponse } from "~/types/book";
-
-defineProps<{
-  books: BookDetailResponse[];
-}>();
+const bookStore = useBookStore();
 
 defineEmits<{
   'delete': [id: number];
@@ -126,20 +122,25 @@ const formatDate = (dateString: string): string => {
 
 const getLatestActionStatus = (book: BookDetailResponse): string | null => {
   if (!book.actions || book.actions.length === 0) return null;
-  return book.actions.at(-1)?.status || null;
+  const sortedActions = [...book.actions].sort((a, b) => 
+    new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime()
+  );
+  return sortedActions[0]?.status || null;
 };
 
 const getStatusLabel = (book: BookDetailResponse): string => {
   if (book.complete_books?.length > 0) return $t("status_list.completed");
-
   const latestStatus = getLatestActionStatus(book);
-  if (latestStatus === "new") return $t("status_list.new");
-  if (latestStatus === "pending") return $t("status_list.pending");
-  if (latestStatus === "processing") return $t("status_list.processing");
-  if (latestStatus === "completed") return $t("status_list.completed");
-  if (latestStatus === "failed") return $t("status_list.failed");
-
-  return $t("status_list.pending");
+  
+  const statuses: Record<string, string> = {
+    new: $t("status_list.new"),
+    pending: $t("status_list.pending"),
+    processing: $t("status_list.processing"),
+    completed: $t("status_list.completed"),
+    failed: $t("status_list.failed")
+  };
+  
+  return latestStatus ? (statuses[latestStatus] || $t("status_list.pending")) : $t("status_list.pending");
 };
 
 const getStatusClass = (book: BookDetailResponse): string => {
@@ -154,24 +155,22 @@ const getStatusClass = (book: BookDetailResponse): string => {
   if (latestStatus === "failed") {
     return "bg-red-50 text-red-700 border-red-200 dark:bg-red-900/30 dark:border-red-800";
   }
-
   return "bg-slate-50 text-slate-700 border-slate-200 dark:bg-slate-800";
 };
 
 const isBookCompleted = (book: BookDetailResponse): boolean => {
   if (book.complete_books && book.complete_books.length > 0) return true;
-  
-  const latestStatus = getLatestActionStatus(book);
-  return latestStatus === "completed";
+  return getLatestActionStatus(book) === "completed";
 };
+
 const navigateToBook = (book: BookDetailResponse): void => {
   if (isBookCompleted(book)) {
-    navigateTo(`/book/model/${book.id}`)
+    navigateTo(`/book/model/${book.id}`);
   }
 };
 
 const openDownloadPopup = (book: BookDetailResponse): void => {
-  isOpenDownloadPopup.value = true
-  selectedBook.value = book
+  isOpenDownloadPopup.value = true;
+  selectedBook.value = book;
 };
 </script>
