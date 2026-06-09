@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import type { DownloadBook } from '~/types/book'
+import type { DownloadBook, DownloadBookStatus } from '~/types/book'
 import type { RequestParams } from '~/types/api'
 import { useDownloadService } from '~/services/downloadService'
 
@@ -43,12 +43,20 @@ export const useDownloadStore = defineStore('downloadStore', () => {
     }
   }
 
+  const updateDownloadStatus = (downloadId: number, newStatus: DownloadBookStatus): void => {
+    const item = downloads.value.find((d) => d.id === downloadId)
+    if (item) {
+      item.status = newStatus
+    }
+  }
+
   return {
     downloads,
     meta,
     isLoading,
     error,
     fetchDownloadList,
-    removeDownload
+    removeDownload,
+    updateDownloadStatus
   }
 })
