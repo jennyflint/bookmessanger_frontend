@@ -471,7 +471,6 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, computed } from "vue";
 import type { BookModel } from "@/types/bookModel";
 import type {
   DownloadBook,
@@ -479,6 +478,15 @@ import type {
   DownloadBookStatus,
   ExportBookFormat,
 } from "@/types/book";
+
+const downloadStore = useDownloadStore();
+
+const {
+  downloads: downloadedBooks,
+  meta,
+  isLoading: isHistoryLoading,
+  error: historyError,
+} = storeToRefs(downloadStore);
 
 const downloadService = useDownloadService();
 const bookModelStore = useBookModelStore();
@@ -504,16 +512,12 @@ const step = ref<Step>("format");
 const selectedFormat = ref<ExportBookFormat | null>(null);
 const selectedTemplate = ref<string | null>(null);
 
-const downloadedBooks = ref<DownloadBook[]>([]);
-const isHistoryLoading = ref(false);
-const historyError = ref<string | null>(null);
 const isStartingDownload = ref(false);
 
 const currentPage = ref(1);
 const itemsPerPage = ref(10);
-const totalItems = ref(0);
 const totalPages = computed(() =>
-  Math.max(1, Math.ceil(totalItems.value / itemsPerPage.value))
+  Math.max(1, Math.ceil((meta.value?.total || 0) / itemsPerPage.value))
 );
 const activeActionId = ref<number | null>(null);
 const currentAction = ref<"download" | "delete" | null>(null);
@@ -528,30 +532,14 @@ const statusColors: Record<DownloadBookStatus, string> = {
 };
 
 const fetchDownloadHistory = async (): Promise<void> => {
-  isHistoryLoading.value = true;
-  historyError.value = null;
-  try {
-    const offset = (currentPage.value - 1) * itemsPerPage.value;
+  const offset = (currentPage.value - 1) * itemsPerPage.value;
 
-    const requestParams = {
-      limit: itemsPerPage.value,
-      offset: offset,
-      sort_by: "created_at" as const,
-      sort_desc: true,
-    };
-    const response = await downloadService.getDownloadBookList(
-      props.bookId,
-      requestParams
-    );
-
-    downloadedBooks.value = response.data || [];
-    totalItems.value = response.meta?.total || 0;
-  } catch (error) {
-    console.error("Failed to fetch download history:", error);
-    historyError.value = "Cannot fetch download history";
-  } finally {
-    isHistoryLoading.value = false;
-  }
+  await downloadStore.fetchDownloadList(props.bookId, {
+    limit: itemsPerPage.value,
+    offset: offset,
+    sort_by: "created_at",
+    sort_desc: true,
+  });
 };
 
 const changePage = async (page: number): Promise<void> => {
@@ -577,8 +565,8 @@ const handleDeleteExisting = async (file: DownloadBook): Promise<void> => {
   activeActionId.value = file.id;
   currentAction.value = "delete";
   try {
-    await downloadService.deleteDownloadBook(props.bookId, file.id);
-    if (downloadedBooks.value.length === 1 && currentPage.value > 1) {
+    await downloadStore.removeDownload(props.bookId, file.id);
+    if (downloadedBooks.value.length === 0 && currentPage.value > 1) {
       currentPage.value--;
     }
     await fetchDownloadHistory();
@@ -684,7 +672,6 @@ const executeDownload = async (): Promise<void> => {
       triggerDownloadBlob(blob, "html");
       emit("success");
     }
-
     currentPage.value = 1;
     await fetchDownloadHistory();
     closeModal();

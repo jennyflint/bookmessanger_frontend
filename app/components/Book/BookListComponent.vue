@@ -5,10 +5,10 @@
         {{ $t("book_list.uploaded_books") }}
       </h2>
       <span
-        v-if="response?.meta"
+        v-if="meta"
         class="px-3 py-1 bg-indigo-100 text-indigo-700 dark:bg-indigo-900/50 dark:text-indigo-300 rounded-full text-sm font-semibold"
       >
-        {{ $t("total") }}: {{ response.meta.total }}
+        {{ $t("total") }}: {{ meta.total }}
       </span>
     </div>
 
@@ -18,11 +18,11 @@
         <button class="underline" @click="refresh()">{{ $t("error.retry") }}</button>
       </p>
     </div>
-    <div v-else-if="pending" class="flex justify-center py-20 animate-pulse text-slate-500">
+    <div v-else-if="isLoading" class="flex justify-center py-20 animate-pulse text-slate-500">
       {{ $t("upload.loading") }}
     </div>
 
-    <div v-else-if="response?.data" class="bg-white dark:bg-slate-800 shadow-sm border border-slate-200 dark:border-slate-700 rounded-2xl overflow-hidden">
+    <div v-else-if="books && books.length > 0" class="bg-white dark:bg-slate-800 shadow-sm border border-slate-200 dark:border-slate-700 rounded-2xl overflow-hidden">
       <div class="hidden md:grid grid-cols-12 bg-slate-50 dark:bg-slate-900/50 border-b border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 uppercase text-[11px] font-bold tracking-wider px-6 py-4">
         <div class="col-span-6">{{ $t("book.name") }}</div>
         <div class="col-span-2">{{ $t("book.status") }}</div>
@@ -38,8 +38,8 @@
     <book-pagination-component
       :offset="params.offset"
       :limit="params.limit"
-      :total="response?.meta?.total"
-      :pending="pending"
+      :total="meta?.total"
+      :pending="isLoading"
       @next="nextPage"
       @prev="prevPage"
     />
@@ -47,10 +47,11 @@
 </template>
 
 <script setup lang="ts">
-import type { RequestParams, PaginatedResponse } from "~/types/api";
+import type { RequestParams } from "~/types/api";
 import type { BookDetailResponse } from "~/types/book";
 
-const bookService = useBookService();
+const bookStore = useBookStore();
+const { books, meta, isLoading, error } = storeToRefs(bookStore);
 
 const selectedBook = ref<BookDetailResponse | null>(null);
 const localBooks = ref<BookDetailResponse[]>([]);
@@ -62,14 +63,15 @@ const params = ref<RequestParams>({
   sort_desc: true,
 });
 
-const { data: response, pending, error, refresh } = await useAsyncData<PaginatedResponse<BookDetailResponse>>(
-  "books-list", 
-  () => bookService.getBooks(params.value)
-);
+await useAsyncData("books-list", () => bookStore.fetchBooks(params.value));
+
+const refresh = async (): Promise<void> => {
+  await bookStore.fetchBooks(params.value);
+};
 
 const nextPage = async (): Promise<void> => {
   if (params.value.offset === undefined || params.value.limit === undefined) return;
-  if (response.value?.meta && params.value.offset + params.value.limit < response.value.meta.total) {
+  if (meta.value && params.value.offset + params.value.limit < meta.value.total) {
     params.value.offset += params.value.limit;
     await refresh();
   }
@@ -82,13 +84,10 @@ const prevPage = async (): Promise<void> => {
     await refresh();
   }
 };
-
-bookService.listenToBookUpdates(localBooks);
-
 watch(
-  () => response.value?.data, 
+  books, 
   (newData) => {
-    if (newData) {
+    if (newData && newData.length > 0) {
       localBooks.value = structuredClone(toRaw(newData));
     } else {
       localBooks.value = [];
