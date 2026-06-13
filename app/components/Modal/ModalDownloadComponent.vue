@@ -344,7 +344,7 @@
                       class="p-1.5 text-slate-400 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg transition-colors disabled:opacity-50 opacity-0 group-hover:opacity-100 focus:opacity-100"
                       :disabled="activeActionId === file.id"
                       :title="$t('buttons.delete')"
-                      @click="handleDeleteExisting(file)"
+                      @click="openDeleteConfirm(file)"
                     >
                       <svg
                         v-if="activeActionId === file.id && currentAction === 'delete'"
@@ -467,6 +467,13 @@
         </div>
       </div>
     </Transition>
+    <modal-confirm-component
+      v-model="isConfirmDeleteOpen"
+      :is-loading="isDeleting"
+      :message="$t('common.delete_warning')"
+      :title="$t('common.confirm_delete')"
+      @confirm="executeDelete"
+    />
   </Teleport>
 </template>
 
@@ -479,6 +486,9 @@ import type {
   ExportBookFormat,
 } from "@/types/book";
 
+const downloadService = useDownloadService();
+const bookModelStore = useBookModelStore();
+const templateStore = useTemplateStore();
 const downloadStore = useDownloadStore();
 
 const {
@@ -487,10 +497,6 @@ const {
   isLoading: isHistoryLoading,
   error: historyError,
 } = storeToRefs(downloadStore);
-
-const downloadService = useDownloadService();
-const bookModelStore = useBookModelStore();
-const templateStore = useTemplateStore();
 
 const props = defineProps<{
   modelValue: boolean;
@@ -531,6 +537,39 @@ const statusColors: Record<DownloadBookStatus, string> = {
   removed: "bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-400",
 };
 
+const isConfirmDeleteOpen = ref(false);
+const isDeleting = ref(false);
+const itemToDelete = ref<DownloadBook | null>(null);
+
+const openDeleteConfirm = (file: DownloadBook): void => {
+  itemToDelete.value = file;
+  isConfirmDeleteOpen.value = true;
+};
+
+const executeDelete = async (): Promise<void> => {
+  if (!itemToDelete.value) return;
+  
+  isDeleting.value = true;
+  activeActionId.value = itemToDelete.value.id;
+  currentAction.value = "delete";
+  
+  try {
+    await downloadStore.removeDownload(props.bookId, itemToDelete.value.id);
+    if (downloadedBooks.value.length === 0 && currentPage.value > 1) {
+      currentPage.value--;
+    }
+    await fetchDownloadHistory();
+    isConfirmDeleteOpen.value = false;
+  } catch (error) {
+    console.error("Failed to delete file:", error);
+  } finally {
+    isDeleting.value = false;
+    activeActionId.value = null;
+    currentAction.value = null;
+    itemToDelete.value = null;
+  }
+};
+
 const fetchDownloadHistory = async (): Promise<void> => {
   const offset = (currentPage.value - 1) * itemsPerPage.value;
 
@@ -555,23 +594,6 @@ const handleDownloadExisting = async (file: DownloadBook): Promise<void> => {
     await downloadService.downloadCompleteBook(props.bookId, file.id);
   } catch (error) {
     console.error("Failed to download existing file:", error);
-  } finally {
-    activeActionId.value = null;
-    currentAction.value = null;
-  }
-};
-
-const handleDeleteExisting = async (file: DownloadBook): Promise<void> => {
-  activeActionId.value = file.id;
-  currentAction.value = "delete";
-  try {
-    await downloadStore.removeDownload(props.bookId, file.id);
-    if (downloadedBooks.value.length === 0 && currentPage.value > 1) {
-      currentPage.value--;
-    }
-    await fetchDownloadHistory();
-  } catch (error) {
-    console.error("Failed to delete file:", error);
   } finally {
     activeActionId.value = null;
     currentAction.value = null;
