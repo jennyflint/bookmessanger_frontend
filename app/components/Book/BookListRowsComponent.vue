@@ -144,16 +144,14 @@ const getStatusLabel = (book: BookDetailResponse): string => {
 };
 
 const getStatusClass = (book: BookDetailResponse): string => {
-  if (book.complete_books?.length > 0) {
-    return "bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-900/30 dark:border-emerald-800";
-  }
 
   const latestStatus = getLatestActionStatus(book);
   if (latestStatus === "processing") {
     return "bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-900/30 dark:border-blue-800";
-  }
-  if (latestStatus === "failed") {
+  } else if (latestStatus === "failed") {
     return "bg-red-50 text-red-700 border-red-200 dark:bg-red-900/30 dark:border-red-800";
+  } else if (latestStatus === "completed") {
+    return "bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-900/30 dark:border-emerald-800";
   }
   return "bg-slate-50 text-slate-700 border-slate-200 dark:bg-slate-800";
 };
