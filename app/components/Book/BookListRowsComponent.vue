@@ -73,7 +73,7 @@
 
         <button
           class="p-2 rounded-xl text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-950/30 transition-colors"
-          @click="$emit('delete', book.id)"
+          @click="$emit('delete', book)"
         >
           <svg
             class="w-5 h-5"
@@ -104,7 +104,7 @@ import type { BookDetailResponse } from "~/types/book";
 const bookStore = useBookStore();
 
 defineEmits<{
-  'delete': [id: number];
+  'delete': [book: BookDetailResponse];
 }>();
 
 const selectedBook = ref<BookDetailResponse | null>(null);

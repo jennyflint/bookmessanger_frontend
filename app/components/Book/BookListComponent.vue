@@ -29,7 +29,7 @@
         <div class="col-span-2">{{ $t("book.date") }}</div>
         <div class="col-span-2 text-right">{{ $t("book.actions") }}</div>
       </div>
-      <book-list-rows-component/>
+      <book-list-rows-component @delete="openDeleteConfirm" />
     </div>
 
     <book-pagination-component
@@ -40,14 +40,25 @@
       @next="nextPage"
       @prev="prevPage"
     />
+
+    <modal-confirm-component
+      v-model="isConfirmDeleteOpen"
+      :title="$t('common.confirm_delete')"
+      :is-loading="isDeleting"
+      :message="$t('book.confirm_delete_message', { name: bookToDelete?.original_name })"
+      @confirm="executeDelete"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
 import type { RequestParams } from "~/types/api";
+import type { BookDetailResponse } from "~/types/book";
 
 const bookStore = useBookStore();
 const { books, meta, isLoading, error } = storeToRefs(bookStore);
+
+const bookService = useBookService();
 
 const params = ref<RequestParams>({
   limit: 5,
@@ -56,7 +67,32 @@ const params = ref<RequestParams>({
   sort_desc: true,
 });
 
+const isConfirmDeleteOpen = ref(false);
+const isDeleting = ref(false);
+const bookToDelete = ref<BookDetailResponse | null>(null);
+
 await useAsyncData("books-list", () => bookStore.fetchBooks(params.value));
+
+const openDeleteConfirm = (book: BookDetailResponse): void => {
+  bookToDelete.value = book;
+  isConfirmDeleteOpen.value = true;
+};
+
+const executeDelete = async (): Promise<void> => {
+  if (!bookToDelete.value) return;
+  
+  isDeleting.value = true;
+  try {
+    await bookService.deleteBook(bookToDelete.value.id)
+    await refresh();
+    isConfirmDeleteOpen.value = false;
+  } catch (err) {
+    console.error("Failed to delete book:", err);
+  } finally {
+    isDeleting.value = false;
+    bookToDelete.value = null;
+  }
+};
 
 const refresh = async (): Promise<void> => {
   await bookStore.fetchBooks(params.value);

@@ -4,6 +4,7 @@ import type { RequestParams, PaginatedResponse } from '~/types/api'
 export const useBookService = (): {
   getBooks: (params?: RequestParams) => Promise<PaginatedResponse<BookDetailResponse>>
   uploadBook: (file: File) => Promise<BookDetailResponse>
+  deleteBook: (id: number) => Promise<string>
 } => {
   const api = useApi()
 
@@ -27,8 +28,14 @@ export const useBookService = (): {
 
     return api.post<BookDetailResponse>('/book/upload', formData)
   }
+
+  const deleteBook = (id: number): Promise<string> => {
+    const response = api.delete<string>(`/book/delete/${id}`)
+    return response || ''
+  }
   return {
     getBooks,
     uploadBook,
+    deleteBook,
   }
 }
