@@ -240,9 +240,7 @@
                 v-if="isHistoryLoading && downloadedBooks.length === 0"
                 class="flex-1 flex items-center justify-center py-6"
               >
-                <div
-                  class="animate-spin rounded-full h-5 w-5 border-b-2 border-slate-400 dark:border-slate-500"
-                />
+                <skeleton-download-history-component />
               </div>
 
               <div v-else-if="historyError" class="text-xs text-center text-red-500 py-4">

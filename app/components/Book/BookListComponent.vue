@@ -29,7 +29,10 @@
         <div class="col-span-2">{{ $t("book.date") }}</div>
         <div class="col-span-2 text-right">{{ $t("book.actions") }}</div>
       </div>
-      <book-list-rows-component @delete="openDeleteConfirm" />
+      
+      <book-list-skeleton v-if="isLoading" :count="params.limit" />
+      <book-list-rows-component v-else-if="books && books.length > 0" @delete="openDeleteConfirm" />
+     
     </div>
 
     <book-pagination-component
@@ -71,7 +74,7 @@ const isConfirmDeleteOpen = ref(false);
 const isDeleting = ref(false);
 const bookToDelete = ref<BookDetailResponse | null>(null);
 
-await useAsyncData("books-list", () => bookStore.fetchBooks(params.value));
+await useAsyncData("books-list", () => bookStore.fetchBooks(params.value), { lazy: true });
 
 const openDeleteConfirm = (book: BookDetailResponse): void => {
   bookToDelete.value = book;
