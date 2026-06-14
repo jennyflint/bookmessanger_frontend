@@ -30,7 +30,7 @@
         <div class="col-span-2 text-right">{{ $t("book.actions") }}</div>
       </div>
       
-      <book-list-skeleton v-if="isLoading" :count="params.limit" />
+      <skeleton-book-table-list-component v-if="isLoading" :count="5" />
       <book-list-rows-component v-else-if="books && books.length > 0" @delete="openDeleteConfirm" />
      
     </div>

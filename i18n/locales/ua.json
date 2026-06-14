@@ -10,15 +10,14 @@
     "select": "Вибрати",
     "try": "Спроб",
     "auth": {
-       "login" : {
-        "description": "Увійдіть, щоб перетворювати книги на діалоги"
-       },
-       "login_with_google": "Продовжити з Google"
+        "login": {
+            "description": "Увійдіть, щоб перетворювати книги на діалоги"
+        },
+        "login_with_google": "Продовжити з Google"
     },
-
     "book_list": {
         "uploaded_books": "Завантажені книги"
-    },    
+    },
     "book": {
         "entity": "Книга",
         "name": "Назва книги",
@@ -29,7 +28,7 @@
         "ready_to_download": "Готові до завантаження файли",
         "confirm_delete_message": "Ви впевнені, що хочете видалити книгу {name}?"
     },
-    "book_model" :{
+    "book_model": {
         "no_found": "Дані відсутні або завантажуються...",
         "characters": {
             "title": "Список Персонажів",
@@ -49,24 +48,20 @@
         "file_too_large": "Файл занадто великий. Максимальний розмір: 20 МБ.",
         "upload_error": "Сталася помилка під час завантаження. Спробуйте ще раз."
     },
-
     "pagination": {
         "page": "Сторінка",
         "prev": "Назад",
         "next": "Далі"
     },
-
     "footer": {
         "agree_terms": "Продовжуючи, ви погоджуєтесь з нашими",
         "terms_of_use": "Умовами використання",
         "privacy_policy": "Політикою конфіденційності"
     },
-
     "error": {
         "loading": "Помилка завантаження",
         "retry": "Спробувати ще раз"
     },
-
     "status_list": {
         "new": "Нова",
         "pending": "Очікування",
@@ -94,7 +89,7 @@
         "extended_mode": "Перейти в розширений режим",
         "previous_downloads": "Попередні завантаження",
         "no_downloads_yet": "Файли ще не завантажувались",
-        "success" : {
+        "success": {
             "title": "Успіх",
             "message": "Почато підготовку до завантаження книги"
         }
@@ -115,5 +110,26 @@
     "common": {
         "confirm_delete": "Підтвердьте видалення",
         "delete_warning": "Ви впевнені, що хочете видалити цей файл?"
+    },
+    "notifications": {
+        "websocket_parse_error": "Помилка парсингу вебсокета:",
+        "missing_download_data": "Не вистачає даних для завантаження",
+        "download_started": "Завантаження розпочато!",
+        "download_error_console": "Помилка завантаження:",
+        "conversion_started": "Почалася конвертація книги...",
+        "book_model_created": "Модель книги успішно створено!",
+        "book_model_error": "Помилка при створенні моделі книги",
+        "conversion_completed": {
+            "title": "Конвертацію завершено!",
+            "description": "Ваша книга успішно оброблена."
+        },
+        "download_error": {
+            "title": "Помилка при завантаженні файлу",
+            "description": "Спробуйте завантажити файл пізніше."
+        },
+        "conversion_error": {
+            "title": "Помилка конвертації",
+            "description": "Щось пішло не так під час обробки файлу."
+        }
     }
 }
