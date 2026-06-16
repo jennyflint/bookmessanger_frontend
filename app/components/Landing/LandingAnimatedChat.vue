@@ -57,9 +57,7 @@
               >
                 <span v-for="(r, rIdx) in item.reactions" :key="rIdx">
                   {{ r.emoji }}
-                  <span class="reaction-count font-bold text-[#4b2c20] text-[12px]">{{
-                    r.count
-                  }}</span>
+                  <span class="reaction-count font-bold text-[#4b2c20] text-[12px]">{{ r.count }}</span>
                 </span>
               </div>
             </div>
@@ -85,9 +83,7 @@
           <div class="name text-[13px] mb-[5px] uppercase tracking-[0.5px] text-gray-500">
             {{ $t("landing.chat.typing", { name: nextSpeakerName }) }}
           </div>
-          <div
-            class="bubble left-bubble relative py-[12px] px-[18px] border border-[#4b2c20] w-fit"
-          >
+          <div class="bubble left-bubble relative py-[12px] px-[18px] border border-[#4b2c20] w-fit">
             <div class="typing-dots flex gap-1 items-center py-1 px-2">
               <span class="dot"/>
               <span class="dot"/>
@@ -101,6 +97,7 @@
 </template>
 
 <script lang="ts" setup>
+import { ref, computed, nextTick, onMounted, onUnmounted } from "vue";
 import { useI18n } from "vue-i18n";
 import type { Character, RawLine, ChatMessage } from "@/types/landingChat";
 
@@ -112,108 +109,47 @@ const isTyping = ref(false);
 const currentLineIndex = ref(0);
 const selectedScenario = ref("alice");
 
+const animationTimeout = ref<ReturnType<typeof setTimeout> | null>(null);
+
 const scenarios = ["alice", "space", "detective"];
 
 const bookData = computed(() => {
   const s = selectedScenario.value;
   return {
     characters: [
-      {
-        id: 1,
-        nameKey: `landing.chat.scenarios.${s}.characters.guest`,
-        avatar: null,
-      },
+      { id: 1, nameKey: `landing.chat.scenarios.${s}.characters.guest`, avatar: null },
       {
         id: 2,
         nameKey: `landing.chat.scenarios.${s}.characters.hero`,
-        avatar:
-          s === "alice"
-            ? "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR3a0f7F1wE-x2J497-p0I9p1Z67tX64Xw1gQ&s"
-            : null,
+        avatar: s === "alice" ? "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR3a0f7F1wE-x2J497-p0I9p1Z67tX64Xw1gQ&s" : null,
       },
     ] as Character[],
     lines: [
-      {
-        is_dialogue: false,
-        contentKey: `landing.chat.scenarios.${s}.lines.system_title`,
-      },
-      {
-        is_dialogue: true,
-        author_id: 1,
-        contentKey: "",
-        partsKeys: [
-          `landing.chat.scenarios.${s}.lines.line1_text`,
-          `landing.chat.scenarios.${s}.lines.line1_meta`,
-        ],
-      },
-      {
-        is_dialogue: true,
-        author_id: 2,
-        contentKey: "",
-        partsKeys: [
-          `landing.chat.scenarios.${s}.lines.line2_text`,
-          `landing.chat.scenarios.${s}.lines.line2_meta`,
-        ],
-      },
-      {
-        is_dialogue: true,
-        author_id: 1,
-        contentKey: "",
-        partsKeys: [
-          `landing.chat.scenarios.${s}.lines.line3_text`,
-          `landing.chat.scenarios.${s}.lines.line3_meta`,
-        ],
-      },
-      {
-        is_dialogue: true,
-        author_id: 2,
-        contentKey: "",
-        partsKeys: [
-          `landing.chat.scenarios.${s}.lines.line4_text`,
-          `landing.chat.scenarios.${s}.lines.line4_meta`,
-        ],
-      },
-      {
-        is_dialogue: true,
-        author_id: 1,
-        contentKey: "",
-        partsKeys: [
-          `landing.chat.scenarios.${s}.lines.line5_text`,
-          `landing.chat.scenarios.${s}.lines.line5_meta`,
-        ],
-      },
+      { is_dialogue: false, contentKey: `landing.chat.scenarios.${s}.lines.system_title` },
+      { is_dialogue: true, author_id: 1, contentKey: "", partsKeys: [`landing.chat.scenarios.${s}.lines.line1_text`, `landing.chat.scenarios.${s}.lines.line1_meta`] },
+      { is_dialogue: true, author_id: 2, contentKey: "", partsKeys: [`landing.chat.scenarios.${s}.lines.line2_text`, `landing.chat.scenarios.${s}.lines.line2_meta`] },
+      { is_dialogue: true, author_id: 1, contentKey: "", partsKeys: [`landing.chat.scenarios.${s}.lines.line3_text`, `landing.chat.scenarios.${s}.lines.line3_meta`] },
+      { is_dialogue: true, author_id: 2, contentKey: "", partsKeys: [`landing.chat.scenarios.${s}.lines.line4_text`, `landing.chat.scenarios.${s}.lines.line4_meta`] },
+      { is_dialogue: true, author_id: 1, contentKey: "", partsKeys: [`landing.chat.scenarios.${s}.lines.line5_text`, `landing.chat.scenarios.${s}.lines.line5_meta`] },
     ] as RawLine[],
   };
 });
 
 const getFallbackEmoji = (id: number): string => {
-  if (selectedScenario.value === "space") {
-    return id === 1 ? "👩‍🚀" : "🤖";
-  }
-  if (selectedScenario.value === "detective") {
-    return id === 1 ? "👨‍⚕️" : "🕵️‍♂️";
-  }
+  if (selectedScenario.value === "space") return id === 1 ? "👩‍🚀" : "🤖";
+  if (selectedScenario.value === "detective") return id === 1 ? "👨‍⚕️" : "🕵️‍♂️";
   const icons = ["🍭", "✨", "🍌", "🖍️", "🍦", "🍩", "🧃", "🛹", "🎈"];
   return icons[id % icons.length] ?? "💬";
 };
 
 const getRandomReactions = (): { emoji: string; count: number }[] | null => {
   if (Math.random() > 0.4) return null;
-  const emojis =
-    selectedScenario.value === "space"
-      ? ["🚀", "🛸", "✨"]
-      : selectedScenario.value === "detective"
-        ? ["🔍", "💡", "📜"]
-        : ["✨", "🍭", "🍩"];
+  const emojis = selectedScenario.value === "space" ? ["🚀", "🛸", "✨"]
+    : selectedScenario.value === "detective" ? ["🔍", "💡", "📜"]
+      : ["✨", "🍭", "🍩"];
 
   const chosenEmoji = emojis[Math.floor(Math.random() * emojis.length)] ?? "✨";
-
-  return [
-    {
-      emoji: chosenEmoji,
-      count: Math.floor(Math.random() * 3) + 1,
-    },
-  ];
+  return [{ emoji: chosenEmoji, count: Math.floor(Math.random() * 3) + 1 }];
 };
 
 const allProcessedLines = computed<ChatMessage[]>(() => {
@@ -270,16 +206,13 @@ const pickRandomScenario = (): void => {
 };
 
 const manageOverflowAndScroll = async (): Promise<void> => {
+  const MAX_VISIBLE_LINES = 10;
+  if (visibleLines.value.length > MAX_VISIBLE_LINES) {
+    visibleLines.value = visibleLines.value.slice(-MAX_VISIBLE_LINES);
+  }
+
   await nextTick();
   if (!chatContainer.value) return;
-
-  while (
-    chatContainer.value.scrollHeight > chatContainer.value.clientHeight + 10 &&
-    visibleLines.value.length > 1
-  ) {
-    visibleLines.value.shift();
-    await nextTick();
-  }
 
   chatContainer.value.scrollTo({
     top: chatContainer.value.scrollHeight,
@@ -289,7 +222,7 @@ const manageOverflowAndScroll = async (): Promise<void> => {
 
 const playChatAnimation = async (): Promise<void> => {
   if (currentLineIndex.value >= allProcessedLines.value.length) {
-    setTimeout(() => {
+    animationTimeout.value = setTimeout(() => {
       visibleLines.value = [];
       currentLineIndex.value = 0;
       pickRandomScenario();
@@ -299,13 +232,13 @@ const playChatAnimation = async (): Promise<void> => {
   }
 
   const nextLine = allProcessedLines.value[currentLineIndex.value];
-
   if (!nextLine) return;
+
   if (nextLine.type === "system") {
     visibleLines.value.push(nextLine);
     currentLineIndex.value++;
     await manageOverflowAndScroll();
-    setTimeout(() => {
+    animationTimeout.value = setTimeout(() => {
       playChatAnimation();
     }, 1500);
   } else {
@@ -313,13 +246,13 @@ const playChatAnimation = async (): Promise<void> => {
     await manageOverflowAndScroll();
     const typingTime = Math.min(Math.max((nextLine.text?.length || 0) * 35, 1200), 3000);
 
-    setTimeout(async () => {
+    animationTimeout.value = setTimeout(async () => {
       isTyping.value = false;
       visibleLines.value.push(nextLine);
       currentLineIndex.value++;
       await manageOverflowAndScroll();
 
-      setTimeout(() => {
+      animationTimeout.value = setTimeout(() => {
         playChatAnimation();
       }, 1000);
     }, typingTime);
@@ -329,6 +262,12 @@ const playChatAnimation = async (): Promise<void> => {
 onMounted(() => {
   selectedScenario.value = scenarios[Math.floor(Math.random() * scenarios.length)] ?? 'alice';
   playChatAnimation();
+});
+
+onUnmounted(() => {
+  if (animationTimeout.value) {
+    clearTimeout(animationTimeout.value);
+  }
 });
 </script>
 
@@ -392,10 +331,15 @@ onMounted(() => {
 
 .msg-animated {
   animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+  will-change: transform, opacity;
+  transform: translateZ(0); 
 }
 
 .animate-fade-in {
   animation: popIn 0.5s ease-out forwards;
+
+  will-change: transform, opacity;
+  transform: translateZ(0); 
 }
 
 .dot {
@@ -405,6 +349,7 @@ onMounted(() => {
   border-radius: 50%;
   display: inline-block;
   animation: bounce 1.4s infinite ease-in-out both;
+  will-change: transform;
 }
 
 .dot:nth-child(1) {
