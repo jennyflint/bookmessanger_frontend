@@ -414,8 +414,8 @@
                 "
                 @click="selectedTemplate = template.value"
               >
-                <span class="font-medium text-slate-800 dark:text-slate-200">{{
-                  template.value
+                <span class="font-medium text-slate-800 dark:text-slate-200 capitalize">{{
+                  template.label
                 }}</span>
                 <svg
                   v-if="selectedTemplate === template.value"
