@@ -11,19 +11,24 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, onUnmounted } from "vue";
+import { onUnmounted} from "vue";
 import type { WebSocketPayload } from "~/types/event";
 import type { DownloadBookStatus } from "~/types/book";
 import { useDownloadStore } from "~/stores/downloadBook";
 import { useBookStore } from "~/stores/book";
+import { useUserStore } from "~/stores/user";
 import { Toaster, toast } from "vue-sonner";
 import "vue-sonner/style.css";
+
 const { t } = useI18n();
 
 const { connect } = useNotificationSocket();
 const downloadStore = useDownloadStore();
 const bookStore = useBookStore();
+const userStore = useUserStore();
 const downloadService = useDownloadService();
+
+const { isAuthenticated } = storeToRefs(userStore);
 
 let unsubscribe: (() => void) | null = null;
 
@@ -32,13 +37,14 @@ const mapSocketStatus = (socketStatus: string): DownloadBookStatus => {
   return socketStatus as DownloadBookStatus;
 };
 
-onMounted(() => {
+const startWebSocket = (): void => {
+  if (unsubscribe) return;
+
   unsubscribe = connect<WebSocketPayload>((rawPayload: WebSocketPayload) => {
     let payload: WebSocketPayload;
     try {
       payload = typeof rawPayload === "string" ? JSON.parse(rawPayload) : rawPayload;
     } catch (error) {
-      
       console.error("Error parsing WebSocket payload:", error);
       return;
     }
@@ -63,7 +69,6 @@ onMounted(() => {
                 }
 
                 await downloadService.downloadCompleteBook(bookId, downloadId);
-
                 toast.success(t("notifications.download_started"));
               } catch (error) {
                 console.error(t("notifications.download_error_console"), error);
@@ -90,9 +95,28 @@ onMounted(() => {
       }
     }
   });
-});
+};
+
+const stopWebSocket = (): void => {
+  if (unsubscribe) {
+    unsubscribe();
+    unsubscribe = null;
+  }
+};
+
+watch(
+  isAuthenticated,
+  (isLoggedIn) => {
+    if (isLoggedIn) {
+      startWebSocket();
+    } else {
+      stopWebSocket();
+    }
+  },
+  { immediate: true }
+);
 
 onUnmounted(() => {
-  if (unsubscribe) unsubscribe();
+  stopWebSocket();
 });
 </script>
