@@ -109,9 +109,9 @@
     </div>
   </div>
 
-  <div class="relative rounded-b-2xl shadow-xl border border-slate-800 max-h-[550px] overflow-y-auto custom-scrollbar bg-slate-50 dark:bg-slate-800 min-h-[200px]">
-    <book-model-preview-json v-if="selectedTemplate === 'json'" />
-    <book-model-preview-html v-else />
+  <div class="relative rounded-b-2xl shadow-xl border border-slate-800 h-[550px] overflow-y-auto custom-scrollbar bg-slate-50 dark:bg-slate-800">
+    <book-model-preview-json v-show="selectedTemplate === 'json'" />
+    <book-model-preview-html v-show="selectedTemplate !== 'json'" />
   </div>
 
   <modal-download-component
