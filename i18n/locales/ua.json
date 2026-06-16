@@ -18,7 +18,8 @@
                 "live_chat": "живий чат"
             }
         },
-        "login_with_google": "Продовжити з Google"
+        "login_with_google": "Продовжити з Google",
+        "logout": "Вийти"
     },
     "book_list": {
         "uploaded_books": "Завантажені книги"
