@@ -7,7 +7,8 @@ export default defineNuxtConfig({
       appUrl: import.meta.env.NUXT_PUBLIC_APP_URL,
       apiBase: import.meta.env.NUXT_PUBLIC_API_BASE,
       appHost: import.meta.env.NUXT_PUBLIC_APP_HOST,
-      defaultApiVersion: import.meta.env.NUXT_PUBLIC_DEFAULT_API_VERSION
+      defaultApiVersion: import.meta.env.NUXT_PUBLIC_DEFAULT_API_VERSION,
+      uploadBookFormats: ["txt", "epub", "fb2"],
 
     }
   },

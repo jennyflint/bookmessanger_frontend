@@ -46,7 +46,7 @@
         ref="fileInput"
         type="file"
         class="hidden"
-        accept=".epub,.pdf,.txt"
+        :accept="Array.from(ALLOWED_EXTENSIONS).map(ext => `.${ext}`).join(',')"
         @change="handleFileSelect"
       >
 
@@ -71,7 +71,7 @@
           }}</span>
           {{ $t("upload.or_drag_and_drop") }}
         </div>
-        <p class="text-xs text-gray-500">{{ $t("upload.supported_formats") }}</p>
+        <p class="text-xs text-gray-500">{{ $t("upload.supported_formats", { formats: Array.from(ALLOWED_EXTENSIONS).join(', ') }) }}</p>
       </div>
 
       <div v-else class="flex flex-col items-center space-y-4">
@@ -164,6 +164,7 @@
 
 <script setup lang="ts">
 const bookService = useBookService();
+const config = useRuntimeConfig();
 
 const fileInput = ref<HTMLInputElement | null>(null);
 const isDragging = ref(false);
@@ -171,7 +172,7 @@ const selectedFile = ref<File | null>(null);
 const error = ref("");
 const isUploading = ref(false);
 
-const ALLOWED_EXTENSIONS = new Set(["txt"]);
+const ALLOWED_EXTENSIONS = new Set(config.public.uploadBookFormats as string[]);
 const MAX_FILE_SIZE = 20 * 1024 * 1024; // 20 MB
 
 const triggerFileInput = (): void => {
@@ -206,7 +207,9 @@ const validateFile = (file: File | null): boolean => {
     return false;
   }
   if (!ALLOWED_EXTENSIONS.has(extension)) {
-    error.value = $t("upload.invalid_file_format");
+    error.value = $t("upload.invalid_file_format", {
+      formats: Array.from(ALLOWED_EXTENSIONS).join(', ')
+    });
     return false;
   }
 
