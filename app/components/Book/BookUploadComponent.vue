@@ -72,6 +72,7 @@
           {{ $t("upload.or_drag_and_drop") }}
         </div>
         <p class="text-xs text-gray-500">{{ $t("upload.supported_formats", { formats: Array.from(ALLOWED_EXTENSIONS).join(', ') }) }}</p>
+        <p class="text-xs font-bold text-red-500">{{ $t("upload.beta_description") }}</p>
       </div>
 
       <div v-else class="flex flex-col items-center space-y-4">
