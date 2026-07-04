@@ -23,10 +23,11 @@
           <select 
             id="template-select"
             v-model="selectedTemplate"
-            class="appearance-none outline-none text-xs font-medium text-black bg-white px-3 py-1.5 pr-8 rounded-lg border border-slate-200 shadow-sm cursor-pointer hover:text-indigo-600 transition-colors w-full min-w-[100px]"
+            :disabled="templateStore.isLoading"
+            class="appearance-none outline-none text-xs font-medium text-black bg-white px-3 py-1.5 pr-8 rounded-lg border border-slate-200 shadow-sm cursor-pointer hover:text-indigo-600 transition-colors w-full min-w-[100px] disabled:opacity-50 disabled:cursor-not-allowed"
             @change="handleTemplateChange"
           >
-            <option value="json">JSON</option>
+            <option value="json">JSON </option>
             <option 
               v-for="template in templateStore.templates" 
               :key="template.value" 
@@ -35,8 +36,28 @@
               {{ template.label }}
             </option>
           </select>
+          
           <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-black">
             <svg
+              v-if="templateStore.isLoading"
+              class="w-3 h-3 animate-spin"
+              viewBox="0 0 24 24">
+              <circle
+                class="opacity-25"
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                stroke-width="4"
+                fill="none"/>
+              <path
+                class="opacity-75"
+                fill="currentColor"
+                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
+            </svg>
+            
+            <svg
+              v-else
               class="w-3 h-3"
               fill="none"
               stroke="currentColor"
