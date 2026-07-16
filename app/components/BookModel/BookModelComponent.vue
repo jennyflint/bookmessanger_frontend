@@ -19,14 +19,15 @@ import type { BookModel } from "~/types/bookModel";
 import type { AvatarItems } from "~/types/avatar";
 
 const route = useRoute();
-const id = route.params.id;
+const id = computed(() => route.params.id);
 
 const bookModelService = useBookModelService();
 const avatarService = useAvatarService();
 const bookModelStore = useBookModelStore();
+
 const { data: response } = await useAsyncData<BookModel>(
-  "book-model",
-  () => bookModelService.getBookModel(Number(id)),
+  () => `book-model-${id.value}`,
+  () => bookModelService.getBookModel(Number(id.value)),
   { lazy: true }
 );
 
@@ -44,6 +45,9 @@ watch(
   (newData) => {
     if (newData) {
       bookModelStore.setBookModel(newData);
+      if (bookModelStore.availableAvatars) {
+        bookModelStore.assignAvatarsToCharacters();
+      }
     }
   },
   { immediate: true }
@@ -54,7 +58,9 @@ watch(
   (newData) => {
     if (newData && newData.items) {
       bookModelStore.setAvailableAvatars(newData);
-      bookModelStore.assignAvatarsToCharacters();
+      if (bookModelStore.bookModel) {
+        bookModelStore.assignAvatarsToCharacters();
+      }
     }
   },
   { immediate: true }

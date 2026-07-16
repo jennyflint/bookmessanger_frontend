@@ -32,18 +32,13 @@ export const useBookModelStore = defineStore('bookModel', () => {
   }
 
   const assignAvatarsToCharacters = (): void => {
-    if (!bookModel.value) return
+    if (!bookModel.value || availableAvatars.value.length === 0) return
 
-    let avatarIndex = 0;
-    for (const character of bookModel.value.characters) {
-      if (avatarIndex < availableAvatars.value.length) {
-        const newAvatarUrl = availableAvatars.value[avatarIndex];
-        if (newAvatarUrl) {
-          character.avatar = newAvatarUrl;
-          avatarIndex++;
-        }
-      }
-    }
+    const avatars = availableAvatars.value;
+  
+    bookModel.value.characters.forEach((character, index) => {
+      character.avatar = avatars[index % avatars.length] ?? null;
+    });
   }
 
   const getPreparedCharacters = (): object[] => {
