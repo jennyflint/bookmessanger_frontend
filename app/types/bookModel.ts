@@ -16,6 +16,8 @@ export interface CharacterModel {
 
 export interface BookModel {
     name: string;
+    /** Original file name of the book; only sent with the short model (?short=1) */
+    book_name?: string;
     lines: SentenceModel[];
     characters: CharacterModel[];
 }

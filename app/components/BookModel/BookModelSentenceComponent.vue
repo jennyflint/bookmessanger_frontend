@@ -8,7 +8,7 @@
         <span class="w-3 h-3 rounded-full bg-emerald-400 block"/>
       </div>
       <span class="text-xs font-bold sm:font-mono sm:font-normal text-slate-700 dark:text-slate-300 sm:text-slate-500 sm:dark:text-slate-400 ml-0 sm:ml-2 truncate max-w-[200px] md:max-w-xs">
-        {{ bookModel?.name || 'book-preview' }}
+        {{ bookTitle || 'book-preview' }}
       </span>
     </div>
 
@@ -166,6 +166,12 @@ const isCopied = ref(false)
 
 const isDownloadModalOpen = ref(false)
 const isNotificationOpen = ref(false)
+
+// Real file name without its extension ("alisa.epub" -> "alisa")
+const bookTitle = computed(() => {
+  const fileName = bookModel.value?.book_name
+  return fileName ? fileName.replace(/\.[^./\\]+$/, '') : ''
+})
 
 const processedTemplateCode = computed(() => {
   const code = templateStore.currentTemplateCode
