@@ -31,3 +31,14 @@ export const getApiErrorDetail = (error: unknown): string | null => {
 
   return null
 }
+
+/**
+ * `detail` only when the backend sent a plain string message.
+ * FastAPI validation errors (an array) return null, so the caller
+ * can show its own generic text instead of technical field paths.
+ */
+export const getApiErrorMessage = (error: unknown): string | null => {
+  const data = (error as Partial<FetchError> | null)?.data as { detail?: unknown } | undefined
+  const detail = data?.detail
+  return typeof detail === 'string' && detail.trim() ? detail : null
+}

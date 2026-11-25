@@ -1,4 +1,4 @@
-import type { BookModel } from "~/types/bookModel";
+import type { BookModel, CharacterModel } from "~/types/bookModel";
 import type { AvatarItems } from "~/types/avatar";
 
 export const useBookModelStore = defineStore('bookModel', () => {
@@ -41,6 +41,25 @@ export const useBookModelStore = defineStore('bookModel', () => {
     });
   }
 
+  const getCharactersByAvatar = (avatarUrl: string): CharacterModel[] => {
+    if (!bookModel.value) return []
+    return bookModel.value.characters.filter(c => c.avatar === avatarUrl)
+  }
+
+  /**
+   * Gives every character that uses `avatarUrl` a random stock avatar
+   * (or null when no stock avatars are loaded). Used after the user deletes
+   * an uploaded avatar, whose URL stops working.
+   */
+  const replaceAvatarWithStock = (avatarUrl: string): void => {
+    const stock = availableAvatars.value
+    getCharactersByAvatar(avatarUrl).forEach((character) => {
+      character.avatar = stock.length > 0
+        ? stock[Math.floor(Math.random() * stock.length)] ?? null
+        : null
+    })
+  }
+
   const getPreparedCharacters = (): object[] => {
     if (!bookModel.value) return []
     return bookModel.value.characters.map(character => ({
@@ -63,6 +82,8 @@ export const useBookModelStore = defineStore('bookModel', () => {
     getCharacterAvatar,
     setAvailableAvatars,
     assignAvatarsToCharacters,
+    getCharactersByAvatar,
+    replaceAvatarWithStock,
     getPreparedCharacters,
     clearBookModel
   }

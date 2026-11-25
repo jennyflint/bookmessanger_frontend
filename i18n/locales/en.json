@@ -150,7 +150,30 @@
     },
     "select_avatar_modal": {
         "title": "Choose a new avatar",
-        "not_found": "No avatars available."
+        "not_found": "No avatars available.",
+        "tabs": {
+            "stock": "Stock",
+            "my": "My avatars"
+        },
+        "my": {
+            "hint": "Upload your own images: {formats}, up to {size}. Only you can see them.",
+            "upload": "Upload",
+            "uploading": "Uploading avatar...",
+            "uploaded": "Avatar uploaded",
+            "empty": "You have no uploaded avatars yet.",
+            "load_error": "Could not load your avatars",
+            "retry": "Try again",
+            "delete_title": "Delete this avatar?",
+            "delete_message": "The image will be deleted permanently.",
+            "delete_in_use": "This avatar is used by: {names}. After deleting, they will get a random stock avatar.",
+            "deleted": "Avatar deleted",
+            "errors": {
+                "invalid_type": "Unsupported file type. Allowed: {formats}.",
+                "too_large": "The file is too large. Maximum size is {size}.",
+                "upload_failed": "Could not upload the avatar",
+                "delete_failed": "Could not delete the avatar"
+            }
+        }
     },
     "template": {
         "label": "Choose any template",

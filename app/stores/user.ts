@@ -17,7 +17,8 @@ export const useUserStore = defineStore('user', () => {
     accessToken.value = null
     refreshToken.value = null
     user.value = null
-
+    // Uploaded avatars belong to the user who is logging out
+    useUserAvatarsStore().reset()
   }
 
   const refreshSession = async (): Promise<boolean> => {

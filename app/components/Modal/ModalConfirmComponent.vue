@@ -3,7 +3,8 @@
     <Transition name="modal-fade">
       <div
         v-if="modelValue"
-        class="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm"
+        :class="zIndexClass"
+        class="fixed inset-0 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm"
         @click.self="closeModal"
       >
         <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-sm p-6 text-center transform transition-all relative">
@@ -126,6 +127,8 @@ const props = withDefaults(
     confirmLabel?: string;
     /** "danger" for destructive actions, "primary" for everything else */
     variant?: "danger" | "primary";
+    /** Tailwind z-index class, raise it when opening on top of another modal */
+    zIndexClass?: string;
   }>(),
   {
     title: "",
@@ -133,6 +136,7 @@ const props = withDefaults(
     isLoading: false,
     confirmLabel: "",
     variant: "danger",
+    zIndexClass: "z-[60]",
   }
 );
 
