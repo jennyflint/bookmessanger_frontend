@@ -190,11 +190,8 @@ onMounted(() => {
 const getLatestParsingAction = (book: BookDetailResponse): ActionResponse | undefined =>
   getLatestAction(book.actions, BOOK_PARSING_ACTION);
 
-const getParserBadge = (book: BookDetailResponse): string => {
-  if (book.parser_mode !== "llm") return $t("parser.badge.spacy");
-  const providerLabel = parserOptionsStore.getProviderLabel(book.llm_provider);
-  return providerLabel ? `${$t("parser.badge.llm")} · ${providerLabel}` : $t("parser.badge.llm");
-};
+const getParserBadge = (book: BookDetailResponse): string =>
+  book.parser_mode === "llm" ? $t("parser.badge.llm") : $t("parser.badge.spacy");
 
 const getParsingError = (book: BookDetailResponse): string | null => {
   const action = getLatestParsingAction(book);

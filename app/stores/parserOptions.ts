@@ -5,19 +5,6 @@ import { useBookService } from '~/services/bookService'
 
 const KNOWN_MODES: ParserMode[] = ['spacy', 'llm']
 
-/** Used for books parsed with a provider that is no longer offered by the backend */
-const KNOWN_PROVIDER_LABELS: Record<string, string> = {
-  deepseek: 'DeepSeek',
-  gemini: 'Gemini',
-  openai: 'OpenAI',
-  anthropic: 'Anthropic',
-  groq: 'Groq',
-  mistral: 'Mistral',
-  openrouter: 'OpenRouter',
-  ollama: 'Ollama',
-  llamacpp: 'llama.cpp',
-}
-
 /**
  * Parser options (GET /book/parser/options), loaded once and cached.
  * If loading fails, only spaCy stays available, so uploads are never blocked.
@@ -75,13 +62,6 @@ export const useParserOptionsStore = defineStore('parserOptions', () => {
     return llmProviders.value[0]?.value ?? null
   })
 
-  const getProviderLabel = (value: string | null | undefined): string | null => {
-    if (!value) return null
-    return llmProviders.value.find((provider) => provider.value === value)?.label
-      ?? KNOWN_PROVIDER_LABELS[value]
-      ?? value
-  }
-
   return {
     options,
     isLoading,
@@ -92,6 +72,5 @@ export const useParserOptionsStore = defineStore('parserOptions', () => {
     availableModes,
     defaultProvider,
     fetchOptions,
-    getProviderLabel,
   }
 })
