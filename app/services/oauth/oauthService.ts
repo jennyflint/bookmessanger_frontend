@@ -7,9 +7,13 @@ export const useOauthService = (): OauthService => {
   const apiVersion = config.public.defaultApiVersion
   const appUrl = config.public.appUrl
   const baseURL = `${apiBase}/${apiVersion}`
-  const redirect_url = `${appUrl}/dashboard`
-  const fallback_url = `${appUrl}/auth/error`
+  const localePath = useLocalePath()
   const loginViaGoogle = async (): Promise<void> => {
+    // Built on click: the language can be switched on the login page
+    const redirect_url = `${appUrl}${localePath('/dashboard')}`
+    // There is no /auth/error page for localePath to resolve, so only the language prefix is reused
+    const localePrefix = localePath('/dashboard').replace(/\/dashboard$/, '')
+    const fallback_url = `${appUrl}${localePrefix}/auth/error`
     const url = withQuery(`${baseURL}/auth/login-via-google`, {
       redirect_url: redirect_url,
       fallback_url: fallback_url

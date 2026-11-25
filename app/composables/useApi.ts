@@ -14,6 +14,7 @@ let refreshPromise: Promise<void> | null = null
 export const useApi = (): ApiComposable => {
   const config = useRuntimeConfig()
   const userStore = useUserStore()
+  const localePath = useLocalePath()
 
   const apiBase = import.meta.server ? config.apiBase : config.public.apiBase
   const apiVersion = config.public.defaultApiVersion
@@ -40,7 +41,7 @@ export const useApi = (): ApiComposable => {
       if (fetchError.response?.status === 401 && !isRetry) {
         if (!userStore.refreshToken) {
           userStore.logout()
-          navigateTo('/auth/login')
+          navigateTo(localePath('/auth/login'))
         }
 
         refreshPromise ??= $fetch<RefreshResponse>('/auth/refresh/token', {
@@ -55,7 +56,7 @@ export const useApi = (): ApiComposable => {
           })
           .catch((refreshError: unknown) => {
             userStore.logout()
-            navigateTo('/auth/login')
+            navigateTo(localePath('/auth/login'))
             throw refreshError
           })
           .finally(() => {

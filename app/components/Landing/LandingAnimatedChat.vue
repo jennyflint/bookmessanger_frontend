@@ -111,7 +111,18 @@ const selectedScenario = ref("alice");
 
 const animationTimeout = ref<ReturnType<typeof setTimeout> | null>(null);
 
-const scenarios = ["alice", "space", "detective"];
+// Keys match landing.chat.scenarios in the locale files; avatars are [guest, hero]
+const scenarioStyles: Record<string, { avatars: [string, string]; reactions: string[] }> = {
+  alice: { avatars: ["🙋", "👱‍♀️"], reactions: ["✨", "🫖", "😹"] },
+  space: { avatars: ["👩‍🚀", "🤖"], reactions: ["🚀", "🛸", "🧦"] },
+  detective: { avatars: ["👨‍⚕️", "🕵️‍♂️"], reactions: ["🔍", "💡", "🍮"] },
+  dracula: { avatars: ["😰", "🧛"], reactions: ["🦇", "🧄", "🌙"] },
+  romeo: { avatars: ["🤵", "👰"], reactions: ["❤️", "🌹", "🥟"] },
+  quixote: { avatars: ["🧔", "🤺"], reactions: ["🛡️", "🌭", "🐴"] },
+  redhood: { avatars: ["👧", "🐺"], reactions: ["🥧", "👂", "🌲"] },
+};
+
+const scenarios = Object.keys(scenarioStyles);
 
 const bookData = computed(() => {
   const s = selectedScenario.value;
@@ -121,7 +132,7 @@ const bookData = computed(() => {
       {
         id: 2,
         nameKey: `landing.chat.scenarios.${s}.characters.hero`,
-        avatar: s === "alice" ? "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR3a0f7F1wE-x2J497-p0I9p1Z67tX64Xw1gQ&s" : null,
+        avatar: null,
       },
     ] as Character[],
     lines: [
@@ -135,18 +146,12 @@ const bookData = computed(() => {
   };
 });
 
-const getFallbackEmoji = (id: number): string => {
-  if (selectedScenario.value === "space") return id === 1 ? "👩‍🚀" : "🤖";
-  if (selectedScenario.value === "detective") return id === 1 ? "👨‍⚕️" : "🕵️‍♂️";
-  const icons = ["🍭", "✨", "🍌", "🖍️", "🍦", "🍩", "🧃", "🛹", "🎈"];
-  return icons[id % icons.length] ?? "💬";
-};
+const getFallbackEmoji = (id: number): string =>
+  scenarioStyles[selectedScenario.value]?.avatars[id - 1] ?? "💬";
 
 const getRandomReactions = (): { emoji: string; count: number }[] | null => {
   if (Math.random() > 0.4) return null;
-  const emojis = selectedScenario.value === "space" ? ["🚀", "🛸", "✨"]
-    : selectedScenario.value === "detective" ? ["🔍", "💡", "📜"]
-      : ["✨", "🍭", "🍩"];
+  const emojis = scenarioStyles[selectedScenario.value]?.reactions ?? [];
 
   const chosenEmoji = emojis[Math.floor(Math.random() * emojis.length)] ?? "✨";
   return [{ emoji: chosenEmoji, count: Math.floor(Math.random() * 3) + 1 }];

@@ -3,7 +3,7 @@
     <div class="max-w-7xl mx-auto flex items-center justify-between">
       
       <div class="flex items-center">
-        <nuxt-link to="/dashboard" class="logo-text font-bold text-[18px] tracking-tight text-[#4b2c20]">
+        <nuxt-link :to="localePath('/dashboard')" class="logo-text font-bold text-[18px] tracking-tight text-[#4b2c20]">
           {{ config.public.appName || 'BookChat' }}
         </nuxt-link>
       </div>

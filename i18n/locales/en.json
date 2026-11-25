@@ -221,17 +221,17 @@
                         "hero": "Alice"
                     },
                     "lines": {
-                        "system_title": "Book: Alice's Adventures in Wonderland (AI Version)",
-                        "line1_text": "Hi! Wow, what is this app? How does it work?",
-                        "line1_meta": "— the surprised Guest asked.",
-                        "line2_text": "Hi! It's pure magic! Our app takes a text book and converts it into an interactive chat with me or other characters!",
-                        "line2_meta": "— Alice smiled. — The app turns a book into an AI chat!",
-                        "line3_text": "So I can not just read the plot, but talk directly with the characters of the book?",
-                        "line3_meta": "— the Guest clarified.",
-                        "line4_text": "Exactly! You can dive into the story from the inside and react to events. The text comes alive before your eyes!",
-                        "line4_meta": "— the Cheshire Cat joyfully bounced somewhere nearby.",
-                        "line5_text": "Cool, I'll sign in with Google and let's start!",
-                        "line5_meta": "— the Guest exclaimed, clicking the nearby button."
+                        "system_title": "Book: Alice in Wonderland (AI Version, Tea Party Included)",
+                        "line1_text": "Whoa! I just wanted to flip through a book, and it texted me \"heyyy\". What is happening?!",
+                        "line1_meta": "— the Guest dropped a sandwich. Butter side down, naturally.",
+                        "line2_text": "Welcome down the rabbit hole! This app turns an ordinary book into a chat. Now the characters answer back instead of napping on a shelf!",
+                        "line2_meta": "— Alice shrank to the size of an emoji.",
+                        "line3_text": "So I can message the Mad Hatter and he'll actually reply?",
+                        "line3_meta": "— the Guest sniffed their teacup suspiciously.",
+                        "line4_text": "He will! With a riddle about a raven and a writing desk. Blocking him is useless, he's already celebrating your unbirthday in your DMs.",
+                        "line4_meta": "— the Cheshire Cat left a 😁 reaction and vanished. The reaction stayed.",
+                        "line5_text": "That's it, I'm signing in with Google before the White Rabbit grabs my nickname!",
+                        "line5_meta": "— the Guest shouted and dove finger-first at the button."
                     }
                 },
                 "space": {
@@ -240,17 +240,17 @@
                         "hero": "Onboard AI"
                     },
                     "lines": {
-                        "system_title": "Book: Space Odyssey 2026 (AI Version)",
-                        "line1_text": "Computer, a new authorization interface has been detected. What is this system?",
-                        "line1_meta": "— the Captain asked, looking at the main screen.",
-                        "line2_text": "Captain, this is an intelligent literature converter. It transforms static book files into live dialogue simulations.",
-                        "line2_meta": "— the Onboard AI replied monotonously, turning on the backlight.",
-                        "line3_text": "So instead of passively reading reports and logs, I can directly interrogate characters from the book database?",
-                        "line3_meta": "— the Captain wondered.",
-                        "line4_text": "Confirmed. You get full synchronization with the characters, adaptive AI responses and a visual messenger format.",
-                        "line4_meta": "— the AI displayed an efficiency graph of the new method on the screen.",
-                        "line5_text": "Activate the Google sign-in protocol. Starting the simulation!",
-                        "line5_meta": "— the Captain ordered, touching the control panel."
+                        "system_title": "Book: A Space Odyssey: Where Are My Socks (AI Version)",
+                        "line1_text": "Computer, there's an unknown button on the screen! Alien attack or another update?",
+                        "line1_meta": "— the Captain heroically hid behind the coffee machine.",
+                        "line2_text": "Worse, Captain. It's an app that turns books into live chats. The crew might start reading.",
+                        "line2_meta": "— the Onboard AI switched on the alarm lights. Very stylish ones.",
+                        "line3_text": "So instead of an 800-page airlock manual, I can just ask a character where the \"don't die\" button is?",
+                        "line3_meta": "— the Captain carefully moved an elbow away from the red lever.",
+                        "line4_text": "Confirmed. Characters reply in character. Unlike your first officer, they don't pretend the signal and their conscience got lost.",
+                        "line4_meta": "— the AI displayed a graph of crew laziness. It didn't fit on the screen.",
+                        "line5_text": "Launch Google sign-in! And tell no one I cried over a novel about a lonely Mars rover.",
+                        "line5_meta": "— the Captain ordered, wiping a tear with a spacesuit sleeve."
                     }
                 },
                 "detective": {
@@ -259,17 +259,93 @@
                         "hero": "Sherlock"
                     },
                     "lines": {
-                        "system_title": "Book: The Adventures of Sherlock Holmes (AI Version)",
-                        "line1_text": "Holmes, look at this strange screen. What do you make of this app?",
-                        "line1_meta": "— Watson walked over to the desk with a newspaper.",
-                        "line2_text": "Elementary, Watson! A revolution in reading is before us. This platform turns any text novel into an interactive interrogation or conversation.",
-                        "line2_meta": "— Holmes lit his pipe and pointed at the monitor.",
-                        "line3_text": "But how does a book become a chat? Surely the authors didn't write lines for messengers?",
-                        "line3_meta": "— Watson shrugged.",
-                        "line4_text": "No, Watson, it's the work of artificial intelligence algorithms. They analyze a character's personality and let you hold a live dialogue with them.",
-                        "line4_meta": "— Holmes smiled mysteriously.",
-                        "line5_text": "Incredible! I'll click the Google button, I'm itching to question Professor Moriarty!",
-                        "line5_meta": "— Watson reached for the mouse."
+                        "system_title": "Book: Sherlock Holmes and the Case of the Unfinished Book (AI Version)",
+                        "line1_text": "Holmes, this book just sent me a message! Shall I call the police or an exorcist?",
+                        "line1_meta": "— Watson waved a rolled-up newspaper at the monitor.",
+                        "line2_text": "Elementary, Watson! The app has turned the text into a chat. By the way, you got stuck on page three last year.",
+                        "line2_meta": "— Holmes eyed the dust and biscuit crumbs on the cover.",
+                        "line3_text": "How did you know?! Wait... Can I now simply ask the characters who the murderer is?",
+                        "line3_meta": "— Watson was so thrilled that his moustache wiggled.",
+                        "line4_text": "You may ask. But the suspects now answer personally: they lie, take offence and demand lawyers. A splendid evening!",
+                        "line4_meta": "— Holmes played a happy tune on the violin. The neighbours banged on the wall.",
+                        "line5_text": "I'm hitting the Google button! I want to ask Moriarty if he ate my pudding!",
+                        "line5_meta": "— Watson lunged for the mouse and tripped over Holmes's skull."
+                    }
+                },
+                "dracula": {
+                    "characters": {
+                        "guest": "Guest",
+                        "hero": "Dracula"
+                    },
+                    "lines": {
+                        "system_title": "Book: Dracula. Late Night Texts (AI Version)",
+                        "line1_text": "Good evening... Wow, it's 3 a.m. and the character is online. Do you ever sleep?",
+                        "line1_meta": "— whispered the Guest, pulling the blanket up to their nose.",
+                        "line2_text": "In the daytime! This delightful app turned my novel into a chat. At last, guests come on their own. No carriage, no wolves.",
+                        "line2_meta": "— Dracula adjusted his collar and dropped his phone into the coffin.",
+                        "line3_text": "Hold on, I can talk to you instead of just reading about you scaring lawyers?",
+                        "line3_meta": "— the Guest ate a clove of garlic, just in case.",
+                        "line4_text": "Precisely! Ask me anything: about the castle, the mortgage on the castle, or why I never show up in selfies.",
+                        "line4_meta": "— Dracula sent 27 bats instead of a sticker.",
+                        "line5_text": "Fine, I'm signing in with Google. But I am not coming to dinner, don't even ask!",
+                        "line5_meta": "— the Guest clicked the button, still clutching a wooden toothpick."
+                    }
+                },
+                "romeo": {
+                    "characters": {
+                        "guest": "Romeo",
+                        "hero": "Juliet"
+                    },
+                    "lines": {
+                        "system_title": "Book: Romeo and Juliet: Seen at 11:59 PM (AI Version)",
+                        "line1_text": "Juliet! I've been under your balcony half the night, and you're in some chat?",
+                        "line1_meta": "— Romeo sneezed as romantically as he could.",
+                        "line2_text": "Darling, the app turned our tragedy into text messages. No more yelling across all of Verona!",
+                        "line2_meta": "— Juliet snuggled into a blanket with a plate of lasagne.",
+                        "line3_text": "So a reader can jump in and tell us: \"Stop, first check whether she's just asleep\"?",
+                        "line3_meta": "— Romeo stopped to think for the first time in the whole play.",
+                        "line4_text": "Yes! You can question the characters, argue and give advice. Tybalt has already learned to send angry emojis instead of drawing his sword.",
+                        "line4_meta": "— Juliet added a ❤️ reaction, and the Nurse took a screenshot.",
+                        "line5_text": "Signing in with Google right now! Just don't give your parents the balcony password.",
+                        "line5_meta": "— Romeo hit the button and tumbled into a rose bush."
+                    }
+                },
+                "quixote": {
+                    "characters": {
+                        "guest": "Sancho",
+                        "hero": "Don Quixote"
+                    },
+                    "lines": {
+                        "system_title": "Book: Don Quixote vs. the Wi-Fi (AI Version)",
+                        "line1_text": "Master, lower your lance! That's no wizard, that's a router. And there's some chat on the screen.",
+                        "line1_meta": "— Sancho shielded the electronics and his sausage.",
+                        "line2_text": "My faithful Sancho! This magic mirror turns books into conversations. Now my heroic deeds can argue with me!",
+                        "line2_meta": "— Don Quixote solemnly put a washbasin on his head.",
+                        "line3_text": "So people can text you directly and explain that the giants are windmills?",
+                        "line3_meta": "— Sancho stopped chewing, full of hope.",
+                        "line4_text": "Let them! Every soul shall receive a knightly reply, a lengthy speech and possibly a challenge to a duel.",
+                        "line4_meta": "— Rocinante quietly lay down, for the speech had begun.",
+                        "line5_text": "I'm signing in with Google before you knight our microwave!",
+                        "line5_meta": "— Sancho poked the button with a greasy sausage finger."
+                    }
+                },
+                "redhood": {
+                    "characters": {
+                        "guest": "Red Riding Hood",
+                        "hero": "Wolf"
+                    },
+                    "lines": {
+                        "system_title": "Book: Little Red Riding Hood. The Wolf Is Online (AI Version)",
+                        "line1_text": "Grandma, why do you have such a strange username: \"FluffyTail2000\"?",
+                        "line1_meta": "— Red Riding Hood squinted over her basket of pies.",
+                        "line2_text": "The better to chat with you! This app turned the fairy tale into messages. Grandma... um... is writing from a new account.",
+                        "line2_meta": "— the Wolf adjusted his nightcap and hiccuped loudly.",
+                        "line3_text": "So I can skip the forest and grill the characters first?",
+                        "line3_meta": "— Red opened a notebook titled \"Suspicious Ears\".",
+                        "line4_text": "Sadly, yes. Ask about ears, eyes, teeth. Just don't ask where Grandma is, it upsets my stomach.",
+                        "line4_meta": "— someone inside the Wolf sent a voice message about slippers.",
+                        "line5_text": "I'm signing in with Google and adding the Huntsman to the chat!",
+                        "line5_meta": "— Red pressed the button, and the Wolf urgently went offline."
                     }
                 }
             }

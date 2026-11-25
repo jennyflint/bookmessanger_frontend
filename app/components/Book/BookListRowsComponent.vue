@@ -166,6 +166,7 @@ import { getApiErrorDetail, getApiErrorStatus } from "~/utils/apiError";
 const bookStore = useBookStore();
 const parserOptionsStore = useParserOptionsStore();
 const bookService = useBookService();
+const localePath = useLocalePath();
 
 defineEmits<{
   'delete': [book: BookDetailResponse];
@@ -314,7 +315,7 @@ const isBookCompleted = (book: BookDetailResponse): boolean => {
 
 const navigateToBook = (book: BookDetailResponse): void => {
   if (isBookCompleted(book)) {
-    navigateTo(`/book/model/${book.id}`);
+    navigateTo(localePath(`/book/model/${book.id}`));
   }
 };
 
