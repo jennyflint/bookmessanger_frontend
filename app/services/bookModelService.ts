@@ -5,9 +5,9 @@ export const useBookModelService = (): {
 } => {
   const api = useApi()
 
-  const getBookModel = async (bookId: number): Promise<BookModel> => {
+  const getBookModel = async (bookId: number, short = 1): Promise<BookModel> => {
     const response = await api.get<BookModel>(
-      `/book/model/${bookId}`
+      `/book/model/${bookId}?short=${short}`
     );
     return response || {};
   }

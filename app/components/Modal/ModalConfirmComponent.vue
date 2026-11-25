@@ -26,8 +26,28 @@
             </svg>
           </button>
 
-          <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 dark:bg-red-900/30 mb-4 text-red-600 dark:text-red-400">
+          <div
+            :class="[
+              'mx-auto flex items-center justify-center h-12 w-12 rounded-full mb-4',
+              variant === 'primary'
+                ? 'bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400'
+                : 'bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400',
+            ]"
+          >
             <svg
+              v-if="variant === 'primary'"
+              class="h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor">
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+            </svg>
+            <svg
+              v-else
               class="h-6 w-6"
               fill="none"
               viewBox="0 0 24 24"
@@ -44,9 +64,13 @@
             {{ title }}
           </h3>
           
-          <p class="text-sm text-slate-500 dark:text-slate-400 mb-6">
+          <p v-if="message" class="text-sm text-slate-500 dark:text-slate-400 mb-6">
             {{ message }}
           </p>
+
+          <div v-if="$slots.default" class="mb-6">
+            <slot />
+          </div>
 
           <div class="flex gap-3">
             <button
@@ -57,7 +81,10 @@
               {{ $t("cancel") }}
             </button>
             <button
-              class="flex-1 px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-xl transition-colors font-medium flex justify-center items-center disabled:opacity-50"
+              :class="[
+                'flex-1 px-4 py-2 text-white rounded-xl transition-colors font-medium flex justify-center items-center disabled:opacity-50',
+                variant === 'primary' ? 'bg-indigo-600 hover:bg-indigo-700' : 'bg-red-600 hover:bg-red-700',
+              ]"
               :disabled="isLoading"
               @click="confirm"
             >
@@ -79,7 +106,7 @@
                   fill="currentColor"
                   d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
               </svg>
-              {{ $t("buttons.delete") }}
+              {{ confirmLabel || $t("buttons.delete") }}
             </button>
           </div>
         </div>
@@ -89,12 +116,25 @@
 </template>
 
 <script setup lang="ts">
-const props = defineProps<{
-  modelValue: boolean;
-  title?: string;
-  message?: string;
-  isLoading?: boolean;
-}>();
+const props = withDefaults(
+  defineProps<{
+    modelValue: boolean;
+    title?: string;
+    message?: string;
+    isLoading?: boolean;
+    /** Text of the confirm button, "Delete" by default */
+    confirmLabel?: string;
+    /** "danger" for destructive actions, "primary" for everything else */
+    variant?: "danger" | "primary";
+  }>(),
+  {
+    title: "",
+    message: "",
+    isLoading: false,
+    confirmLabel: "",
+    variant: "danger",
+  }
+);
 
 const emit = defineEmits<{
   "update:modelValue": [value: boolean];

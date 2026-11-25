@@ -2,6 +2,34 @@ import type { ActionResponse } from "./action";
 
 export type ExportBookFormat = 'html' | 'pdf'
 export type DownloadBookStatus = 'new' | 'pending' | 'completed' | 'failed' | 'removed'
+export type ParserMode = 'spacy' | 'llm'
+
+export interface ParserOption<T extends string = string> {
+  value: T
+  label: string
+}
+
+/** Response of GET /book/parser/options */
+export interface ParserOptionsResponse {
+  modes: ParserOption<ParserMode>[]
+  llm_providers: ParserOption[]
+  default_mode: ParserMode
+  default_llm_provider: string | null
+}
+
+/** Body of POST /book/parse/{book_id}. Empty means "use the values saved with the book". */
+export type ReparseBookParams = {
+  parser_mode?: ParserMode
+  llm_provider?: string
+}
+
+/** Response of POST /book/upload and POST /book/parse/{book_id} */
+export interface BookParseResponse {
+  id: number
+  name: string
+  parser_mode: ParserMode
+  llm_provider: string | null
+}
 
 export interface CompleteBookResponse {
   id: number;
@@ -17,6 +45,8 @@ export interface BookDetailResponse {
   updated_at: string;
   complete_books: CompleteBookResponse[];
   actions: ActionResponse[];
+  parser_mode: ParserMode;
+  llm_provider: string | null;
 }
 
 export type DownloadBookParams = {

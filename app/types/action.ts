@@ -4,4 +4,5 @@ export interface ActionResponse {
   status: ActionStatus
   type: string
   updated_at: string
+  error_message?: string | null
 }

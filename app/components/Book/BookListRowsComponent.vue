@@ -32,9 +32,28 @@
               d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
           </svg>
         </div>
-        <div class="truncate font-medium text-slate-800 dark:text-slate-200" :title="book.original_name">
-          {{ book.original_name }}
-          <p class="text-[10px] text-slate-400 font-normal">ID: {{ book.id }}</p>
+        <div class="min-w-0">
+          <div class="truncate font-medium text-slate-800 dark:text-slate-200" :title="book.original_name">
+            {{ book.original_name }}
+          </div>
+          <span
+            :class="[
+              'inline-block mt-1 px-1.5 py-0.5 rounded text-[10px] font-semibold border',
+              book.parser_mode === 'llm'
+                ? 'bg-violet-50 text-violet-700 border-violet-200 dark:bg-violet-900/30 dark:text-violet-300 dark:border-violet-800'
+                : 'bg-slate-50 text-slate-600 border-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-600',
+            ]"
+            :title="$t('parser.badge_title')"
+          >
+            {{ getParserBadge(book) }}
+          </span>
+          <p
+            v-if="getParsingError(book)"
+            class="mt-1 text-xs text-red-600 dark:text-red-400 line-clamp-2 whitespace-normal"
+            :title="getParsingError(book) ?? undefined"
+          >
+            {{ $t("book.parse_error", { error: getParsingError(book) }) }}
+          </p>
         </div>
       </div>
       
@@ -72,6 +91,26 @@
         </button>
 
         <button
+          v-if="canReparse(book)"
+          class="p-2 rounded-xl text-slate-400 hover:text-indigo-500 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
+          :title="$t('reparse.button')"
+          :aria-label="$t('reparse.button')"
+          @click="openReparseModal(book)"
+        >
+          <svg
+            class="w-5 h-5"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24">
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+          </svg>
+        </button>
+
+        <button
           class="p-2 rounded-xl text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-950/30 transition-colors"
           @click="$emit('delete', book)"
         >
@@ -93,15 +132,40 @@
     <modal-download-component
       v-if="selectedBook"
       v-model="isOpenDownloadPopup"
-      :book-id="selectedBook.id" 
+      :book-id="selectedBook.id"
     />
+
+    <modal-confirm-component
+      v-model="isReparseModalOpen"
+      variant="primary"
+      :title="$t('reparse.title')"
+      :message="$t('reparse.message', { name: bookToReparse?.original_name })"
+      :confirm-label="$t('reparse.confirm')"
+      :is-loading="isReparsing"
+      @confirm="executeReparse"
+    >
+      <book-parser-select-component
+        v-model:mode="reparseMode"
+        v-model:provider="reparseProvider"
+        :disabled="isReparsing"
+        compact
+      />
+    </modal-confirm-component>
   </div>
 </template>
 
 <script setup lang="ts">
+import { toast } from "vue-sonner";
 import { useBookStore } from '~/stores/book';
-import type { BookDetailResponse } from "~/types/book";
+import { useParserOptionsStore } from "~/stores/parserOptions";
+import type { BookDetailResponse, ParserMode, ReparseBookParams } from "~/types/book";
+import type { ActionResponse } from "~/types/action";
+import { BOOK_PARSING_ACTION, getLatestAction } from "~/utils/bookActions";
+import { getApiErrorDetail, getApiErrorStatus } from "~/utils/apiError";
+
 const bookStore = useBookStore();
+const parserOptionsStore = useParserOptionsStore();
+const bookService = useBookService();
 
 defineEmits<{
   'delete': [book: BookDetailResponse];
@@ -109,6 +173,93 @@ defineEmits<{
 
 const selectedBook = ref<BookDetailResponse | null>(null);
 const isOpenDownloadPopup = ref(false);
+
+const isReparseModalOpen = ref(false);
+const isReparsing = ref(false);
+const bookToReparse = ref<BookDetailResponse | null>(null);
+const reparseMode = ref<ParserMode>("spacy");
+const reparseProvider = ref<string | null>(null);
+
+const IN_PROGRESS_STATUSES = new Set(["new", "pending", "processing"]);
+
+onMounted(() => {
+  // Cached in the store: the reparse modal opens with options already loaded
+  parserOptionsStore.fetchOptions();
+});
+
+const getLatestParsingAction = (book: BookDetailResponse): ActionResponse | undefined =>
+  getLatestAction(book.actions, BOOK_PARSING_ACTION);
+
+const getParserBadge = (book: BookDetailResponse): string => {
+  if (book.parser_mode !== "llm") return $t("parser.badge.spacy");
+  const providerLabel = parserOptionsStore.getProviderLabel(book.llm_provider);
+  return providerLabel ? `${$t("parser.badge.llm")} · ${providerLabel}` : $t("parser.badge.llm");
+};
+
+const getParsingError = (book: BookDetailResponse): string | null => {
+  const action = getLatestParsingAction(book);
+  if (action?.status !== "failed") return null;
+  return action.error_message || $t("notifications.book_model_error");
+};
+
+const canReparse = (book: BookDetailResponse): boolean => {
+  const action = getLatestParsingAction(book);
+  return !action || !IN_PROGRESS_STATUSES.has(action.status);
+};
+
+const openReparseModal = (book: BookDetailResponse): void => {
+  bookToReparse.value = book;
+  reparseMode.value = book.parser_mode ?? "spacy";
+  reparseProvider.value = book.llm_provider ?? null;
+  isReparseModalOpen.value = true;
+};
+
+// Without changes send no body, so the backend reuses the values saved with the book
+const buildReparseOptions = (book: BookDetailResponse): ReparseBookParams | undefined => {
+  const savedMode = book.parser_mode ?? "spacy";
+  const isUnchanged = reparseMode.value === savedMode
+    && (reparseMode.value !== "llm" || reparseProvider.value === book.llm_provider);
+  if (isUnchanged) return undefined;
+
+  if (reparseMode.value === "spacy") return { parser_mode: "spacy" };
+  return reparseProvider.value
+    ? { parser_mode: "llm", llm_provider: reparseProvider.value }
+    : { parser_mode: "llm" };
+};
+
+const withDetail = (err: unknown): { description?: string } => {
+  const detail = getApiErrorDetail(err);
+  return detail ? { description: detail } : {};
+};
+
+const executeReparse = async (): Promise<void> => {
+  const book = bookToReparse.value;
+  if (!book) return;
+
+  isReparsing.value = true;
+  try {
+    await bookService.reparseBook(book.id, buildReparseOptions(book));
+    isReparseModalOpen.value = false;
+    bookToReparse.value = null;
+    toast.success($t("reparse.started"));
+    await refreshNuxtData("books-list");
+  } catch (err) {
+    const status = getApiErrorStatus(err);
+    if (status === 409) {
+      toast.error($t("reparse.errors.already_parsing"));
+      // The list is out of date: show the running job instead of the button
+      isReparseModalOpen.value = false;
+      await refreshNuxtData("books-list");
+    } else if (status === 400) {
+      toast.error($t("reparse.errors.bad_request"), withDetail(err));
+    } else {
+      toast.error($t("reparse.errors.generic"), withDetail(err));
+    }
+    console.error(err);
+  } finally {
+    isReparsing.value = false;
+  }
+};
 
 const formatDate = (dateString: string): string => {
   return new Intl.DateTimeFormat("uk-UA", {
@@ -129,9 +280,12 @@ const getLatestActionStatus = (book: BookDetailResponse): string | null => {
 };
 
 const getStatusLabel = (book: BookDetailResponse): string => {
-  if (book.complete_books?.length > 0) return $t("status_list.completed");
   const latestStatus = getLatestActionStatus(book);
-  
+  // A running or failed re-parse must be visible even if the book already has exports
+  const isParsingUnfinished = !!latestStatus && latestStatus !== "completed"
+    && getLatestParsingAction(book)?.status === latestStatus;
+  if (book.complete_books?.length > 0 && !isParsingUnfinished) return $t("status_list.completed");
+
   const statuses: Record<string, string> = {
     new: $t("status_list.new"),
     pending: $t("status_list.pending"),

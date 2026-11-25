@@ -17,6 +17,7 @@ import type { DownloadBookStatus } from "~/types/book";
 import { useDownloadStore } from "~/stores/downloadBook";
 import { useBookStore } from "~/stores/book";
 import { useUserStore } from "~/stores/user";
+import { BOOK_PARSING_ACTION } from "~/utils/bookActions";
 import { Toaster, toast } from "vue-sonner";
 import "vue-sonner/style.css";
 
@@ -87,11 +88,11 @@ const startWebSocket = (): void => {
         toast.info(t("notifications.conversion_started"));
       }
     } else if (payload?.type === "create_book_model") {
-      bookStore.updateBookActionStatus(payload.book_id, "book_parsing", payload.status);
+      bookStore.updateBookActionStatus(payload.book_id, BOOK_PARSING_ACTION, payload.status, payload.error);
       if (payload.status === "completed") {
         toast.success(t("notifications.book_model_created"));
       } else if (payload.status === "failed") {
-        toast.error(t("notifications.book_model_error"));
+        toast.error(payload.error || t("notifications.book_model_error"));
       }
     }
   });

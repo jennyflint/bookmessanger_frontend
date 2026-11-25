@@ -12,6 +12,8 @@ export interface CreateBookModelEvent {
   type: 'create_book_model'
   book_id: number
   status: ActionStatus
+  /** Present only when status is 'failed' */
+  error?: string
 }
 
 export type WebSocketPayload = BookConvertedEvent | CreateBookModelEvent

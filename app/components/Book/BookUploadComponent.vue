@@ -98,6 +98,15 @@
         </div>
       </div>
     </div>
+
+    <!-- Kept outside the drop zone: its @click opens the file dialog -->
+    <book-parser-select-component
+      v-model:mode="parserMode"
+      v-model:provider="llmProvider"
+      :disabled="isUploading"
+      class="mt-6"
+    />
+
     <div
       v-if="error"
       class="mt-4 p-4 bg-red-50 text-red-700 rounded-xl text-sm font-medium flex items-center"
@@ -164,6 +173,9 @@
 </template>
 
 <script setup lang="ts">
+import type { ParserMode } from "~/types/book";
+import { getApiErrorDetail, getApiErrorStatus } from "~/utils/apiError";
+
 const bookService = useBookService();
 const config = useRuntimeConfig();
 
@@ -172,6 +184,8 @@ const isDragging = ref(false);
 const selectedFile = ref<File | null>(null);
 const error = ref("");
 const isUploading = ref(false);
+const parserMode = ref<ParserMode>("spacy");
+const llmProvider = ref<string | null>(null);
 
 const ALLOWED_EXTENSIONS = new Set(config.public.uploadBookFormats as string[]);
 const MAX_FILE_SIZE = 20 * 1024 * 1024; // 20 MB
@@ -260,13 +274,15 @@ const uploadBook = async (): Promise<void> => {
   error.value = "";
 
   try {
-    await bookService.uploadBook(selectedFile.value);
+    await bookService.uploadBook(selectedFile.value, parserMode.value, llmProvider.value);
 
     removeFile();
 
     await refreshNuxtData("books-list");
   } catch (err) {
-    error.value = $t("upload.upload_error");
+    const status = getApiErrorStatus(err);
+    const detail = status === 400 || status === 422 ? getApiErrorDetail(err) : null;
+    error.value = detail || $t("upload.upload_error");
     console.error(err);
   } finally {
     isUploading.value = false;
