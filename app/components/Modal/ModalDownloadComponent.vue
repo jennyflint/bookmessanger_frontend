@@ -96,6 +96,37 @@
               </button>
 
               <button
+                class="w-full flex items-center p-3 rounded-xl border border-slate-200 dark:border-slate-700 hover:border-teal-300 dark:hover:border-teal-800 hover:bg-teal-50 dark:hover:bg-teal-900/20 transition-all group disabled:opacity-50 disabled:cursor-not-allowed"
+                @click="handleFormatSelect('epub')"
+              >
+                <div
+                  class="w-10 h-10 rounded-lg bg-teal-100 dark:bg-teal-900/40 text-teal-600 dark:text-teal-400 flex items-center justify-center mr-4 group-hover:scale-105 transition-transform"
+                >
+                  <svg
+                    class="w-5 h-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
+                    />
+                  </svg>
+                </div>
+                <div class="text-left flex-1">
+                  <div class="font-bold text-slate-800 dark:text-slate-200">
+                    {{ $t("download_modal.epub_document") }}
+                  </div>
+                  <div class="text-xs text-slate-500">
+                    {{ $t("download_modal.for_ereaders") }}
+                  </div>
+                </div>
+              </button>
+
+              <button
                 v-if="htmlContent"
                 class="w-full flex items-center p-3 rounded-xl border border-slate-200 dark:border-slate-700 hover:border-orange-300 dark:hover:border-orange-800 hover:bg-orange-50 dark:hover:bg-orange-900/20 transition-all group disabled:opacity-50 disabled:cursor-not-allowed"
                 @click="handleFormatSelect('html')"
@@ -265,11 +296,7 @@
                 >
                   <div
                     class="flex-shrink-0 w-8 h-8 rounded-md flex items-center justify-center font-bold text-[10px] uppercase"
-                    :class="
-                      file.format === 'pdf'
-                        ? 'bg-red-100 text-red-600 dark:bg-red-900/40 dark:text-red-400'
-                        : 'bg-orange-100 text-orange-600 dark:bg-orange-900/40 dark:text-orange-400'
-                    "
+                    :class="getFormatColor(file.format)"
                   >
                     {{ file.format }}
                   </div>
@@ -535,6 +562,15 @@ const statusColors: Record<DownloadBookStatus, string> = {
   removed: "bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-400",
 };
 
+const formatColors: Record<ExportBookFormat, string> = {
+  pdf: "bg-red-100 text-red-600 dark:bg-red-900/40 dark:text-red-400",
+  epub: "bg-teal-100 text-teal-600 dark:bg-teal-900/40 dark:text-teal-400",
+  html: "bg-orange-100 text-orange-600 dark:bg-orange-900/40 dark:text-orange-400",
+};
+
+const getFormatColor = (format: ExportBookFormat): string =>
+  formatColors[format] ?? formatColors.html;
+
 const isConfirmDeleteOpen = ref(false);
 const isDeleting = ref(false);
 const itemToDelete = ref<DownloadBook | null>(null);
@@ -678,10 +714,10 @@ const executeDownload = async (): Promise<void> => {
   if (!selectedTemplate.value || !selectedFormat.value) return;
 
   try {
-    if (selectedFormat.value === "pdf") {
+    if (selectedFormat.value === "pdf" || selectedFormat.value === "epub") {
       isStartingDownload.value = true;
       const params: DownloadBookParams = {
-        format: "pdf",
+        format: selectedFormat.value,
         characters: bookModelStore.getPreparedCharacters(),
         template: selectedTemplate.value,
       };

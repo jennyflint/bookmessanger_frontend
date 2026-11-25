@@ -134,6 +134,8 @@
         "description": "Оберіть формат для завантаження",
         "pdf_document": "PDF Документ",
         "for_reading_and_printing": "Для читання та друку",
+        "epub_document": "EPUB Книга",
+        "for_ereaders": "Для електронних читалок",
         "html_page": "HTML Сторінка",
         "opens_in_browser": "Відкривається в браузері",
         "raw_data_json": "Сирі дані (JSON)",

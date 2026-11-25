@@ -1,6 +1,6 @@
 import type { ActionResponse } from "./action";
 
-export type ExportBookFormat = 'html' | 'pdf'
+export type ExportBookFormat = 'html' | 'pdf' | 'epub'
 export type DownloadBookStatus = 'new' | 'pending' | 'completed' | 'failed' | 'removed'
 export type ParserMode = 'spacy' | 'llm'
 

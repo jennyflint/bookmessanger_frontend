@@ -112,6 +112,17 @@ export const useApi = (): ApiComposable => {
           }
         }
 
+        if (!/\.[a-z0-9]+$/i.test(fileName)) {
+          const contentType = response.headers.get('content-type') || '';
+          const extensions: Record<string, string> = {
+            'application/pdf': 'pdf',
+            'application/epub+zip': 'epub',
+            'text/html': 'html',
+          };
+          const ext = Object.entries(extensions).find(([type]) => contentType.includes(type))?.[1];
+          if (ext) fileName = `${fileName}.${ext}`;
+        }
+
         const fileData = response._data as Blob; 
         const urlObj = window.URL.createObjectURL(fileData);
         

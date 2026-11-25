@@ -122,7 +122,7 @@
           class="group/name flex items-start justify-between cursor-pointer"
           @click="startEditingName(char)">
           <div class="relative">
-            <h3 class="font-semibold text-slate-800 dark:text-slate-100 truncate group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors inline-block mr-1">
+            <h3 class="font-semibold text-slate-800 dark:text-slate-100 truncate group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors inline-block mr-1 whitespace-normal">
               {{ char.name }}
             </h3>
             <svg

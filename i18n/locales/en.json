@@ -134,6 +134,8 @@
         "description": "Choose a download format",
         "pdf_document": "PDF Document",
         "for_reading_and_printing": "For reading and printing",
+        "epub_document": "EPUB Book",
+        "for_ereaders": "For e-readers",
         "html_page": "HTML Page",
         "opens_in_browser": "Opens in the browser",
         "raw_data_json": "Raw data (JSON)",
