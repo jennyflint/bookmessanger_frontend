@@ -25,6 +25,10 @@ const bookModelService = useBookModelService();
 const avatarService = useAvatarService();
 const bookModelStore = useBookModelStore();
 
+// Reset on setup, not on unmount: switching locale remounts the page and the
+// old instance unmounts after the new one has already filled the store.
+bookModelStore.clearBookModel();
+
 const { data: response } = await useAsyncData<BookModel>(
   () => `book-model-${id.value}`,
   () => bookModelService.getBookModel(Number(id.value)),
@@ -65,8 +69,4 @@ watch(
   },
   { immediate: true }
 );
-
-onUnmounted(() => {
-  bookModelStore.clearBookModel();
-});
 </script>
