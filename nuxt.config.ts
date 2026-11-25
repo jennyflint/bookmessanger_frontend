@@ -48,8 +48,14 @@ export default defineNuxtConfig({
   ],
   i18n: {
     strategy: 'prefix_except_default',
-    defaultLocale: 'ua',
+    defaultLocale: 'en',
     locales: [
+      {
+        code: 'en',
+        iso: 'en-US',
+        name: 'English',
+        file: 'en.json'
+      },
       {
         code: 'ua',
         iso: 'uk-UA',

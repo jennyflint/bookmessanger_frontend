@@ -9,6 +9,8 @@
       </div>
 
       <div class="flex items-center gap-4">
+        <LanguageSwitcher />
+
         <span v-if="userStore.user" class="user-email text-[14px] text-[#4b2c20]/70 hidden xs:inline-block">
           {{ userStore.user.email }}
         </span>
@@ -38,10 +40,11 @@ import { useUserStore } from '~/stores/user'
 
 const config = useRuntimeConfig()
 const userStore = useUserStore()
+const localePath = useLocalePath()
 
 const handleLogout = (): void => {
   userStore.logout()
-  navigateTo('/auth/login')
+  navigateTo(localePath('/auth/login'))
 }
 </script>
 

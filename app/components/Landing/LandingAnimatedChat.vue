@@ -97,11 +97,11 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed, nextTick, onMounted, onUnmounted } from "vue";
+import { ref, computed, nextTick, onMounted, onUnmounted, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import type { Character, RawLine, ChatMessage } from "@/types/landingChat";
 
-const { t } = useI18n();
+const { t, locale } = useI18n();
 
 const chatContainer = ref<HTMLElement | null>(null);
 const visibleLines = ref<ChatMessage[]>([]);
@@ -258,6 +258,15 @@ const playChatAnimation = async (): Promise<void> => {
     }, typingTime);
   }
 };
+
+// Already shown lines hold translated text, so restart the animation on language change
+watch(locale, () => {
+  if (animationTimeout.value) clearTimeout(animationTimeout.value);
+  visibleLines.value = [];
+  isTyping.value = false;
+  currentLineIndex.value = 0;
+  playChatAnimation();
+});
 
 onMounted(() => {
   selectedScenario.value = scenarios[Math.floor(Math.random() * scenarios.length)] ?? 'alice';

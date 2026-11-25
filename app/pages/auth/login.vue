@@ -1,7 +1,9 @@
 <template>
   <div
-    class="main-container flex flex-col md:flex-row-reverse w-full min-h-screen md:h-screen md:overflow-hidden m-0 p-0 bg-login"
+    class="main-container relative flex flex-col md:flex-row-reverse w-full min-h-screen md:h-screen md:overflow-hidden m-0 p-0 bg-login"
   >
+    <LanguageSwitcher class="absolute top-4 right-4 z-50" />
+
     <OauthLogin />
 
     <LandingAnimatedChat />

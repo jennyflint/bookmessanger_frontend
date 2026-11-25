@@ -1,0 +1,253 @@
+{
+    "total": "Total",
+    "files": "Files",
+    "done": "Done",
+    "processing": "Processing",
+    "pending": "Pending",
+    "download": "Download",
+    "downloading": "Downloading",
+    "cancel": "Cancel",
+    "select": "Select",
+    "try": "Attempt",
+    "auth": {
+        "login": {
+            "description": "Sign in to turn books into dialogues",
+            "ai_transformation": "AI Transformation",
+            "hero": {
+                "title": "Turn any book into {br} a {action}",
+                "live_chat": "live chat"
+            }
+        },
+        "login_with_google": "Continue with Google",
+        "logout": "Log out"
+    },
+    "book_list": {
+        "uploaded_books": "Uploaded books"
+    },
+    "book": {
+        "entity": "Book",
+        "name": "Book title",
+        "status": "Status",
+        "jobs": "Jobs",
+        "date": "Date",
+        "actions": "Actions",
+        "ready_to_download": "Files ready to download",
+        "confirm_delete_message": "Are you sure you want to delete the book {name}?",
+        "parse_error": "Parsing error: {error}"
+    },
+    "book_model": {
+        "no_found": "No data available or still loading...",
+        "characters": {
+            "title": "Character List",
+            "description": "recognized by AI in the book",
+            "not_found": "No characters found or the book is still being processed."
+        }
+    },
+    "upload": {
+        "loading": "Loading...",
+        "click_to_select_file": "Click to select a file",
+        "or_drag_and_drop": "or drag and drop it here",
+        "supported_formats": "Supported: {formats} (up to 20 MB)",
+        "add_new_book": "Add a new book",
+        "task_description": "Convert to chat",
+        "upload_file_to_convert": "Upload a file to convert it into an interactive chat",
+        "invalid_file_format": "Invalid file format. Please upload {formats}.",
+        "file_too_large": "The file is too large. Maximum size: 20 MB.",
+        "upload_error": "An error occurred during upload. Please try again.",
+        "beta_description": "This app is in beta, currently only books in Ukrainian and English are supported"
+    },
+    "parser": {
+        "title": "Book parsing method",
+        "modes": {
+            "spacy": "Lite",
+            "llm": "Pro"
+        },
+        "descriptions": {
+            "spacy": "Local processing at no extra cost",
+            "llm": "Better at recognizing characters and speakers"
+        },
+        "badge": {
+            "spacy": "Lite",
+            "llm": "Pro"
+        },
+        "badge_title": "Book parsing method",
+        "features": {
+            "spacy": {
+                "speed": "Faster book processing",
+                "simple_dialogs": "Works well with simple dialogues where the speaker is named directly",
+                "complex_dialogs": "More likely to misidentify the speaker in complex dialogues"
+            },
+            "llm": {
+                "accuracy": "More accurately identifies characters and who is speaking",
+                "unnamed_speakers": "Handles dialogues better where the speaker is not named directly",
+                "duration": "Processing takes longer: roughly 1–2.5 min more per 1 MB of text"
+            }
+        },
+        "provider": "AI provider",
+        "loading": "Loading parsing methods...",
+        "options_unavailable": "Failed to load parsing options, so only Lite is available."
+    },
+    "reparse": {
+        "button": "Re-parse",
+        "title": "Re-parse book",
+        "message": "The book “{name}” will be processed again. Choose a parsing method.",
+        "confirm": "Re-parse",
+        "started": "Re-parsing started",
+        "errors": {
+            "already_parsing": "The book is already being parsed. Please wait for it to finish.",
+            "bad_request": "Failed to start parsing: the book has no text or the provider is unavailable.",
+            "generic": "Failed to start re-parsing. Please try again."
+        }
+    },
+    "pagination": {
+        "page": "Page",
+        "prev": "Previous",
+        "next": "Next"
+    },
+    "footer": {
+        "agree_terms": "By continuing, you agree to our",
+        "terms_of_use": "Terms of Use",
+        "privacy_policy": "Privacy Policy",
+        "and": "and"
+    },
+    "error": {
+        "loading": "Loading error",
+        "retry": "Try again"
+    },
+    "status_list": {
+        "new": "New",
+        "pending": "Pending",
+        "processing": "Processing",
+        "completed": "Done",
+        "failed": "Failed"
+    },
+    "buttons": {
+        "delete": "Delete",
+        "copy": "Copy",
+        "copied": "Copied!",
+        "download": "Download",
+        "close": "Close",
+        "save": "Save"
+    },
+    "download_modal": {
+        "title": "Download book",
+        "description": "Choose a download format",
+        "pdf_document": "PDF Document",
+        "for_reading_and_printing": "For reading and printing",
+        "html_page": "HTML Page",
+        "opens_in_browser": "Opens in the browser",
+        "raw_data_json": "Raw data (JSON)",
+        "for_developers_and_api": "For developers and API",
+        "extended_mode": "Switch to advanced mode",
+        "previous_downloads": "Previous downloads",
+        "no_downloads_yet": "No files downloaded yet",
+        "success": {
+            "title": "Success",
+            "message": "Book download preparation has started"
+        }
+    },
+    "select_avatar_modal": {
+        "title": "Choose a new avatar",
+        "not_found": "No avatars available."
+    },
+    "template": {
+        "label": "Choose any template",
+        "loading": "Loading template...",
+        "generating_preview": "Generating preview...",
+        "select_to_preview": "Choose a template for the book"
+    },
+    "navigation": {
+        "back": "Back"
+    },
+    "common": {
+        "confirm_delete": "Confirm deletion",
+        "delete_warning": "Are you sure you want to delete this file?"
+    },
+    "notifications": {
+        "websocket_parse_error": "WebSocket parsing error:",
+        "missing_download_data": "Missing data for download",
+        "download_started": "Download started!",
+        "download_error_console": "Download error:",
+        "conversion_started": "Book conversion has started...",
+        "book_model_created": "Book model created successfully!",
+        "book_model_error": "Error creating book model",
+        "conversion_completed": {
+            "title": "Conversion completed!",
+            "description": "Your book has been processed successfully."
+        },
+        "download_error": {
+            "title": "Error downloading file",
+            "description": "Try downloading the file later."
+        },
+        "conversion_error": {
+            "title": "Conversion error",
+            "description": "Something went wrong while processing the file."
+        }
+    },
+    "landing": {
+        "chat": {
+            "unknown": "Unknown",
+            "someone": "Someone",
+            "typing": "{name} is typing...",
+            "scenarios": {
+                "alice": {
+                    "characters": {
+                        "guest": "Guest",
+                        "hero": "Alice"
+                    },
+                    "lines": {
+                        "system_title": "Book: Alice's Adventures in Wonderland (AI Version)",
+                        "line1_text": "Hi! Wow, what is this app? How does it work?",
+                        "line1_meta": "— the surprised Guest asked.",
+                        "line2_text": "Hi! It's pure magic! Our app takes a text book and converts it into an interactive chat with me or other characters!",
+                        "line2_meta": "— Alice smiled. — The app turns a book into an AI chat!",
+                        "line3_text": "So I can not just read the plot, but talk directly with the characters of the book?",
+                        "line3_meta": "— the Guest clarified.",
+                        "line4_text": "Exactly! You can dive into the story from the inside and react to events. The text comes alive before your eyes!",
+                        "line4_meta": "— the Cheshire Cat joyfully bounced somewhere nearby.",
+                        "line5_text": "Cool, I'll sign in with Google and let's start!",
+                        "line5_meta": "— the Guest exclaimed, clicking the nearby button."
+                    }
+                },
+                "space": {
+                    "characters": {
+                        "guest": "Captain",
+                        "hero": "Onboard AI"
+                    },
+                    "lines": {
+                        "system_title": "Book: Space Odyssey 2026 (AI Version)",
+                        "line1_text": "Computer, a new authorization interface has been detected. What is this system?",
+                        "line1_meta": "— the Captain asked, looking at the main screen.",
+                        "line2_text": "Captain, this is an intelligent literature converter. It transforms static book files into live dialogue simulations.",
+                        "line2_meta": "— the Onboard AI replied monotonously, turning on the backlight.",
+                        "line3_text": "So instead of passively reading reports and logs, I can directly interrogate characters from the book database?",
+                        "line3_meta": "— the Captain wondered.",
+                        "line4_text": "Confirmed. You get full synchronization with the characters, adaptive AI responses and a visual messenger format.",
+                        "line4_meta": "— the AI displayed an efficiency graph of the new method on the screen.",
+                        "line5_text": "Activate the Google sign-in protocol. Starting the simulation!",
+                        "line5_meta": "— the Captain ordered, touching the control panel."
+                    }
+                },
+                "detective": {
+                    "characters": {
+                        "guest": "Watson",
+                        "hero": "Sherlock"
+                    },
+                    "lines": {
+                        "system_title": "Book: The Adventures of Sherlock Holmes (AI Version)",
+                        "line1_text": "Holmes, look at this strange screen. What do you make of this app?",
+                        "line1_meta": "— Watson walked over to the desk with a newspaper.",
+                        "line2_text": "Elementary, Watson! A revolution in reading is before us. This platform turns any text novel into an interactive interrogation or conversation.",
+                        "line2_meta": "— Holmes lit his pipe and pointed at the monitor.",
+                        "line3_text": "But how does a book become a chat? Surely the authors didn't write lines for messengers?",
+                        "line3_meta": "— Watson shrugged.",
+                        "line4_text": "No, Watson, it's the work of artificial intelligence algorithms. They analyze a character's personality and let you hold a live dialogue with them.",
+                        "line4_meta": "— Holmes smiled mysteriously.",
+                        "line5_text": "Incredible! I'll click the Google button, I'm itching to question Professor Moriarty!",
+                        "line5_meta": "— Watson reached for the mouse."
+                    }
+                }
+            }
+        }
+    }
+}
