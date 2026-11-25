@@ -43,5 +43,6 @@ const currentPage = computed(() => Math.floor(safeOffset.value / safeLimit.value
 const isFirstPage = computed(() => safeOffset.value === 0);
 const isLastPage = computed(() => safeOffset.value + safeLimit.value >= safeTotal.value);
 
-const shouldShow = computed(() => !props.pending && safeTotal.value > 0);
+// Stays visible while pending (buttons are disabled) so the page doesn't jump
+const shouldShow = computed(() => safeTotal.value > 0);
 </script>

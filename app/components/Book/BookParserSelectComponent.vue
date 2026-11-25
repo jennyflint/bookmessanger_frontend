@@ -31,6 +31,8 @@
           {{ $t(`parser.descriptions.${option}`) }}
         </span>
       </button>
+
+      <skeleton-parser-mode-component v-if="isModeLoading" />
     </div>
 
     <div
@@ -64,7 +66,10 @@
       </select>
     </div>
 
-    <p v-if="parserOptionsStore.isLoading" class="text-xs text-slate-400">
+    <p
+      v-if="isModeLoading"
+      class="sr-only"
+      role="status">
       {{ $t("parser.loading") }}
     </p>
     <p v-else-if="parserOptionsStore.error" class="text-xs text-slate-500 dark:text-slate-400">
@@ -116,6 +121,11 @@ const displayedModes = computed<ParserMode[]>(() => {
   }
   return modes;
 });
+
+// Pro appears only after the options arrive: hold its place until then
+const isModeLoading = computed<boolean>(() =>
+  !parserOptionsStore.isResolved && !displayedModes.value.includes("llm")
+);
 
 const selectMode = (value: ParserMode): void => {
   mode.value = value;

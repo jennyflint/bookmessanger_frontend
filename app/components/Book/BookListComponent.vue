@@ -18,11 +18,7 @@
         <button class="underline" @click="refresh()">{{ $t("error.retry") }}</button>
       </p>
     </div>
-    <div v-else-if="isLoading" class="flex justify-center py-20 animate-pulse text-slate-500">
-      {{ $t("upload.loading") }}
-    </div>
-
-    <div v-else-if="books && books.length > 0" class="bg-white dark:bg-slate-800 shadow-sm border border-slate-200 dark:border-slate-700 rounded-2xl overflow-hidden">
+    <div v-else-if="isLoading || (books && books.length > 0)" class="bg-white dark:bg-slate-800 shadow-sm border border-slate-200 dark:border-slate-700 rounded-2xl overflow-hidden">
       <div class="hidden md:grid grid-cols-12 bg-slate-50 dark:bg-slate-900/50 border-b border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 uppercase text-[11px] font-bold tracking-wider px-6 py-4">
         <div class="col-span-6">{{ $t("book.name") }}</div>
         <div class="col-span-2">{{ $t("book.status") }}</div>
@@ -30,9 +26,11 @@
         <div class="col-span-2 text-right">{{ $t("book.actions") }}</div>
       </div>
       
-      <skeleton-book-table-list-component v-if="isLoading" :count="5" />
-      <book-list-rows-component v-else-if="books && books.length > 0" @delete="openDeleteConfirm" />
-     
+      <template v-if="isLoading">
+        <p class="sr-only" role="status">{{ $t("upload.loading") }}</p>
+        <skeleton-book-table-list-component :count="params.limit ?? 5" aria-hidden="true" />
+      </template>
+      <book-list-rows-component v-else @delete="openDeleteConfirm" />
     </div>
 
     <book-pagination-component

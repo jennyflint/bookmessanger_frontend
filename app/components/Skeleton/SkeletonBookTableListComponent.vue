@@ -1,6 +1,9 @@
 <template>
-  <div class="max-w-6xl mx-auto p-4 sm:p-6"/>
   <div class="divide-y divide-slate-100 dark:divide-slate-700">
+    <!--
+      Text placeholders repeat the font and spacing classes of BookListRowsComponent,
+      so a skeleton row is exactly as tall as a real one
+    -->
     <div
       v-for="i in count"
       :key="i"
@@ -8,21 +11,23 @@
     >
       <div class="col-span-1 md:col-span-6 flex items-center space-x-3">
         <div class="w-9 h-9 rounded-lg bg-slate-200 dark:bg-slate-700 shrink-0"/>
-        
-        <div class="flex-1 space-y-2">
-          <div class="h-4 bg-slate-200 dark:bg-slate-700 rounded w-3/4"/>
-          <div class="h-2 bg-slate-100 dark:bg-slate-800 rounded w-1/4"/>
+
+        <div class="flex-1 min-w-0">
+          <div>
+            <span class="inline-block w-3/4 text-xs rounded bg-slate-200 dark:bg-slate-700">&nbsp;</span>
+          </div>
+          <span class="inline-block mt-1 w-14 px-1.5 py-0.5 rounded text-[10px] border border-transparent bg-slate-100 dark:bg-slate-700/50">&nbsp;</span>
         </div>
       </div>
-      
+
       <div class="col-span-1 md:col-span-2 flex md:block items-center justify-between">
         <span class="md:hidden text-xs text-slate-400 font-medium mr-2">{{ $t("book.status") }}:</span>
-        <div class="h-6 w-20 bg-slate-200 dark:bg-slate-700 rounded"/>
+        <span class="inline-block w-20 px-2 py-1 rounded text-[10px] border border-transparent bg-slate-200 dark:bg-slate-700">&nbsp;</span>
       </div>
-      
-      <div class="col-span-1 md:col-span-2 flex md:block items-center justify-between">
+
+      <div class="col-span-1 md:col-span-2 text-xs flex md:block items-center justify-between">
         <span class="md:hidden text-xs text-slate-400 font-medium mr-2">{{ $t("book.date") }}:</span>
-        <div class="h-4 w-24 bg-slate-200 dark:bg-slate-700 rounded"/>
+        <span class="inline-block w-24 rounded bg-slate-200 dark:bg-slate-700">&nbsp;</span>
       </div>
 
       <div class="col-span-1 md:col-span-2 flex items-center justify-end space-x-2">
