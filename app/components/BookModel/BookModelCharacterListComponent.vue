@@ -17,16 +17,16 @@
           </svg>
           {{ $t("book_model.characters.title") }}
         </h2>
+
+        <span class="px-3 py-1 bg-indigo-50 text-indigo-700 dark:bg-indigo-900/40 dark:text-indigo-300 rounded-full text-sm font-semibold border border-indigo-100 dark:border-indigo-800">
+          {{ bookModel?.characters?.length || 0 }}
+        </span>
       </div>
     
       <p class="text-sm text-slate-500 dark:text-slate-400 mt-1 ml-11">
         {{ $t("book_model.characters.description") }}
       </p>
     </div>
-
-    <span class="px-3 py-1 bg-indigo-50 text-indigo-700 dark:bg-indigo-900/40 dark:text-indigo-300 rounded-full text-sm font-semibold border border-indigo-100 dark:border-indigo-800">
-      {{ bookModel?.characters?.length || 0 }}
-    </span>
   </div>
 
   <div v-if="!bookModel?.characters || bookModel.characters.length === 0" class="text-center py-12 text-slate-400 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700">

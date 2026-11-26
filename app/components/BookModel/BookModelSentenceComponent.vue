@@ -14,9 +14,9 @@
 
     <div class="flex flex-wrap items-center gap-2 sm:gap-3">
   
-      <div class="flex items-center space-x-2 mr-auto sm:mr-0">
-        <label for="template-select" class="hidden md:block text-xs font-semibold text-slate-600 dark:text-slate-300">
-          {{ $t('template.label') }}:
+      <div v-show="activeTab === 'templates'" class="flex items-center">
+        <label for="template-select" class="sr-only">
+          {{ $t('template.label') }}
         </label>
     
         <div class="relative">
@@ -27,7 +27,9 @@
             class="appearance-none outline-none text-xs font-medium text-black bg-white px-3 py-1.5 pr-8 rounded-lg border border-slate-200 shadow-sm cursor-pointer hover:text-indigo-600 transition-colors w-full min-w-[100px] disabled:opacity-50 disabled:cursor-not-allowed"
             @change="handleTemplateChange"
           >
-            <option value="json">JSON </option>
+            <option value="" disabled>
+              {{ $t('template.label') }}
+            </option>
             <option 
               v-for="template in templateStore.templates" 
               :key="template.value" 
@@ -72,9 +74,31 @@
         </div>
       </div>
 
+      <div
+        role="tablist"
+        class="flex items-center p-0.5 rounded-lg bg-slate-200 dark:bg-slate-800 mr-auto sm:mr-0"
+      >
+        <button
+          v-for="tab in tabs"
+          :id="`preview-tab-${tab.value}`"
+          :key="tab.value"
+          type="button"
+          role="tab"
+          aria-controls="preview-panel"
+          :aria-selected="activeTab === tab.value"
+          class="text-xs font-medium px-3 py-1 rounded-md transition-colors"
+          :class="activeTab === tab.value
+            ? 'bg-white dark:bg-slate-700 text-indigo-600 dark:text-indigo-400 shadow-sm'
+            : 'text-slate-600 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400'"
+          @click="activeTab = tab.value"
+        >
+          {{ tab.label }}
+        </button>
+      </div>
+
       <div class="flex items-center space-x-2">
         <button 
-          v-if="bookModel?.lines?.length && selectedTemplate === 'json'"
+          v-if="bookModel?.lines?.length && activeTab === 'json'"
           class="inline-flex items-center space-x-1.5 text-xs font-medium text-slate-600 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors bg-white dark:bg-slate-800 px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 shadow-sm"
           :title="$t('buttons.copy')"
           @click="copyToClipboard"
@@ -107,7 +131,7 @@
         </button>
 
         <button 
-          v-if="bookModel?.lines?.length && selectedTemplate !== 'json'"
+          v-if="bookModel?.lines?.length && activeTab === 'templates' && selectedTemplate"
           class="inline-flex items-center space-x-1.5 text-xs font-medium text-slate-600 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors bg-white dark:bg-slate-800 px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 shadow-sm"
           :title="$t('buttons.download')"
           @click="isDownloadModalOpen = true"
@@ -130,12 +154,20 @@
     </div>
   </div>
 
-  <div class="relative rounded-b-2xl shadow-xl border border-slate-800 h-[550px] overflow-y-auto custom-scrollbar bg-slate-50 dark:bg-slate-800">
-    <book-model-preview-json v-show="selectedTemplate === 'json'" />
-    <book-model-preview-html v-show="selectedTemplate !== 'json'" />
+  <div
+    id="preview-panel"
+    role="tabpanel"
+    :aria-labelledby="`preview-tab-${activeTab}`"
+    class="relative rounded-b-2xl shadow-xl border border-slate-800 h-[550px] overflow-y-auto custom-scrollbar bg-slate-50 dark:bg-slate-800">
+    <book-model-preview-json v-show="activeTab === 'json'" />
+    <book-model-preview-html
+      v-show="activeTab === 'templates'"
+      :is-initializing="isInitializing"
+    />
   </div>
 
   <modal-download-component
+    v-if="selectedTemplate"
     v-model="isDownloadModalOpen"
     :html-content="processedTemplateCode"
     :json-content="bookModelStore.bookModel"
@@ -154,6 +186,9 @@
 
 <script setup lang="ts">
 
+type PreviewTab = 'json' | 'templates'
+
+const { t } = useI18n()
 const bookModelStore = useBookModelStore()
 const templateStore = useTemplateStore()
 const { bookModel } = storeToRefs(bookModelStore)
@@ -161,11 +196,22 @@ const { bookModel } = storeToRefs(bookModelStore)
 const route = useRoute()
 const id = Number(route.params.id)
 
-const selectedTemplate = ref('json')
+const activeTab = ref<PreviewTab>('templates')
+const selectedTemplate = ref('')
 const isCopied = ref(false)
+// True from the first render until the default template has been fetched
+const isInitializing = ref(true)
 
 const isDownloadModalOpen = ref(false)
 const isNotificationOpen = ref(false)
+
+const tabs = computed<{ value: PreviewTab; label: string }[]>(() => [
+  { value: 'templates', label: t('template.tab') },
+  { value: 'json', label: 'JSON' }
+])
+
+// The store outlives the component, so drop the template left from a previous visit
+templateStore.clearCurrentTemplate()
 
 // Real file name without its extension ("alisa.epub" -> "alisa")
 const bookTitle = computed(() => {
@@ -181,37 +227,32 @@ const processedTemplateCode = computed(() => {
   return code.replace(/\{\{\s*json_data\s*\}\}/g, jsonDataString)
 })
 
-onMounted(() => {
-  templateStore.fetchTemplates()
+onMounted(async () => {
+  await templateStore.fetchTemplates()
+
+  const [firstTemplate] = templateStore.templates
+  if (firstTemplate && !selectedTemplate.value) {
+    selectedTemplate.value = firstTemplate.value
+    await handleTemplateChange()
+  }
+
+  isInitializing.value = false
 })
 
 const copyToClipboard = async (): Promise<void> => {
   if (!bookModel.value?.lines) return
   
   try {
-    let contentToCopy = '';
-    
-    if (selectedTemplate.value === 'json') {
-      contentToCopy = JSON.stringify(bookModel.value.lines, null, 2)
-    } else {
-      contentToCopy = templateStore.currentTemplateCode || ''
-    }
-    
-    if (contentToCopy) {
-      await navigator.clipboard.writeText(contentToCopy)
-      isCopied.value = true
-      setTimeout(() => { isCopied.value = false }, 2000)
-    }
+    await navigator.clipboard.writeText(JSON.stringify(bookModel.value.lines, null, 2))
+    isCopied.value = true
+    setTimeout(() => { isCopied.value = false }, 2000)
   } catch (err) {
     console.error('Error copying to clipboard:', err)
   }
 }
 
 const handleTemplateChange = async (): Promise<void> => {
-  if (selectedTemplate.value === 'json') {
-   
-    templateStore.clearCurrentTemplate()
-  } else if (selectedTemplate.value) {
+  if (selectedTemplate.value) {
     await templateStore.fetchTemplateByValue(selectedTemplate.value)
   }
 }

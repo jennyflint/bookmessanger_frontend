@@ -176,6 +176,7 @@
         }
     },
     "template": {
+        "tab": "Templates",
         "label": "Choose any template",
         "loading": "Loading template...",
         "generating_preview": "Generating preview...",
