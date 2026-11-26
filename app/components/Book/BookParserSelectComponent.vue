@@ -7,7 +7,7 @@
     <div
       role="radiogroup"
       :aria-label="$t('parser.title')"
-      :class="['grid gap-3', compact ? 'grid-cols-1' : 'grid-cols-1 sm:grid-cols-2']"
+      :class="['grid gap-3', compact ? 'grid-cols-1' : 'grid-cols-1 sm:grid-cols-3']"
     >
       <button
         v-for="option in displayedModes"
@@ -16,6 +16,7 @@
         role="radio"
         :aria-checked="mode === option"
         :disabled="disabled"
+        :style="{ order: PARSER_MODE_ORDER.indexOf(option) }"
         :class="[
           'rounded-xl border-2 px-4 py-3 text-left transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-1 disabled:opacity-60 disabled:cursor-not-allowed',
           mode === option
@@ -32,7 +33,11 @@
         </span>
       </button>
 
-      <skeleton-parser-mode-component v-if="isModeLoading" />
+      <skeleton-parser-mode-component
+        v-for="item in loadingModes"
+        :key="`loading-${item}`"
+        :style="{ order: PARSER_MODE_ORDER.indexOf(item) }"
+      />
     </div>
 
     <div
@@ -46,7 +51,7 @@
       </ul>
     </div>
 
-    <div v-if="mode === 'llm' && parserOptionsStore.llmProviders.length > 1">
+    <div v-if="usesLlm(mode) && parserOptionsStore.llmProviders.length > 1">
       <label :for="providerSelectId" class="block mb-1 text-xs font-medium text-slate-600 dark:text-slate-300">
         {{ $t("parser.provider") }}
       </label>
@@ -82,6 +87,7 @@
 import { computed, onMounted, useId, watch } from "vue";
 import type { ParserMode } from "~/types/book";
 import { useParserOptionsStore } from "~/stores/parserOptions";
+import { PARSER_MODE_ORDER, sortParserModes, usesLlm } from "~/utils/parserMode";
 
 withDefaults(
   defineProps<{
@@ -104,6 +110,7 @@ const { t } = useI18n();
 // Order of the feature list shown under the mode cards (keys in parser.features.<mode>)
 const FEATURE_KEYS: Record<ParserMode, string[]> = {
   spacy: ["speed", "simple_dialogs", "complex_dialogs"],
+  spacy_llm: ["accuracy", "cost", "duration"],
   llm: ["accuracy", "unnamed_speakers", "duration"],
 };
 
@@ -113,19 +120,21 @@ const features = computed<string[]>(() =>
 const providerSelectId = useId();
 
 // While the options are loading, keep the current selection visible
-// so a saved "llm" mode does not disappear for a moment.
+// so a saved paid mode does not disappear for a moment.
 const displayedModes = computed<ParserMode[]>(() => {
   const modes = parserOptionsStore.availableModes;
   if (!parserOptionsStore.isResolved && !modes.includes(mode.value)) {
-    return [...modes, mode.value];
+    return sortParserModes([...modes, mode.value]);
   }
   return modes;
 });
 
-// Pro appears only after the options arrive: hold its place until then
-const isModeLoading = computed<boolean>(() =>
-  !parserOptionsStore.isResolved && !displayedModes.value.includes("llm")
-);
+// Paid modes appear only after the options arrive: hold a place for each until then
+const loadingModes = computed<ParserMode[]>(() => {
+  if (parserOptionsStore.isResolved) return [];
+  return PARSER_MODE_ORDER.filter((item) => usesLlm(item) && !displayedModes.value.includes(item));
+});
+const isModeLoading = computed<boolean>(() => loadingModes.value.length > 0);
 
 const selectMode = (value: ParserMode): void => {
   mode.value = value;
@@ -139,7 +148,7 @@ const normalizeSelection = (): void => {
     mode.value = "spacy";
   }
 
-  if (mode.value === "llm") {
+  if (usesLlm(mode.value)) {
     const isKnownProvider = parserOptionsStore.llmProviders.some((item) => item.value === provider.value);
     if (!isKnownProvider) {
       provider.value = parserOptionsStore.defaultProvider;

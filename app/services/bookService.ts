@@ -6,6 +6,7 @@ import type {
   ReparseBookParams,
 } from '@/types/book'
 import type { RequestParams, PaginatedResponse } from '~/types/api'
+import { usesLlm } from '~/utils/parserMode'
 
 export const useBookService = (): {
   getBooks: (params?: RequestParams) => Promise<PaginatedResponse<BookDetailResponse>>
@@ -38,8 +39,8 @@ export const useBookService = (): {
     const formData = new FormData()
     formData.append('file', file)
     formData.append('parser_mode', parserMode)
-    // The backend expects llm_provider only together with the LLM mode
-    if (parserMode === 'llm' && llmProvider) {
+    // The backend expects llm_provider only together with an LLM mode
+    if (usesLlm(parserMode) && llmProvider) {
       formData.append('llm_provider', llmProvider)
     }
 
@@ -54,7 +55,7 @@ export const useBookService = (): {
     let body: ReparseBookParams | undefined
     if (options?.parser_mode) {
       body = { parser_mode: options.parser_mode }
-      if (options.parser_mode === 'llm' && options.llm_provider) {
+      if (usesLlm(options.parser_mode) && options.llm_provider) {
         body.llm_provider = options.llm_provider
       }
     }

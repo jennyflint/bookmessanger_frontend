@@ -2,7 +2,7 @@ import type { ActionResponse } from "./action";
 
 export type ExportBookFormat = 'html' | 'pdf' | 'epub'
 export type DownloadBookStatus = 'new' | 'pending' | 'completed' | 'failed' | 'removed'
-export type ParserMode = 'spacy' | 'llm'
+export type ParserMode = 'spacy' | 'spacy_llm' | 'llm'
 
 export interface ParserOption<T extends string = string> {
   value: T

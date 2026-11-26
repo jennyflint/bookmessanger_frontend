@@ -60,14 +60,17 @@
         "title": "Book parsing method",
         "modes": {
             "spacy": "Lite",
+            "spacy_llm": "Medium",
             "llm": "Pro"
         },
         "descriptions": {
             "spacy": "Poorly understands context and may get confused by complex sentences",
+            "spacy_llm": "Nearly as accurate as Pro, but a bit faster",
             "llm": "Understands context well and identifies characters well"
         },
         "badge": {
             "spacy": "Lite",
+            "spacy_llm": "Medium",
             "llm": "Pro"
         },
         "badge_title": "Book parsing method",
@@ -76,6 +79,11 @@
                 "speed": "Faster book processing",
                 "simple_dialogs": "Works well with simple dialogues where the speaker is named directly",
                 "complex_dialogs": "More likely to misidentify the speaker in complex dialogues"
+            },
+            "spacy_llm": {
+                "accuracy": "spaCy handles simple lines where the speaker is named directly, AI handles the rest",
+                "cost": "About 15% cheaper than Pro with nearly the same accuracy",
+                "duration": "Takes longer than Lite, but a bit less than Pro"
             },
             "llm": {
                 "accuracy": "More accurately identifies characters and who is speaking",

@@ -39,9 +39,7 @@
           <span
             :class="[
               'inline-block mt-1 px-1.5 py-0.5 rounded text-[10px] font-semibold border',
-              book.parser_mode === 'llm'
-                ? 'bg-violet-50 text-violet-700 border-violet-200 dark:bg-violet-900/30 dark:text-violet-300 dark:border-violet-800'
-                : 'bg-slate-50 text-slate-600 border-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-600',
+              getParserBadgeClass(book),
             ]"
             :title="$t('parser.badge_title')"
           >
@@ -162,6 +160,7 @@ import type { BookDetailResponse, ParserMode, ReparseBookParams } from "~/types/
 import type { ActionResponse } from "~/types/action";
 import { BOOK_PARSING_ACTION, getLatestAction } from "~/utils/bookActions";
 import { getApiErrorDetail, getApiErrorStatus } from "~/utils/apiError";
+import { isKnownParserMode, usesLlm } from "~/utils/parserMode";
 
 const bookStore = useBookStore();
 const parserOptionsStore = useParserOptionsStore();
@@ -191,8 +190,21 @@ onMounted(() => {
 const getLatestParsingAction = (book: BookDetailResponse): ActionResponse | undefined =>
   getLatestAction(book.actions, BOOK_PARSING_ACTION);
 
+const PARSER_BADGE_CLASSES: Record<ParserMode, string> = {
+  spacy: "bg-slate-50 text-slate-600 border-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-600",
+  spacy_llm: "bg-indigo-50 text-indigo-700 border-indigo-200 dark:bg-indigo-900/30 dark:text-indigo-300 dark:border-indigo-800",
+  llm: "bg-violet-50 text-violet-700 border-violet-200 dark:bg-violet-900/30 dark:text-violet-300 dark:border-violet-800",
+};
+
+// An unknown mode from a newer backend is shown as Lite rather than breaking the row
+const getBookParserMode = (book: BookDetailResponse): ParserMode =>
+  isKnownParserMode(book.parser_mode) ? book.parser_mode : "spacy";
+
 const getParserBadge = (book: BookDetailResponse): string =>
-  book.parser_mode === "llm" ? $t("parser.badge.llm") : $t("parser.badge.spacy");
+  $t(`parser.badge.${getBookParserMode(book)}`);
+
+const getParserBadgeClass = (book: BookDetailResponse): string =>
+  PARSER_BADGE_CLASSES[getBookParserMode(book)];
 
 const getParsingError = (book: BookDetailResponse): string | null => {
   const action = getLatestParsingAction(book);
@@ -207,22 +219,22 @@ const canReparse = (book: BookDetailResponse): boolean => {
 
 const openReparseModal = (book: BookDetailResponse): void => {
   bookToReparse.value = book;
-  reparseMode.value = book.parser_mode ?? "spacy";
+  reparseMode.value = getBookParserMode(book);
   reparseProvider.value = book.llm_provider ?? null;
   isReparseModalOpen.value = true;
 };
 
 // Without changes send no body, so the backend reuses the values saved with the book
 const buildReparseOptions = (book: BookDetailResponse): ReparseBookParams | undefined => {
-  const savedMode = book.parser_mode ?? "spacy";
+  const savedMode = getBookParserMode(book);
   const isUnchanged = reparseMode.value === savedMode
-    && (reparseMode.value !== "llm" || reparseProvider.value === book.llm_provider);
+    && (!usesLlm(reparseMode.value) || reparseProvider.value === book.llm_provider);
   if (isUnchanged) return undefined;
 
-  if (reparseMode.value === "spacy") return { parser_mode: "spacy" };
+  if (!usesLlm(reparseMode.value)) return { parser_mode: reparseMode.value };
   return reparseProvider.value
-    ? { parser_mode: "llm", llm_provider: reparseProvider.value }
-    : { parser_mode: "llm" };
+    ? { parser_mode: reparseMode.value, llm_provider: reparseProvider.value }
+    : { parser_mode: reparseMode.value };
 };
 
 const withDetail = (err: unknown): { description?: string } => {

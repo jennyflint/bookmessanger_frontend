@@ -2,8 +2,7 @@ import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
 import type { ParserMode, ParserOption, ParserOptionsResponse } from '@/types/book'
 import { useBookService } from '~/services/bookService'
-
-const KNOWN_MODES: ParserMode[] = ['spacy', 'llm']
+import { isKnownParserMode, sortParserModes, usesLlm } from '~/utils/parserMode'
 
 /**
  * Parser options (GET /book/parser/options), loaded once and cached.
@@ -42,16 +41,17 @@ export const useParserOptionsStore = defineStore('parserOptions', () => {
   const llmProviders = computed<ParserOption[]>(() => options.value?.llm_providers ?? [])
 
   const isLlmAvailable = computed<boolean>(() =>
-    !!options.value?.modes?.some((mode) => mode.value === 'llm') && llmProviders.value.length > 0
+    !!options.value?.modes?.some((mode) => usesLlm(mode.value)) && llmProviders.value.length > 0
   )
 
   const availableModes = computed<ParserMode[]>(() => {
     const fromBackend = (options.value?.modes ?? [])
       .map((mode) => mode.value)
-      .filter((mode): mode is ParserMode => KNOWN_MODES.includes(mode))
-      .filter((mode) => mode !== 'llm' || isLlmAvailable.value)
+      .filter(isKnownParserMode)
+      // LLM modes are useless without a provider
+      .filter((mode) => !usesLlm(mode) || llmProviders.value.length > 0)
 
-    return fromBackend.includes('spacy') ? fromBackend : ['spacy', ...fromBackend]
+    return sortParserModes(fromBackend.includes('spacy') ? fromBackend : ['spacy', ...fromBackend])
   })
 
   const defaultProvider = computed<string | null>(() => {
