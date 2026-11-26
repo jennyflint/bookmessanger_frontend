@@ -62,7 +62,7 @@ const { books, meta, isLoading, error } = storeToRefs(bookStore);
 const bookService = useBookService();
 
 const params = ref<RequestParams>({
-  limit: 5,
+  limit: 15,
   offset: 0,
   sort_by: "created_at",
   sort_desc: true,
@@ -72,7 +72,12 @@ const isConfirmDeleteOpen = ref(false);
 const isDeleting = ref(false);
 const bookToDelete = ref<BookDetailResponse | null>(null);
 
-await useAsyncData("books-list", () => bookStore.fetchBooks(params.value), { lazy: true });
+// The books live in the store, but the handler still has to return a value:
+// with `undefined` the client fetches again during hydration and renders the skeleton
+await useAsyncData("books-list", async () => {
+  await bookStore.fetchBooks(params.value);
+  return true;
+}, { lazy: true });
 
 const openDeleteConfirm = (book: BookDetailResponse): void => {
   bookToDelete.value = book;
