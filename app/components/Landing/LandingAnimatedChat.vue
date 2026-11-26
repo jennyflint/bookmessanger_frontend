@@ -41,6 +41,7 @@
             <div
               class="bubble relative py-[12px] px-[18px] text-[19px] leading-[1.4] border border-[#4b2c20] break-words w-fit"
               :class="item.isRight ? 'right-bubble' : 'left-bubble'"
+              :style="item.isRight ? undefined : { backgroundColor: item.color }"
             >
               <div>{{ item.text }}</div>
               <div
@@ -111,8 +112,17 @@ const selectedScenario = ref("alice");
 
 const animationTimeout = ref<ReturnType<typeof setTimeout> | null>(null);
 
-// Keys match landing.chat.scenarios in the locale files; avatars are [guest, hero]
-const scenarioStyles: Record<string, { avatars: [string, string]; reactions: string[] }> = {
+interface Scenario {
+  avatars: string[]; // in characterKeys order
+  reactions: string[];
+  authors?: number[]; // character id of each line, if not the default two-person dialogue
+}
+
+const characterKeys = ["guest", "hero", "friend"];
+const defaultAuthors = [1, 2, 1, 2, 1];
+
+// Keys match landing.chat.scenarios in the locale files
+const scenarioStyles: Record<string, Scenario> = {
   alice: { avatars: ["🙋", "👱‍♀️"], reactions: ["✨", "🫖", "😹"] },
   space: { avatars: ["👩‍🚀", "🤖"], reactions: ["🚀", "🛸", "🧦"] },
   detective: { avatars: ["👨‍⚕️", "🕵️‍♂️"], reactions: ["🔍", "💡", "🍮"] },
@@ -120,28 +130,29 @@ const scenarioStyles: Record<string, { avatars: [string, string]; reactions: str
   romeo: { avatars: ["🤵", "👰"], reactions: ["❤️", "🌹", "🥟"] },
   quixote: { avatars: ["🧔", "🤺"], reactions: ["🛡️", "🌭", "🐴"] },
   redhood: { avatars: ["👧", "🐺"], reactions: ["🥧", "👂", "🌲"] },
+  watermelon: { avatars: ["🧐", "😴", "💪"], reactions: ["🍉", "🚨", "🎃"], authors: [1, 2, 3, 1, 2, 3, 1] },
 };
 
 const scenarios = Object.keys(scenarioStyles);
 
 const bookData = computed(() => {
   const s = selectedScenario.value;
+  const style = scenarioStyles[s];
+  const prefix = `landing.chat.scenarios.${s}`;
   return {
-    characters: [
-      { id: 1, nameKey: `landing.chat.scenarios.${s}.characters.guest`, avatar: null },
-      {
-        id: 2,
-        nameKey: `landing.chat.scenarios.${s}.characters.hero`,
-        avatar: null,
-      },
-    ] as Character[],
+    characters: characterKeys.slice(0, style?.avatars.length).map((key, index) => ({
+      id: index + 1,
+      nameKey: `${prefix}.characters.${key}`,
+      avatar: null,
+    })) as Character[],
     lines: [
-      { is_dialogue: false, contentKey: `landing.chat.scenarios.${s}.lines.system_title` },
-      { is_dialogue: true, author_id: 1, contentKey: "", partsKeys: [`landing.chat.scenarios.${s}.lines.line1_text`, `landing.chat.scenarios.${s}.lines.line1_meta`] },
-      { is_dialogue: true, author_id: 2, contentKey: "", partsKeys: [`landing.chat.scenarios.${s}.lines.line2_text`, `landing.chat.scenarios.${s}.lines.line2_meta`] },
-      { is_dialogue: true, author_id: 1, contentKey: "", partsKeys: [`landing.chat.scenarios.${s}.lines.line3_text`, `landing.chat.scenarios.${s}.lines.line3_meta`] },
-      { is_dialogue: true, author_id: 2, contentKey: "", partsKeys: [`landing.chat.scenarios.${s}.lines.line4_text`, `landing.chat.scenarios.${s}.lines.line4_meta`] },
-      { is_dialogue: true, author_id: 1, contentKey: "", partsKeys: [`landing.chat.scenarios.${s}.lines.line5_text`, `landing.chat.scenarios.${s}.lines.line5_meta`] },
+      { is_dialogue: false, contentKey: `${prefix}.lines.system_title` },
+      ...(style?.authors ?? defaultAuthors).map((authorId, index) => ({
+        is_dialogue: true,
+        author_id: authorId,
+        contentKey: "",
+        partsKeys: [`${prefix}.lines.line${index + 1}_text`, `${prefix}.lines.line${index + 1}_meta`],
+      })),
     ] as RawLine[],
   };
 });
@@ -159,7 +170,7 @@ const getRandomReactions = (): { emoji: string; count: number }[] | null => {
 
 const allProcessedLines = computed<ChatMessage[]>(() => {
   const charMap = new Map(bookData.value.characters.map((c) => [c.id, c]));
-  const colors = ["#ff6b6b", "#4ecdc4"];
+  const colors = ["#4ecdc4", "#ff6b6b", "#9b5de5"]; // by character id
   const result: ChatMessage[] = [];
 
   bookData.value.lines.forEach((line, index) => {
@@ -172,8 +183,8 @@ const allProcessedLines = computed<ChatMessage[]>(() => {
     const char = charMap.get(aId);
     const name = char ? t(char.nameKey) : t("landing.chat.unknown");
     const avatarUrl = char?.avatar || null;
-    const color = colors[aId % colors.length];
-    const isRight = aId % 2 !== 0;
+    const color = colors[aId - 1];
+    const isRight = aId === 1;
 
     if (line && line.partsKeys && line.partsKeys.length) {
       result.push({

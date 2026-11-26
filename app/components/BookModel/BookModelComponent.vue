@@ -2,10 +2,7 @@
   <div>
     <div class="max-w-6xl mx-auto p-4 sm:p-6">
       <div class="pb-2">
-        <book-model-character-list-component
-          v-if="!isAvatarPending"
-          :avatars="avatarResponse?.items || []"
-        />
+        <book-model-character-list-component v-if="!isAvatarPending" />
         <skeleton-character-list-component v-else :count="16" />
       </div>
 

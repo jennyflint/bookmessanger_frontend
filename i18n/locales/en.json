@@ -63,8 +63,8 @@
             "llm": "Pro"
         },
         "descriptions": {
-            "spacy": "Local processing at no extra cost",
-            "llm": "Better at recognizing characters and speakers"
+            "spacy": "Poorly understands context and may get confused by complex sentences",
+            "llm": "Understands context well and identifies characters well"
         },
         "badge": {
             "spacy": "Lite",
@@ -347,6 +347,30 @@
                         "line4_meta": "— someone inside the Wolf sent a voice message about slippers.",
                         "line5_text": "I'm signing in with Google and adding the Huntsman to the chat!",
                         "line5_meta": "— Red pressed the button, and the Wolf urgently went offline."
+                    }
+                },
+                "watermelon": {
+                    "characters": {
+                        "guest": "Fayst",
+                        "hero": "PjSm",
+                        "friend": "Mac"
+                    },
+                    "lines": {
+                        "system_title": "Book: Fayst, PjSm, Mac and the Great Watermelon Heist (AI Version)",
+                        "line1_text": "Quiet, we're on a job! I've already pulled a stocking over my head, and now a book is texting me. Are we busted?!",
+                        "line1_meta": "— Fayst whispered so loudly that every dog in the village started barking.",
+                        "line2_text": "Relax. It's an app that turns books into live chats. I was reading while keeping watch. I mean, sleeping while keeping watch.",
+                        "line2_meta": "— PjSm yawned, flashing his slipper headlights straight into the guard's window.",
+                        "line3_text": "Brilliant! Let's ask some book detective where we slipped up. And I've already got the loot!",
+                        "line3_meta": "— Mac proudly rolled an enormous pumpkin out of the dark.",
+                        "line4_text": "That's a pumpkin! Three weeks of planning, a map, a password, and we've stolen tomorrow's soup?!",
+                        "line4_meta": "— Fayst collapsed dramatically onto the vegetable patch, after checking it was soft.",
+                        "line5_text": "Don't panic. My invention, the Melonmobile, can haul anything away. Admittedly, it has pillows for wheels.",
+                        "line5_meta": "— PjSm pressed the remote, and the Melonmobile started snoring.",
+                        "line6_text": "New plan! I grab the real watermelon and escape into that little hut. Look, the light's on!",
+                        "line6_meta": "— Mac happily ran straight into the guard's hut. A voice inside said, \"Good evening.\"",
+                        "line7_text": "That's it, I'm quitting crime and becoming a reader. Signing in with Google before the guard starts his lecture!",
+                        "line7_meta": "— Fayst pressed the button. They returned the watermelon with apologies, but lost the receipt for it."
                     }
                 }
             }
