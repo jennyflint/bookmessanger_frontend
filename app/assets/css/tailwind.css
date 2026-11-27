@@ -1,0 +1,51 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+ * Theme tokens. RGB triplets so Tailwind opacity modifiers work
+ * (e.g. text-comic-ink/70). The `dark` class on <html> is set by the
+ * inline script in nuxt.config.ts before first paint and kept in sync
+ * by the theme plugin.
+ */
+@layer base {
+  :root {
+    color-scheme: light;
+    --font-comic: "Nunito", ui-rounded, system-ui, sans-serif;
+    --comic-bg: 242 204 84;
+    --comic-ink: 75 44 32;
+    --comic-surface: 255 255 255;
+    --comic-soft: 247 255 247;
+    --comic-line: 75 44 32;
+    --comic-shadow: 75 44 32;
+    --comic-dot: rgba(255, 255, 255, 0.7);
+    --comic-vignette: rgba(200, 140, 0, 0.25);
+    --comic-title-glow: 1;
+  }
+
+  :root.dark {
+    color-scheme: dark;
+    /* Calm "night sky": muted indigo, soft text, low-contrast outlines */
+    --comic-bg: 31 30 48;
+    --comic-ink: 214 207 192;
+    --comic-surface: 43 42 64;
+    --comic-soft: 37 45 60;
+    --comic-line: 78 76 110;
+    --comic-shadow: 14 13 26;
+    --comic-title-glow: 0.35;
+    --comic-dot: rgba(255, 230, 128, 0.07);
+    --comic-vignette: rgba(8, 6, 24, 0.45);
+  }
+
+  /* Tone down saturated accent fills (bubbles, icons) in dark theme.
+     A background-image overlay sits under the text, so it stays crisp
+     (unlike `filter`, which rasterizes the element). */
+  :root.dark .comic-muted {
+    background-image: linear-gradient(rgba(20, 18, 40, 0.3), rgba(20, 18, 40, 0.3));
+    color: rgba(255, 255, 255, 0.92);
+  }
+
+  body {
+    @apply bg-slate-50 text-slate-800 dark:bg-slate-900 dark:text-slate-100;
+  }
+}

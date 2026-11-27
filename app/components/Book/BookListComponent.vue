@@ -12,7 +12,7 @@
       </span>
     </div>
 
-    <div v-if="error" class="p-4 mb-6 bg-red-50 text-red-600 rounded-xl border border-red-200">
+    <div v-if="error" class="p-4 mb-6 bg-red-50 text-red-600 dark:bg-red-900/30 dark:text-red-300 rounded-xl border border-red-200 dark:border-red-800">
       <p class="font-semibold">
         {{ $t("error.loading") }}
         <button class="underline" @click="refresh()">{{ $t("error.retry") }}</button>

@@ -40,6 +40,29 @@ export default defineNuxtConfig({
   pinia: {
     storesDirs: ['./stores/**'],
   },
+  app: {
+    head: {
+      link: [
+        // Nunito: rounded font with both Latin and Cyrillic glyphs
+        // (Fredoka One had Latin only, so Ukrainian fell back to another font)
+        { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
+        { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' },
+        { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Nunito:wght@600..900&display=swap' },
+      ],
+      script: [
+        {
+          // Applies the saved/system theme before first paint to avoid a flash.
+          // Keep the storage key in sync with app/composables/useTheme.ts.
+          tagPosition: 'head',
+          innerHTML: `(function(){try{var t=localStorage.getItem('theme');var d=t==='dark'||(t!=='light'&&window.matchMedia('(prefers-color-scheme: dark)').matches);var r=document.documentElement;r.classList.toggle('dark',d);r.style.colorScheme=d?'dark':'light'}catch(e){}})()`,
+        },
+      ],
+    },
+  },
+  tailwindcss: {
+    // Holds the theme CSS variables; must replace the module's default entry
+    cssPath: '~/assets/css/tailwind.css',
+  },
   modules: [
     '@nuxt/eslint',
     '@pinia/nuxt',

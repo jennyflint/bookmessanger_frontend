@@ -1,13 +1,13 @@
 <template>
   <div
     ref="chatContainer"
-    class="chat-half w-full min-h-[50vh] md:flex-1 md:h-full overflow-hidden p-5 select-none bg-[#ffe680]"
+    class="chat-half w-full min-h-[50vh] md:flex-1 md:h-full overflow-hidden p-5 select-none bg-comic-bg"
   >
     <div class="chat max-w-[600px] py-[30px] mx-auto w-full">
       <template v-for="item in visibleLines" :key="item.uid">
         <div
           v-if="item.type === 'system'"
-          class="system text-center text-[19px] py-[12px] px-[18px] my-[40px] mx-auto bg-[#f7fff7] border border-dashed border-[#4ecdc4] rounded-[16px] max-w-[85%] animate-fade-in"
+          class="system text-center text-[19px] py-[12px] px-[18px] my-[40px] mx-auto bg-comic-soft border border-dashed border-[#4ecdc4]/60 rounded-[16px] max-w-[85%] animate-fade-in"
         >
           {{ item.content }}
         </div>
@@ -33,13 +33,13 @@
           >
             <div
               class="name text-[13px] mb-[5px] uppercase tracking-[0.5px]"
-              :style="{ color: item.color, textShadow: '1px 1px 0 #fff' }"
+              :style="{ color: item.color, textShadow: '1px 1px 0 rgb(var(--comic-surface))' }"
             >
               {{ item.name }}
             </div>
 
             <div
-              class="bubble relative py-[12px] px-[18px] text-[19px] leading-[1.4] border border-[#4b2c20] break-words w-fit"
+              class="bubble comic-muted relative py-[12px] px-[18px] text-[19px] leading-[1.4] border border-comic-line break-words w-fit"
               :class="item.isRight ? 'right-bubble' : 'left-bubble'"
               :style="item.isRight ? undefined : { backgroundColor: item.color }"
             >
@@ -53,12 +53,12 @@
 
               <div
                 v-if="item.reactions"
-                class="reactions absolute bottom-[-18px] bg-white border border-[#4b2c20] rounded-[12px] py-[2px] px-[8px] text-[13px] flex gap-[6px] items-center z-10 whitespace-nowrap"
+                class="reactions absolute bottom-[-18px] bg-comic-surface border border-comic-line rounded-[12px] py-[2px] px-[8px] text-[13px] flex gap-[6px] items-center z-10 whitespace-nowrap"
                 :class="item.isRight ? 'left-[12px]' : 'right-[12px]'"
               >
                 <span v-for="(r, rIdx) in item.reactions" :key="rIdx">
                   {{ r.emoji }}
-                  <span class="reaction-count font-bold text-[#4b2c20] text-[12px]">{{ r.count }}</span>
+                  <span class="reaction-count font-bold text-comic-ink text-[12px]">{{ r.count }}</span>
                 </span>
               </div>
             </div>
@@ -84,7 +84,7 @@
           <div class="name text-[13px] mb-[5px] uppercase tracking-[0.5px] text-gray-500">
             {{ $t("landing.chat.typing", { name: nextSpeakerName }) }}
           </div>
-          <div class="bubble left-bubble relative py-[12px] px-[18px] border border-[#4b2c20] w-fit">
+          <div class="bubble comic-muted left-bubble relative py-[12px] px-[18px] border border-comic-line w-fit">
             <div class="typing-dots flex gap-1 items-center py-1 px-2">
               <span class="dot"/>
               <span class="dot"/>
@@ -298,22 +298,21 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
-@import url("https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap");
-
 .chat-half {
-  font-family: "Fredoka One", cursive;
-  background-image: radial-gradient(#ffffff 3px, transparent 3px);
+  font-family: var(--font-comic);
+  font-weight: 800;
+  background-image: radial-gradient(var(--comic-dot) 3px, transparent 3px);
   background-size: 30px 30px;
-  color: #4b2c20;
+  color: rgb(var(--comic-ink));
   -webkit-font-smoothing: antialiased;
 }
 
 .avatar {
   width: 48px;
   height: 48px;
-  border: 1px solid #4b2c20;
+  border: 1px solid rgb(var(--comic-line));
   border-radius: 50%;
-  background: #ffffff;
+  background: rgb(var(--comic-surface));
   display: flex;
   align-items: center;
   justify-content: center;
@@ -356,16 +355,11 @@ onUnmounted(() => {
 }
 
 .msg-animated {
-  animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-  will-change: transform, opacity;
-  transform: translateZ(0); 
+  animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) backwards;
 }
 
 .animate-fade-in {
-  animation: popIn 0.5s ease-out forwards;
-
-  will-change: transform, opacity;
-  transform: translateZ(0); 
+  animation: popIn 0.5s ease-out backwards;
 }
 
 .dot {

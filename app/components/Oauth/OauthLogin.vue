@@ -6,7 +6,7 @@
       class="auth-content p-6 sm:p-10 flex items-center justify-center h-full min-h-screen"
     >
       <div
-        class="comic-card max-w-md w-full space-y-8 p-8 sm:p-10 relative z-10 bg-white"
+        class="comic-card max-w-md w-full space-y-8 p-8 sm:p-10 relative z-10 bg-comic-surface"
       >
         <div>
           <div class="flex justify-center mb-8">
@@ -19,7 +19,7 @@
           </div>
 
           <div class="flex items-center justify-center gap-4 mb-8">
-            <div class="comic-icon bg-[#ff6b6b] transform -rotate-3 text-white">
+            <div class="comic-icon comic-muted bg-[#ff6b6b] transform -rotate-3 text-white">
               <svg
                 class="w-8 h-8"
                 fill="none"
@@ -34,7 +34,7 @@
               </svg>
             </div>
 
-            <div class="text-[#4b2c20] animate-pulse">
+            <div class="text-comic-ink animate-pulse">
               <svg
                 class="w-8 h-8"
                 fill="none"
@@ -49,7 +49,7 @@
               </svg>
             </div>
 
-            <div class="comic-icon bg-[#4ecdc4] transform rotate-3 text-white">
+            <div class="comic-icon comic-muted bg-[#4ecdc4] transform rotate-3 text-white">
               <svg
                 class="w-8 h-8"
                 fill="none"
@@ -66,19 +66,19 @@
           </div>
 
           <h2
-            class="mt-4 text-center text-3xl text-[#4b2c20]"
-            style="text-shadow: 1px 1px 0px #4ecdc4"
+            class="mt-4 text-center text-3xl text-comic-ink"
+            style="text-shadow: 1px 1px 0px rgb(78 205 196 / var(--comic-title-glow, 1))"
           >
             {{ $config.public.appName }}
           </h2>
 
           <div class="mt-4 text-center">
-            <p class="text-[17px] text-[#4b2c20] leading-snug">
+            <p class="text-[17px] text-comic-ink leading-snug">
               {{
                 $t("auth.login.hero.title", { action: $t("auth.login.hero.live_chat") })
               }}
             </p>
-            <p class="mt-3 text-[14px] text-[#4b2c20]/70">
+            <p class="mt-3 text-[14px] text-comic-ink/70">
               {{ $t("auth.login.description") }}
             </p>
           </div>
@@ -86,7 +86,7 @@
 
         <div class="mt-8">
           <button
-            class="comic-btn w-full flex items-center justify-center px-4 py-3 bg-white text-[#4b2c20] text-[17px] transition-all"
+            class="comic-btn w-full flex items-center justify-center px-4 py-3 bg-comic-surface text-comic-ink text-[17px] transition-all"
             @click="loginWith('google')"
           >
             <svg
@@ -115,7 +115,7 @@
           </button>
         </div>
 
-        <p class="mt-6 text-center text-[12px] text-[#4b2c20]/80">
+        <p class="mt-6 text-center text-[12px] text-comic-ink/80">
           {{ $t("footer.agree_terms") }}<br >
           <a
             href="#"
@@ -145,35 +145,34 @@ const loginWith = async (provider: string): Promise<void> => {
 </script>
 
 <style scoped>
-@import url("https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap");
-
 .auth-half {
-  font-family: "Fredoka One", cursive;
-  background-color: #ffe680;
-  background-image: radial-gradient(#ffffff 3px, transparent 3px);
+  font-family: var(--font-comic);
+  font-weight: 800;
+  background-color: rgb(var(--comic-bg));
+  background-image: radial-gradient(var(--comic-dot) 3px, transparent 3px);
   background-size: 30px 30px;
-  color: #4b2c20;
+  color: rgb(var(--comic-ink));
   -webkit-font-smoothing: antialiased;
 }
 
 .comic-card {
-  border: 2px solid #4b2c20;
+  border: 2px solid rgb(var(--comic-line));
   border-radius: 24px;
-  box-shadow: 8px 8px 0px 0px #4b2c20;
+  box-shadow: 8px 8px 0px 0px rgb(var(--comic-shadow));
 }
 
 .system-badge {
-  background: #f7fff7;
-  border: 2px dashed #4ecdc4;
+  background: rgb(var(--comic-soft));
+  border: 2px dashed rgb(78 205 196 / 0.6);
   border-radius: 16px;
-  color: #4b2c20;
+  color: rgb(var(--comic-ink));
 }
 
 .comic-icon {
   padding: 14px;
   border-radius: 18px 18px 18px 4px;
-  border: 2px solid #4b2c20;
-  box-shadow: 4px 4px 0px 0px #4b2c20;
+  border: 2px solid rgb(var(--comic-line));
+  box-shadow: 4px 4px 0px 0px rgb(var(--comic-shadow));
 }
 
 .comic-icon:last-child {
@@ -181,17 +180,17 @@ const loginWith = async (provider: string): Promise<void> => {
 }
 
 .comic-btn {
-  border: 2px solid #4b2c20;
+  border: 2px solid rgb(var(--comic-line));
   border-radius: 16px;
-  box-shadow: 4px 4px 0px 0px #4b2c20;
+  box-shadow: 4px 4px 0px 0px rgb(var(--comic-shadow));
 }
 
 .comic-btn:hover {
-  background-color: #f7fff7;
+  background-color: rgb(var(--comic-soft));
 }
 
 .comic-btn:active {
   transform: translate(4px, 4px);
-  box-shadow: 0px 0px 0px 0px #4b2c20;
+  box-shadow: 0px 0px 0px 0px rgb(var(--comic-shadow));
 }
 </style>

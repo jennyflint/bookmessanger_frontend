@@ -1,17 +1,18 @@
 <template>
-  <header v-if="userStore.isAuthenticated" class="app-header w-full bg-white border-b border-[#4b2c20]/20 px-6 py-3 sticky top-0 z-50 select-none">
+  <header v-if="userStore.isAuthenticated" class="app-header w-full bg-white dark:bg-slate-900 border-b border-comic-ink/20 px-6 py-3 sticky top-0 z-50 select-none">
     <div class="max-w-7xl mx-auto flex items-center justify-between">
       
       <div class="flex items-center">
-        <nuxt-link :to="localePath('/dashboard')" class="logo-text font-bold text-[18px] tracking-tight text-[#4b2c20]">
+        <nuxt-link :to="localePath('/dashboard')" class="logo-text font-bold text-[18px] tracking-tight text-comic-ink">
           {{ config.public.appName || 'BookChat' }}
         </nuxt-link>
       </div>
 
       <div class="flex items-center gap-4">
+        <ThemeSwitcher />
         <LanguageSwitcher />
 
-        <span v-if="userStore.user" class="user-email text-[14px] text-[#4b2c20]/70 hidden xs:inline-block">
+        <span v-if="userStore.user" class="user-email text-[14px] text-comic-ink/70 hidden xs:inline-block">
           {{ userStore.user.email }}
         </span>
 
@@ -49,10 +50,9 @@ const handleLogout = (): void => {
 </script>
 
 <style scoped>
-@import url('https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap');
-
 .app-header {
-  font-family: 'Fredoka One', cursive;
+  font-family: var(--font-comic);
+  font-weight: 800;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -65,6 +65,6 @@ const handleLogout = (): void => {
 }
 
 .logout-btn:hover {
-  border-color: #ff6b6b/20;
+  border-color: rgba(255, 107, 107, 0.2);
 }
 </style>

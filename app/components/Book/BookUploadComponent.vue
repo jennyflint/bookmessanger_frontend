@@ -1,13 +1,13 @@
 <template>
   <div
-    class="max-w-6xl mx-auto p-4 sm:p-6 rounded-3xl shadow-2xl bg-white/85 backdrop-blur-xl border border-white"
+    class="max-w-6xl mx-auto p-4 sm:p-6 rounded-3xl shadow-2xl bg-white/85 dark:bg-slate-800/85 backdrop-blur-xl border border-white dark:border-slate-700"
   >
     <div
       :class="[
         'relative border-2 border-dashed rounded-2xl p-12 text-center cursor-pointer transition-all duration-300 ease-in-out',
         isDragging
-          ? 'border-indigo-500 bg-indigo-50/50 scale-[1.02]'
-          : 'border-gray-300 hover:border-indigo-400 hover:bg-gray-50/50',
+          ? 'border-indigo-500 bg-indigo-50/50 dark:bg-indigo-900/20 scale-[1.02]'
+          : 'border-gray-300 dark:border-slate-600 hover:border-indigo-400 hover:bg-gray-50/50 dark:hover:bg-slate-700/30',
       ]"
       @dragenter.prevent="isDragging = true"
       @dragleave.prevent="isDragging = false"
@@ -17,7 +17,7 @@
     >
       <div class="text-center mb-8">
         <div
-          class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-indigo-100 text-indigo-600 mb-4 shadow-sm"
+          class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-indigo-100 text-indigo-600 dark:bg-indigo-900/50 dark:text-indigo-300 mb-4 shadow-sm"
         >
           <svg
             class="w-8 h-8"
@@ -34,10 +34,10 @@
             />
           </svg>
         </div>
-        <h2 class="text-3xl font-extrabold text-gray-900 tracking-tight">
+        <h2 class="text-3xl font-extrabold text-gray-900 dark:text-slate-100 tracking-tight">
           {{ $t("upload.add_new_book") }}
         </h2>
-        <p class="mt-2 text-gray-600 font-medium">
+        <p class="mt-2 text-gray-600 dark:text-slate-400 font-medium">
           {{ $t("upload.upload_file_to_convert") }}
         </p>
       </div>
@@ -52,7 +52,7 @@
 
       <div v-if="!selectedFile" class="space-y-4 pointer-events-none">
         <svg
-          class="mx-auto h-12 w-12 text-gray-400"
+          class="mx-auto h-12 w-12 text-gray-400 dark:text-slate-500"
           stroke="currentColor"
           fill="none"
           viewBox="0 0 48 48"
@@ -65,18 +65,18 @@
             stroke-linejoin="round"
           />
         </svg>
-        <div class="text-gray-600">
-          <span class="font-semibold text-indigo-600">{{
+        <div class="text-gray-600 dark:text-slate-300">
+          <span class="font-semibold text-indigo-600 dark:text-indigo-400">{{
             $t("upload.click_to_select_file")
           }}</span>
           {{ $t("upload.or_drag_and_drop") }}
         </div>
-        <p class="text-xs text-gray-500">{{ $t("upload.supported_formats", { formats: Array.from(ALLOWED_EXTENSIONS).join(', ') }) }}</p>
+        <p class="text-xs text-gray-500 dark:text-slate-400">{{ $t("upload.supported_formats", { formats: Array.from(ALLOWED_EXTENSIONS).join(', ') }) }}</p>
         <p class="text-xs font-bold text-red-500">{{ $t("upload.beta_description") }}</p>
       </div>
 
       <div v-else class="flex flex-col items-center space-y-4">
-        <div class="p-4 bg-green-50 rounded-full text-green-600">
+        <div class="p-4 bg-green-50 dark:bg-green-900/30 rounded-full text-green-600 dark:text-green-400">
           <svg
             class="w-10 h-10"
             fill="none"
@@ -91,10 +91,10 @@
           </svg>
         </div>
         <div>
-          <p class="text-lg font-medium text-gray-900 truncate max-w-xs mx-auto">
+          <p class="text-lg font-medium text-gray-900 dark:text-slate-100 truncate max-w-xs mx-auto">
             {{ selectedFile.name }}
           </p>
-          <p class="text-sm text-gray-500">{{ formatFileSize(selectedFile.size) }}</p>
+          <p class="text-sm text-gray-500 dark:text-slate-400">{{ formatFileSize(selectedFile.size) }}</p>
         </div>
       </div>
     </div>
@@ -109,7 +109,7 @@
 
     <div
       v-if="error"
-      class="mt-4 p-4 bg-red-50 text-red-700 rounded-xl text-sm font-medium flex items-center"
+      class="mt-4 p-4 bg-red-50 text-red-700 dark:bg-red-900/30 dark:text-red-300 rounded-xl text-sm font-medium flex items-center"
     >
       <svg
         class="w-5 h-5 mr-2 shrink-0"
@@ -127,7 +127,7 @@
     <div class="mt-8 flex gap-4">
       <button
         v-if="selectedFile"
-        class="flex-1 px-6 py-3 border border-gray-300 shadow-sm text-base font-medium rounded-xl text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors"
+        class="flex-1 px-6 py-3 border border-gray-300 dark:border-slate-600 shadow-sm text-base font-medium rounded-xl text-gray-700 dark:text-slate-200 bg-white dark:bg-slate-700 hover:bg-gray-50 dark:hover:bg-slate-600 dark:focus:ring-offset-slate-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors"
         @click="removeFile"
       >
         {{ $t("cancel") }}
@@ -138,7 +138,7 @@
         :class="[
           'flex-1 flex justify-center items-center px-6 py-3 border border-transparent shadow-sm text-base font-semibold rounded-xl text-white transition-all',
           !selectedFile || isUploading
-            ? 'bg-indigo-300 cursor-not-allowed'
+            ? 'bg-indigo-300 dark:bg-indigo-900/60 dark:text-slate-400 cursor-not-allowed'
             : 'bg-indigo-600 hover:bg-indigo-700 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500',
         ]"
         @click="uploadBook"

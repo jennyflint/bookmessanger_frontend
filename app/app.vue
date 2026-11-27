@@ -5,7 +5,11 @@
     </NuxtLayout>
 
     <ClientOnly>
-      <Toaster position="bottom-center" rich-colors />
+      <Toaster
+        position="bottom-center"
+        rich-colors
+        :theme="isDark ? 'dark' : 'light'"
+      />
     </ClientOnly>
   </div>
 </template>
@@ -22,6 +26,7 @@ import { Toaster, toast } from "vue-sonner";
 import "vue-sonner/style.css";
 
 const { t } = useI18n();
+const { isDark } = useTheme();
 
 const { connect } = useNotificationSocket();
 const downloadStore = useDownloadStore();
