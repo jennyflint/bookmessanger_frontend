@@ -130,7 +130,8 @@ const scenarioStyles: Record<string, Scenario> = {
   romeo: { avatars: ["🤵", "👰"], reactions: ["❤️", "🌹", "🥟"] },
   quixote: { avatars: ["🧔", "🤺"], reactions: ["🛡️", "🌭", "🐴"] },
   redhood: { avatars: ["👧", "🐺"], reactions: ["🥧", "👂", "🌲"] },
-  watermelon: { avatars: ["🧐", "😴", "💪"], reactions: ["🍉", "🚨", "🎃"], authors: [1, 2, 3, 1, 2, 3, 1] },
+  watermelon: { avatars: ["🧐", "😴", "💪"], reactions: ["🍉", "🌙", "👁️"], authors: [1, 2, 3, 1, 2, 3, 1] },
+  rocket: { avatars: ["🧑‍🔧", "🖥️"], reactions: ["🚀", "🎸", "⭐"], authors: [1, 2, 1, 2, 1, 2, 1] },
 };
 
 const scenarios = Object.keys(scenarioStyles);

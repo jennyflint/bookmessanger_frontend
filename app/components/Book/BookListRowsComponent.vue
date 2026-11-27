@@ -4,14 +4,14 @@
       v-for="book in bookStore.books"
       :key="book.id"
       :class="[
-        'grid grid-cols-1 md:grid-cols-12 items-center px-6 py-4 transition-all gap-4 md:gap-0',
+        'grid grid-cols-[minmax(0,1fr)_auto] md:grid-cols-12 items-center px-6 py-4 transition-all gap-x-2 gap-y-4 md:gap-0',
         isBookCompleted(book)
           ? 'cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-700/50 hover:shadow-sm'
           : 'hover:bg-slate-50/30 dark:hover:bg-slate-700/10 opacity-85',
       ]"
       @click="navigateToBook(book)"
     >
-      <div class="col-span-1 md:col-span-6 flex items-center space-x-3 overflow-hidden">
+      <div class="md:col-span-6 flex items-center space-x-3 overflow-hidden">
         <div
           :class="[
             'p-2 rounded-lg shrink-0',
@@ -55,21 +55,21 @@
         </div>
       </div>
       
-      <div class="col-span-1 md:col-span-2 flex md:block items-center justify-between">
+      <div class="col-span-2 flex md:block items-center justify-between">
         <span class="md:hidden text-xs text-slate-400 font-medium mr-2">{{ $t("book.status") }}:</span>
         <span :class="getStatusClass(book)" class="px-2 py-1 rounded text-[10px] font-bold border uppercase tracking-tight">
           {{ getStatusLabel(book) }}
         </span>
       </div>
       
-      <div class="col-span-1 md:col-span-2 text-xs text-slate-500 dark:text-slate-400 flex md:block items-center justify-between">
+      <div class="col-span-2 text-xs text-slate-500 dark:text-slate-400 flex md:block items-center justify-between">
         <span class="md:hidden text-xs text-slate-400 font-medium mr-2">{{ $t("book.date") }}:</span>
         <ClientOnly fallback-tag="span" fallback="...">
           {{ formatDate(book.created_at) }}
         </ClientOnly>
       </div>
 
-      <div class="col-span-1 md:col-span-2 flex items-center justify-end space-x-2" @click.stop>
+      <div class="col-start-2 row-start-1 self-start -mt-1.5 -mr-2 md:col-span-2 md:row-start-auto md:self-center md:mt-0 md:mr-0 flex items-center justify-end md:space-x-2" @click.stop>
         <button
           v-if="isBookCompleted(book)"
           class="p-2 rounded-xl text-slate-400 hover:text-emerald-500 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"

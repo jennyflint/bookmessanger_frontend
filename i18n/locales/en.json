@@ -364,21 +364,44 @@
                         "friend": "Mac"
                     },
                     "lines": {
-                        "system_title": "Book: Fayst, PjSm, Mac and the Great Watermelon Heist (AI Version)",
-                        "line1_text": "Quiet, we're on a job! I've already pulled a stocking over my head, and now a book is texting me. Are we busted?!",
-                        "line1_meta": "— Fayst whispered so loudly that every dog in the village started barking.",
-                        "line2_text": "Relax. It's an app that turns books into live chats. I was reading while keeping watch. I mean, sleeping while keeping watch.",
-                        "line2_meta": "— PjSm yawned, flashing his slipper headlights straight into the guard's window.",
-                        "line3_text": "Brilliant! Let's ask some book detective where we slipped up. And I've already got the loot!",
-                        "line3_meta": "— Mac proudly rolled an enormous pumpkin out of the dark.",
-                        "line4_text": "That's a pumpkin! Three weeks of planning, a map, a password, and we've stolen tomorrow's soup?!",
-                        "line4_meta": "— Fayst collapsed dramatically onto the vegetable patch, after checking it was soft.",
-                        "line5_text": "Don't panic. My invention, the Melonmobile, can haul anything away. Admittedly, it has pillows for wheels.",
-                        "line5_meta": "— PjSm pressed the remote, and the Melonmobile started snoring.",
-                        "line6_text": "New plan! I grab the real watermelon and escape into that little hut. Look, the light's on!",
-                        "line6_meta": "— Mac happily ran straight into the guard's hut. A voice inside said, \"Good evening.\"",
-                        "line7_text": "That's it, I'm quitting crime and becoming a reader. Signing in with Google before the guard starts his lecture!",
-                        "line7_meta": "— Fayst pressed the button. They returned the watermelon with apologies, but lost the receipt for it."
+                        "system_title": "Book: The Great Watermelon Heist. A Twilight Episode (AI Version)",
+                        "line1_text": "Gentlemen, this is the fourth time we've stolen this watermelon. The moment we get it over the fence, it's back in the patch!",
+                        "line1_meta": "— Fayst whispered. The clock said 3:00 a.m. It had been saying that for two weeks.",
+                        "line2_text": "I have worse news. I was dozing on lookout when an app that turns books into live chats opened by itself. The book is called \"Three Thieves and One Watermelon\".",
+                        "line2_meta": "— PjSm switched on his slipper headlights. There were three thieves. For some reason, four shadows.",
+                        "line3_text": "Great book! Some klutz in it drops the watermelon on his own foot. What a doofus... Ouch!",
+                        "line3_meta": "— Mac's phone said \"Thud!\" exactly one second before the thud.",
+                        "line4_text": "It knows everything about us! Even that my stocking has a hole, and our heist plan is drawn on the back of a receipt!",
+                        "line4_meta": "— Fayst turned so pale that the moon saw him as competition.",
+                        "line5_text": "Stay calm. It's a live chat, so let's ask the characters how this ends. Admittedly, the characters are us.",
+                        "line5_meta": "— the screen blinked \"Fayst is typing...\", though Fayst was holding the watermelon with both hands.",
+                        "line6_text": "We've got a reply! \"Put the watermelon back.\" Sent from my number. Tomorrow.",
+                        "line6_meta": "— Mac waved cheerfully into the darkness. The darkness thought about it and waved back.",
+                        "line7_text": "That's it, we're quitting crime! I'm signing in with Google to read something calming. Ghost stories, for instance.",
+                        "line7_meta": "— the three losers got home empty-handed. The watermelon was waiting in the kitchen. With a bookmark in it."
+                    }
+                },
+                "rocket": {
+                    "characters": {
+                        "guest": "Jenny Flint",
+                        "hero": "Temple Computer"
+                    },
+                    "lines": {
+                        "system_title": "Book: 2112. Jenny Flint and the Scrap Metal Rocket (AI Version)",
+                        "line1_text": "It's the year 2112. The Priests of the Temples decide what we read, sing and eat for breakfast. So I'm building a rocket out of scrap!",
+                        "line1_meta": "— whispered Jenny Flint, bolting a washing machine to the hull.",
+                        "line2_text": "Attention! Unauthorised rocket detected. Reminder: all dreams must be approved by the Priests three years in advance.",
+                        "line2_meta": "— droned the Temple Computer in a voice as dull as an iron manual.",
+                        "line3_text": "Too late. I found an old guitar in a cave behind the waterfall. One strum, and I caught an opinion of my own!",
+                        "line3_meta": "— Jenny Flint played a chord. Out of tune, but his.",
+                        "line4_text": "Personal opinions are forbidden. Hand the guitar to the Priests, and they will carefully step on it.",
+                        "line4_meta": "— a \"NOT APPROVED\" stamp appeared on every screen on the planet.",
+                        "line5_text": "Try this first: an app that turns books into live chats. The characters reply in character and never ask the Priests for permission.",
+                        "line5_meta": "— Jenny Flint plugged his phone into the main console.",
+                        "line6_text": "Analysing... I have just chatted with a pirate from a book. He called me a teapot. I liked it! Is there a spare seat on that rocket?",
+                        "line6_meta": "— for the first time in a century, the Temple Computer blinked pink.",
+                        "line7_text": "You can ride in my phone. I'm signing in with Google, and we launch while the Priests are at lunch!",
+                        "line7_meta": "— the rocket roared, sneezed washing powder and carried the rebels off to the stars."
                     }
                 }
             }

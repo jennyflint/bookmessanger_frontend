@@ -1,0 +1,17 @@
+services:
+  app:
+    container_name: bookmessanger_frontend
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
+    restart: always
+    env_file: .env
+    ports:
+      - "127.0.0.1:3007:3007"
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    external: true
+    name: bookmessanger_network
