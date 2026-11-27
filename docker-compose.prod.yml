@@ -14,4 +14,4 @@ services:
 networks:
   app-network:
     external: true
-    name: bookmessanger_network
+    name: ${DOCKER_NETWORK:-bookmessanger_network}
